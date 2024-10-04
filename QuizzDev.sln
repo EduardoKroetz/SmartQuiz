@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizzDev.API", "QuizzDev.API\QuizzDev.API.csproj", "{D8FB4AB4-D61C-444D-95EA-85F68F6CF3A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizzDev.Application", "QuizzDev.Application\QuizzDev.Application.csproj", "{FE64AFB0-8A62-4926-B925-E8DE718495C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizzDev.Core", "QuizzDev.Core\QuizzDev.Core.csproj", "{8BF5B120-42B4-4ADD-BF83-705C58C0466E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizzDev.Infrastructure", "QuizzDev.Infrastructure\QuizzDev.Infrastructure.csproj", "{F8ACBD8B-4824-4146-8879-5E4748E8D594}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8FB4AB4-D61C-444D-95EA-85F68F6CF3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8FB4AB4-D61C-444D-95EA-85F68F6CF3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8FB4AB4-D61C-444D-95EA-85F68F6CF3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8FB4AB4-D61C-444D-95EA-85F68F6CF3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE64AFB0-8A62-4926-B925-E8DE718495C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE64AFB0-8A62-4926-B925-E8DE718495C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE64AFB0-8A62-4926-B925-E8DE718495C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE64AFB0-8A62-4926-B925-E8DE718495C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF5B120-42B4-4ADD-BF83-705C58C0466E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF5B120-42B4-4ADD-BF83-705C58C0466E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF5B120-42B4-4ADD-BF83-705C58C0466E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF5B120-42B4-4ADD-BF83-705C58C0466E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8ACBD8B-4824-4146-8879-5E4748E8D594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8ACBD8B-4824-4146-8879-5E4748E8D594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8ACBD8B-4824-4146-8879-5E4748E8D594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8ACBD8B-4824-4146-8879-5E4748E8D594}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
