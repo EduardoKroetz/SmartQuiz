@@ -1,4 +1,4 @@
-﻿namespace QuizzDev.Core.Entities;
+﻿namespace QuizDev.Core.Entities;
 
 public class User
 {
@@ -7,6 +7,6 @@ public class User
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public List<Play> Plays { get; set; }
-    public List<Quiz> Quizzes { get; set; }
+    public List<Quiz> Quizes { get; set; }
     public List<Review> Reviews { get; set; }
 }

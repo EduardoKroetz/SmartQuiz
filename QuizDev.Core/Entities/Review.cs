@@ -1,6 +1,6 @@
 ﻿
 
-namespace QuizzDev.Core.Entities;
+namespace QuizDev.Core.Entities;
 
 public class Review
 {
@@ -11,4 +11,6 @@ public class Review
     public Quiz Quiz { get; set; }
     public Guid PlayId { get; set; }
     public Play Play { get; set; }
+    public Guid UserId { get; set; }
+    public User User { get; set; }
 }

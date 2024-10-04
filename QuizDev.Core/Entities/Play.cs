@@ -1,4 +1,4 @@
-﻿namespace QuizzDev.Core.Entities;
+﻿namespace QuizDev.Core.Entities;
 
 public class Play
 {
