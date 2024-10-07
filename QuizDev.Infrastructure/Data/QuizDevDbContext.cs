@@ -61,10 +61,6 @@ public class QuizDevDbContext : DbContext
             options.HasMany(x => x.Options)
                 .WithOne(x => x.Question)
                 .HasForeignKey(x => x.QuestionId);
-
-            options.HasOne(x => x.CorrectOption)
-                .WithMany()
-                .HasForeignKey(x => x.CorrectOptionId);
         });
 
 

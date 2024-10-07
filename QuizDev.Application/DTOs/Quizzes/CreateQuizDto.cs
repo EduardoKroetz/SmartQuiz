@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace QuizDev.Core.DTOs.Quizzes;
+namespace QuizDev.Application.DTOs.Quizzes;
 
 public class CreateQuizDto
 {

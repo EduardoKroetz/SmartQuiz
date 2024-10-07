@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QuizDev.Infrastructure.Data;
@@ -11,9 +12,11 @@ using QuizDev.Infrastructure.Data;
 namespace QuizDev.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(QuizDevDbContext))]
-    partial class QuizDevDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241007180431_Question_NullableCorrectOption")]
+    partial class Question_NullableCorrectOption
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +67,9 @@ namespace QuizDev.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CorrectOptionId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uuid");
 
@@ -72,6 +78,8 @@ namespace QuizDev.Infrastructure.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorrectOptionId");
 
                     b.HasIndex("QuizId");
 
@@ -215,11 +223,19 @@ namespace QuizDev.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
                 {
+                    b.HasOne("QuizDev.Core.Entities.QuestionOption", "CorrectOption")
+                        .WithMany()
+                        .HasForeignKey("CorrectOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QuizDev.Core.Entities.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CorrectOption");
 
                     b.Navigation("Quiz");
                 });
@@ -228,9 +244,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
                 {
                     b.HasOne("QuizDev.Core.Entities.Question", "Question")
                         .WithMany("Options")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
 
                     b.Navigation("Question");
                 });
