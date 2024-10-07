@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuizDev.API.Filters;
 using QuizDev.Application.Services;
+using QuizDev.Application.UseCases.Quizzes;
 using QuizDev.Application.UseCases.Users;
 using QuizDev.Core.Repositories;
 using QuizDev.Infrastructure.Data;
@@ -39,6 +40,31 @@ void InjectDependencies(IServiceCollection services)
             Description = "API para desenvolvedores jogarem quizzes"
         });
 
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            BearerFormat = "JWT",
+            Description = "Coloque SOMENTE o token JWT",
+            Name = "JWT Authentication",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = JwtBearerDefaults.AuthenticationScheme
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type=ReferenceType.SecurityScheme,
+                        Id="Bearer"
+                    }
+                },
+                new string[]{}
+            }
+        });
+
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
@@ -71,6 +97,7 @@ void InjectDependencies(IServiceCollection services)
 
     //Repositories
     services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<IQuizRepository, QuizRepository>();
 
     //Services
     services.AddScoped<AuthService>();
@@ -78,5 +105,7 @@ void InjectDependencies(IServiceCollection services)
     //UseCases
     services.AddScoped<CreateUserUseCase>();
     services.AddScoped<LoginUserUseCase>();
+
+    services.AddScoped<CreateQuizUseCase>();
 
 }

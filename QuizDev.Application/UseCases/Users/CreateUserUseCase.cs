@@ -1,5 +1,5 @@
 ﻿using QuizDev.Application.Services;
-using QuizDev.Core.DTOs.Accounts;
+using QuizDev.Core.DTOs.Users;
 using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;

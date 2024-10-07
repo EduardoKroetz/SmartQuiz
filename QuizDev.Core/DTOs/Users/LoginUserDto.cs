@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuizDev.Core.DTOs.Accounts;
+namespace QuizDev.Core.DTOs.Users;
 
 public class LoginUserDto
 {

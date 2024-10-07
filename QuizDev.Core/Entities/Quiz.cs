@@ -7,6 +7,7 @@ public class Quiz
     public string Description { get; set; }
     public bool Expires { get; set; }
     public int ExpiresInSeconds { get; set; }
+    public bool IsActive { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     public List<Question> Questions { get; set; }
