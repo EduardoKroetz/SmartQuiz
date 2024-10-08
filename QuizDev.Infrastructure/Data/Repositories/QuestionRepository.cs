@@ -41,4 +41,10 @@ public class QuestionRepository : IQuestionRepository
             .Select(x => new Question { Id = x.Id, Text = x.Text, Options = x.Options, QuizId = x.QuizId })
             .FirstOrDefaultAsync();
     }
+
+    public async Task UpdateRangeAsync(List<Question> questions)
+    {
+        _dbContext.Questions.UpdateRange(questions);
+        await _dbContext.SaveChangesAsync();
+    }
 }

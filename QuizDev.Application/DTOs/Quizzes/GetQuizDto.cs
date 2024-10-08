@@ -14,7 +14,7 @@ public class GetQuizDto
         ExpiresInSeconds = expiresInSeconds;
         IsActive = isActive;
         UserId = userId;
-        Questions = questions.Select(x => new GetQuestionDto(x.Id, x.Text, x.QuizId, x.Options)).ToList();
+        Questions = questions.Select(x => new GetQuestionDto(x.Id, x.Text, x.QuizId, x.Order ,x.Options)).ToList();
     }
 
     public Guid Id { get; set; }

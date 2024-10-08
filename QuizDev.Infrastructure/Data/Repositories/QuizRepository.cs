@@ -25,7 +25,20 @@ public class QuizRepository : IQuizRepository
 
         if (includeQuestions)
         {
-            query = query.Include(x => x.Questions).ThenInclude(x => x.Options);  
+            query = query
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.Options)
+                .Select(x => new Quiz
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    UserId = x.UserId,
+                    Expires = x.Expires,
+                    ExpiresInSeconds = x.ExpiresInSeconds,
+                    IsActive = x.IsActive,
+                    Questions = x.Questions.OrderBy(q => q.Order).ToList()
+                });  
         }
         
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));

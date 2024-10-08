@@ -48,7 +48,7 @@ public class CreateMatchUseCase
             throw new InvalidOperationException("Não foi possível obter a primeira questão do Quiz pois a ordem das questões é inválida");
         }
 
-        var questionDto = new GetQuestionDto(nextQuestion.Id, nextQuestion.Text, nextQuestion.QuizId, nextQuestion.Options);
+        var questionDto = new GetQuestionDto(nextQuestion.Id, nextQuestion.Text, nextQuestion.QuizId, nextQuestion.Order, nextQuestion.Options);
       
         return new ResultDto(new { MatchId = match.Id, NextQuestion = questionDto });
     }
