@@ -30,4 +30,15 @@ public class QuestionRepository : IQuestionRepository
 
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
+
+    public async Task<Question?> GetQuizQuestionByOrder(Guid quizId, int order)
+    {
+        return await _dbContext
+            .Questions
+                .Include(x => x.Options)
+            .Where(x => x.QuizId.Equals(quizId))
+            .Where(x => x.Order.Equals(order))
+            .Select(x => new Question { Id = x.Id, Text = x.Text, Options = x.Options, QuizId = x.QuizId })
+            .FirstOrDefaultAsync();
+    }
 }
