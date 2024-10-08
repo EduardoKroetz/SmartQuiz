@@ -25,7 +25,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("QuizDev.Core.Entities.Play", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.Match", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Plays");
+                    b.ToTable("Matchs");
                 });
 
             modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
@@ -149,7 +149,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PlayId")
+                    b.Property<Guid>("MatchId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("QuizId")
@@ -193,20 +193,20 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("QuizDev.Core.Entities.Play", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.Match", b =>
                 {
                     b.HasOne("QuizDev.Core.Entities.Quiz", "Quiz")
-                        .WithMany("Plays")
+                        .WithMany("Matchs")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizDev.Core.Entities.Review", "Review")
-                        .WithOne("Play")
-                        .HasForeignKey("QuizDev.Core.Entities.Play", "ReviewId");
+                        .WithOne("Match")
+                        .HasForeignKey("QuizDev.Core.Entities.Match", "ReviewId");
 
                     b.HasOne("QuizDev.Core.Entities.User", "User")
-                        .WithMany("Plays")
+                        .WithMany("Matchs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -285,20 +285,20 @@ namespace QuizDev.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("QuizDev.Core.Entities.Quiz", b =>
                 {
-                    b.Navigation("Plays");
+                    b.Navigation("Matchs");
 
                     b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("QuizDev.Core.Entities.Review", b =>
                 {
-                    b.Navigation("Play")
+                    b.Navigation("Match")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("QuizDev.Core.Entities.User", b =>
                 {
-                    b.Navigation("Plays");
+                    b.Navigation("Matchs");
 
                     b.Navigation("Quizes");
 

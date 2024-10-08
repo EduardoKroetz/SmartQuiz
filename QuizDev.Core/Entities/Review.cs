@@ -9,8 +9,8 @@ public class Review
     public int Rating { get; set; }
     public Guid QuizId { get; set; }
     public Quiz Quiz { get; set; }
-    public Guid PlayId { get; set; }
-    public Play Play { get; set; }
+    public Guid MatchId { get; set; }
+    public Match Match { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
 }

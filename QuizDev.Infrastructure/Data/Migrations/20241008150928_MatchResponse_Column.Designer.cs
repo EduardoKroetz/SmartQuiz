@@ -12,8 +12,8 @@ using QuizDev.Infrastructure.Data;
 namespace QuizDev.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(QuizDevDbContext))]
-    [Migration("20241006234534_Quiz_IsActiveColumn")]
-    partial class Quiz_IsActiveColumn
+    [Migration("20241008150928_MatchResponse_Column")]
+    partial class MatchResponse_Column
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,13 +61,34 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.ToTable("Matchs");
                 });
 
-            modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.MatchResponse", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CorrectOptionId")
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("QuestionOptionId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId");
+
+                    b.HasIndex("QuestionOptionId");
+
+                    b.ToTable("MatchResponse");
+                });
+
+            modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("QuizId")
@@ -78,8 +99,6 @@ namespace QuizDev.Infrastructure.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CorrectOptionId");
 
                     b.HasIndex("QuizId");
 
@@ -221,21 +240,32 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.MatchResponse", b =>
                 {
-                    b.HasOne("QuizDev.Core.Entities.QuestionOption", "CorrectOption")
-                        .WithMany()
-                        .HasForeignKey("CorrectOptionId")
+                    b.HasOne("QuizDev.Core.Entities.Match", "Match")
+                        .WithMany("Responses")
+                        .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QuizDev.Core.Entities.QuestionOption", "QuestionOption")
+                        .WithMany()
+                        .HasForeignKey("QuestionOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
+
+                    b.Navigation("QuestionOption");
+                });
+
+            modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
+                {
                     b.HasOne("QuizDev.Core.Entities.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CorrectOption");
 
                     b.Navigation("Quiz");
                 });
@@ -279,6 +309,11 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.Navigation("Quiz");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuizDev.Core.Entities.Match", b =>
+                {
+                    b.Navigation("Responses");
                 });
 
             modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>

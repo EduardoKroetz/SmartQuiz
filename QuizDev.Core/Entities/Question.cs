@@ -8,4 +8,5 @@ public class Question
     public Guid QuizId { get; set; }
     public Quiz Quiz { get; set; }
     public List<QuestionOption> Options { get; set; }
+    public int Order { get; set; }
 }

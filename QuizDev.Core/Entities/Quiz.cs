@@ -11,5 +11,5 @@ public class Quiz
     public Guid UserId { get; set; }
     public User User { get; set; }
     public List<Question> Questions { get; set; }
-    public List<Play> Plays { get; set; }
+    public List<Match> Matchs { get; set; }
 }
