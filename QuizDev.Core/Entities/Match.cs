@@ -15,11 +15,17 @@ public class Match
     public bool Reviewed { get; set; }
     public Guid? ReviewId { get; set; }
     public Review Review { get; set; }
-    public List<MatchResponse> Responses { get; private set; }
+    public List<Response> Responses { get; private set; }
 
-    public MatchResponse AddResponse(QuestionOption option)
+    public Response CreateResponse(QuestionOption option)
     {
-        var response = new MatchResponse
+        //Verificar se a questão da opção de resposta está entre as questões do quiz
+        if (Quiz.Questions.Any(x => x.Id.Equals(option.QuestionId)) == false)
+        {
+            throw new InvalidOperationException("A opção de resposta não está disponível");    
+        }
+
+        var response = new Response
         {
             Id = Guid.NewGuid(),
             MatchId = this.Id,
@@ -27,13 +33,11 @@ public class Match
             QuestionOptionId = option.Id
         };
        
-        if (option.IsCorrectOption)
-        {
-            Score++;
-        }
-
-        Responses.Add(response);
-
         return response;
+    }
+
+    public void AddScore()
+    {
+        Score++;
     }
 }

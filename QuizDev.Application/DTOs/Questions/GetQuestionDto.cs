@@ -12,7 +12,7 @@ public class GetQuestionDto
         Text = text;
         QuizId = quizId;
         Order = order;
-        Options = options.Select(x => new GetQuestionOptionDto(x.Id, x.Response, x.IsCorrectOption, x.QuestionId)).ToList();
+        Options = options.Select(x => new GetQuestionOptionDto(x.Id, x.Response, x.QuestionId)).ToList();
     }
 
     public Guid Id { get; set; }

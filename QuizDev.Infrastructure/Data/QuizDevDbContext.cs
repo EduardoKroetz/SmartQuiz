@@ -13,7 +13,7 @@ public class QuizDevDbContext : DbContext
     public DbSet<Question> Questions { get; set; }
     public DbSet<QuestionOption> QuestionOptions { get; set; }
     public DbSet<Review> Reviews { get; set; }
-    public DbSet<MatchResponse> MatchResponses { get; set; }
+    public DbSet<Response> Responses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -64,7 +64,7 @@ public class QuizDevDbContext : DbContext
                 .HasForeignKey(x => x.QuestionId);
         });
 
-        builder.Entity<MatchResponse>(options =>
+        builder.Entity<Response>(options =>
         {
             options.HasKey(x => x.Id);
             options.HasOne(x => x.Match)

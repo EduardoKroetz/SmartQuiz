@@ -64,7 +64,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("QuizDev.Core.Entities.MatchResponse", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.Response", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,7 +85,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
 
                     b.HasIndex("QuestionOptionId");
 
-                    b.ToTable("MatchResponses");
+                    b.ToTable("Responses");
                 });
 
             modelBuilder.Entity("QuizDev.Core.Entities.Question", b =>
@@ -247,7 +247,7 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("QuizDev.Core.Entities.MatchResponse", b =>
+            modelBuilder.Entity("QuizDev.Core.Entities.Response", b =>
                 {
                     b.HasOne("QuizDev.Core.Entities.Match", "Match")
                         .WithMany("Responses")

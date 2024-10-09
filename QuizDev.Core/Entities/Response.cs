@@ -2,7 +2,7 @@
 
 namespace QuizDev.Core.Entities;
 
-public class MatchResponse
+public class Response
 {
     public Guid Id { get; set; }
     public Guid QuestionOptionId { get; set; }

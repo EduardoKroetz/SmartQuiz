@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using QuizDev.API.Filters;
 using QuizDev.Application.Services;
 using QuizDev.Application.UseCases.Matches;
+using QuizDev.Application.UseCases.Responses;
 using QuizDev.Application.UseCases.Questions;
 using QuizDev.Application.UseCases.Quizzes;
 using QuizDev.Application.UseCases.Users;
@@ -103,6 +104,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IQuestionRepository, QuestionRepository>();
     services.AddScoped<IQuestionOptionRepository, QuestionOptionRepository>();
     services.AddScoped<IMatchRepository, MatchRepository>();
+    services.AddScoped<IResponseRepository, ResponseRepository>();
 
     //Services
     services.AddScoped<AuthService>();
@@ -117,4 +119,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<CreateQuestionUseCase>();
 
     services.AddScoped<CreateMatchUseCase>();
+
+    services.AddScoped<CreateResponseUseCase>();
 }

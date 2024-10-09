@@ -25,7 +25,7 @@ public class CreateMatchUseCase
         var quiz = await _quizRepository.GetAsync(quizId, false);
         if (quiz == null)
         {
-            throw new Exception("Quiz não encontrado");
+            throw new ArgumentException("Quiz não encontrado");
         }
 
         var match = new Match
