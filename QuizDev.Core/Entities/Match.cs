@@ -15,7 +15,7 @@ public class Match
     public bool Reviewed { get; set; }
     public Guid? ReviewId { get; set; }
     public Review Review { get; set; }
-    public List<Response> Responses { get; private set; }
+    public List<Response> Responses { get; set; }
 
     public Response CreateResponse(QuestionOption option)
     {

@@ -22,7 +22,7 @@ public class QuizzesController : ControllerBase
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(dto, userId);
-        return Created(nameof(result), result);
+        return Created(nameof(GetQuizById), result);
     }
 
     /// <summary>

@@ -52,7 +52,8 @@ public class MatchRepository : IMatchRepository
         if (includeRelations)
         {
             query = query
-                .Include(x => x.Quiz)
+                .Include(x => x.Responses)
+                .Include(x => x.Quiz)              
                 .ThenInclude(x => x.Questions)
                 .Select(x => new Match
                 {
@@ -64,6 +65,7 @@ public class MatchRepository : IMatchRepository
                     UserId = x.UserId,
                     Status = x.Status,
                     ReviewId = x.ReviewId,
+                    Responses = x.Responses,
                     Quiz = new Quiz
                     {
                         Id = x.Quiz.Id,

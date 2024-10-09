@@ -1,4 +1,5 @@
 ﻿
+using QuizDev.Application.DTOs.Quizzes;
 using QuizDev.Application.DTOs.Results;
 using QuizDev.Core.Repositories;
 
@@ -11,7 +12,7 @@ public class SearchQuizUseCase
     public SearchQuizUseCase(IQuizRepository quizRepository)
     {
         _quizRepository = quizRepository;
-    }
+    } 
 
     public async Task<PaginatedResultDto> Execute(string reference, int pageSize, int pageNumber)
     {
@@ -20,6 +21,8 @@ public class SearchQuizUseCase
 
         var quizzes = await _quizRepository.SearchQuiz(keyWords, skip, pageSize);
 
-        return new PaginatedResultDto(pageSize, pageNumber, quizzes.Count, pageNumber + 1, quizzes);  
+        var quizzesDto = quizzes.Select(x => new GetSearchQuizDto(x.Id, x.Title, x.Description, x.Expires, x.ExpiresInSeconds, x.IsActive, x.UserId)).ToList();
+
+        return new PaginatedResultDto(pageSize, pageNumber, quizzes.Count, pageNumber + 1, quizzesDto);  
     }
 }

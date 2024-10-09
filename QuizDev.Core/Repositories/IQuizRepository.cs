@@ -9,4 +9,5 @@ public interface IQuizRepository
     Task<Quiz?> GetAsync(Guid id, bool includeQuestions = false);
     Task<List<Quiz>> SearchQuizByReviews(string[] keyWords, int skip, int take);
     Task<List<Quiz>> SearchQuiz(string[] keyWords, int skip, int take);
+    Task UpdateAsync(Quiz quiz);
 }

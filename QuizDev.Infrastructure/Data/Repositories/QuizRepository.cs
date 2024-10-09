@@ -88,4 +88,9 @@ public class QuizRepository : IQuizRepository
             .ToListAsync();
     }
 
+    public async Task UpdateAsync(Quiz quiz)
+    {
+        _dbContext.Quizzes.Update(quiz);
+        await _dbContext.SaveChangesAsync();
+    }
 }

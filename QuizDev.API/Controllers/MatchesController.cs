@@ -45,4 +45,14 @@ public class MatchesController : ControllerBase
         return Created(nameof(response) ,response);
     }
 
+    [HttpGet("{matchId:guid}/next-question"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetNextQuestion([FromRoute] Guid matchId, [FromServices] GetNextQuestionUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(matchId, userId);
+        return Ok(result);
+    }
+
 }

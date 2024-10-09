@@ -121,6 +121,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<CreateQuestionUseCase>();
 
     services.AddScoped<CreateMatchUseCase>();
-
     services.AddScoped<CreateResponseUseCase>();
+    services.AddScoped<GetNextQuestionUseCase>();
 }
