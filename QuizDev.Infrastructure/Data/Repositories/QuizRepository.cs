@@ -43,5 +43,49 @@ public class QuizRepository : IQuizRepository
         
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
+    
+    public async Task<List<Quiz>> SearchQuizByReviews(string[] keyWords, int skip, int take)
+    {
+        return await _dbContext.Reviews  //Filtra por Review
+            .Include(x => x.Quiz)
+            .Where(x =>  //Buscar os Quiz pelas palavras chaves
+                keyWords.Any(k => x.Quiz.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
+                keyWords.Any(k => x.Quiz.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+            .OrderBy(x => x.Rating) //Ordernar as Reviews pela maior avaliação
+            .Skip(skip)
+            .Take(take)
+            .Select(x => new Quiz //Selecionar o Quiz dessas avaliações
+            {
+                Id = x.Quiz.Id,
+                Title = x.Quiz.Title,
+                Description = x.Quiz.Description,
+                UserId = x.Quiz.UserId,
+                Expires = x.Quiz.Expires,
+                ExpiresInSeconds = x.Quiz.ExpiresInSeconds,
+                IsActive = x.Quiz.IsActive,     
+            })
+            .ToListAsync();
+    }
+
+    public async Task<List<Quiz>> SearchQuiz(string[] keyWords, int skip, int take)
+    {
+        return await _dbContext.Quizzes 
+            .Where(x =>  //Buscar os Quiz pelas palavras chaves
+                keyWords.Any(k => x.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
+                keyWords.Any(k => x.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+            .Skip(skip)
+            .Take(take)
+            .Select(x => new Quiz //Selecionar o Quiz dessas avaliações
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description,
+                UserId = x.UserId,
+                Expires = x.Expires,
+                ExpiresInSeconds = x.ExpiresInSeconds,
+                IsActive = x.IsActive,
+            })
+            .ToListAsync();
+    }
 
 }

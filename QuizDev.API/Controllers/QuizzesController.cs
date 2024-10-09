@@ -40,4 +40,37 @@ public class QuizzesController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Pesquisar Quiz
+    /// </summary>
+    /// <param name="reference"></param>
+    /// <param name="useCase"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="pageNumber"></param>
+    /// <returns></returns>
+    [HttpGet("search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SearchQuizAsync([FromQuery] string reference, [FromServices] SearchQuizUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1)
+    {
+        var result = await useCase.Execute(reference, pageSize, pageNumber);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Pesquisar Quiz por Reviews e ordenar por maior avaliação
+    /// </summary>
+    /// <param name="reference"></param>
+    /// <param name="useCase"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="pageNumber"></param>
+    /// <returns></returns>
+    [HttpGet("reviews/search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SearchQuizByReviewsAsync([FromQuery] string reference, [FromServices] SearchQuizByReviewsUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1)
+    {
+        var result = await useCase.Execute(reference, pageSize, pageNumber);
+        return Ok(result);
+    }
 }
