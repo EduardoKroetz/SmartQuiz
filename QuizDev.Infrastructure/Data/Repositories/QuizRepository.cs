@@ -95,4 +95,15 @@ public class QuizRepository : IQuizRepository
         _dbContext.Quizzes.Update(quiz);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(Quiz quiz)
+    {
+        _dbContext.Quizzes.Remove(quiz);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> HasMatchesRelated(Guid quizId)
+    {
+        return await _dbContext.Matches.AnyAsync(x => x.QuizId == quizId);
+    }
 }

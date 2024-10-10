@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Quizzes;
 using QuizDev.Application.DTOs.Quizzes;
+using System.Formats.Asn1;
 
 namespace QuizDev.API.Controllers;
 
@@ -108,6 +109,24 @@ public class QuizzesController : ControllerBase
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(quizId, editorQuizDto, userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Deleta um Quiz pelo Id
+    /// </summary>
+    /// <param name="quizId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    /// <response code="400">Caso hajam partidas relacionadas</response>
+    [HttpDelete("{quizId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteQuizAsync([FromRoute] Guid quizId, [FromServices] DeleteQuizUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(quizId, userId);
         return Ok(result);
     }
 }
