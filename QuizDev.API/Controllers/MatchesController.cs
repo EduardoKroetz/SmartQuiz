@@ -100,4 +100,20 @@ public class MatchesController : ControllerBase
         return Ok(result);
     }
 
+
+    /// <summary>
+    /// Busca todas as respostas de uma partida
+    /// </summary>
+    /// <param name="matchId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet("{matchId:guid}/responses"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetResponsesAsync([FromRoute] Guid matchId, [FromServices] GetResponsesByMatchUseCase useCase)
+    {
+        var result = await useCase.Execute(matchId);
+        return Ok(result);
+    }
 }
