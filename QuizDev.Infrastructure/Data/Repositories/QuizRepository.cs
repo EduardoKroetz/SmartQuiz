@@ -51,6 +51,7 @@ public class QuizRepository : IQuizRepository
             .Where(x =>  //Buscar os Quiz pelas palavras chaves
                 keyWords.Any(k => x.Quiz.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
                 keyWords.Any(k => x.Quiz.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+            .Where(x => x.Quiz.IsActive == true)
             .OrderBy(x => x.Rating) //Ordernar as Reviews pela maior avaliação
             .Skip(skip)
             .Take(take)
@@ -73,6 +74,7 @@ public class QuizRepository : IQuizRepository
             .Where(x =>  //Buscar os Quiz pelas palavras chaves
                 keyWords.Any(k => x.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
                 keyWords.Any(k => x.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+            .Where(x => x.IsActive == true)
             .Skip(skip)
             .Take(take)
             .Select(x => new Quiz //Selecionar o Quiz dessas avaliações

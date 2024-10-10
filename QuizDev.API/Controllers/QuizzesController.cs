@@ -73,4 +73,20 @@ public class QuizzesController : ControllerBase
         var result = await useCase.Execute(reference, pageSize, pageNumber);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Ativa/desativa o Quiz
+    /// </summary>
+    /// <param name="quizId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpPost("toogle/{quizId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ToggleQuizAsync([FromRoute] Guid quizId, [FromServices] ToggleQuizUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(quizId, userId);
+        return Ok(result);
+    }
 }

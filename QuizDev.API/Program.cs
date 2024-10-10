@@ -117,6 +117,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetQuizByIdUseCase>();
     services.AddScoped<SearchQuizUseCase>();
     services.AddScoped<SearchQuizByReviewsUseCase>();
+    services.AddScoped<ToggleQuizUseCase>();
 
     services.AddScoped<CreateQuestionUseCase>();
 

@@ -28,6 +28,11 @@ public class CreateMatchUseCase
             throw new ArgumentException("Quiz não encontrado");
         }
 
+        if (quiz.IsActive == false)
+        {
+            throw new InvalidOperationException("Não é possível criar uma partida pois o Quiz está inativo");
+        }
+
         var match = new Match
         {
             Id = Guid.NewGuid(),
