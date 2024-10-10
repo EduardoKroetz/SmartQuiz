@@ -74,8 +74,26 @@ public class MatchesController : ControllerBase
     [HttpGet("{matchId:guid}"),  Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetMatchDetails([FromRoute] Guid matchId, [FromServices] GetMatchUseCase useCase) 
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(matchId, userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Finalizar partida
+    /// </summary>
+    /// <param name="matchId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    /// <response code="403">Tentou finalizar partida de outro usuário</response>
+    [HttpPost("{matchId:guid}"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> FinalizeMatchAsync([FromRoute] Guid matchId, [FromServices] FinalizeMatchUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(matchId, userId);

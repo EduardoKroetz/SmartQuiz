@@ -45,7 +45,7 @@ public class MatchRepository : IMatchRepository
         return await _questionRepository.GetQuizQuestionByOrder(match.QuizId, lastResponse.Order + 1);
     }
 
-    public async Task<Match?> GetAsync(Guid matchId, bool includeRelations)
+    public async Task<Match?> GetAsync(Guid matchId, bool includeRelations = false)
     {
         var query = _dbContext.Matches.AsQueryable();
 
