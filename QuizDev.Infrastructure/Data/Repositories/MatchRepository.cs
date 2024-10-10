@@ -32,10 +32,10 @@ public class MatchRepository : IMatchRepository
         var lastResponse = await _dbContext
             .Responses
             .Where(x => x.MatchId.Equals(match.Id))
-            .Include(x => x.QuestionOption)
+            .Include(x => x.AnswerOption)
                 .ThenInclude(x => x.Question)
-            .OrderByDescending(x => x.QuestionOption.Question.Order)
-            .Select(x => new { x.QuestionOption.Question.Order })
+            .OrderByDescending(x => x.AnswerOption.Question.Order)
+            .Select(x => new { x.AnswerOption.Question.Order })
             .FirstOrDefaultAsync();
 
         if (lastResponse == null)

@@ -2,8 +2,8 @@
 
 namespace QuizDev.Core.Repositories;
 
-public interface IQuestionOptionRepository
+public interface IAnswerOptionRepository
 {
-    Task<QuestionOption?> GetById(Guid id);
-    Task CreateAsync(QuestionOption option);
+    Task<AnswerOption?> GetById(Guid id);
+    Task CreateAsync(AnswerOption option);
 }

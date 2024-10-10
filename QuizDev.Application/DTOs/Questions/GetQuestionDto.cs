@@ -1,23 +1,23 @@
 ﻿
-using QuizDev.Application.DTOs.QuestionOptions;
+using QuizDev.Application.DTOs.AnswerOptions;
 using QuizDev.Core.Entities;
 
 namespace QuizDev.Application.DTOs.Questions;
 
 public class GetQuestionDto
 {
-    public GetQuestionDto(Guid id, string text, Guid quizId, int order, List<QuestionOption> options)
+    public GetQuestionDto(Guid id, string text, Guid quizId, int order, List<AnswerOption> options)
     {
         Id = id;
         Text = text;
         QuizId = quizId;
         Order = order;
-        Options = options.Select(x => new GetQuestionOptionDto(x.Id, x.Response, x.QuestionId)).ToList();
+        Options = options.Select(x => new GetAnswerOptionDto(x.Id, x.Response, x.QuestionId)).ToList();
     }
 
     public Guid Id { get; set; }
     public string Text { get; set; }
     public Guid QuizId { get; set; }
     public int Order { get; set; }
-    public List<GetQuestionOptionDto> Options { get; set; }
+    public List<GetAnswerOptionDto> Options { get; set; }
 }

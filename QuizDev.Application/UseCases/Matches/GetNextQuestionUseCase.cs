@@ -1,9 +1,7 @@
 ﻿
 using QuizDev.Application.DTOs.Questions;
 using QuizDev.Application.DTOs.Responses;
-using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace QuizDev.Application.UseCases.Matches;
 
@@ -43,14 +41,7 @@ public class GetNextQuestionUseCase
 
         if (nextQuestion == null)
         {
-            //Se for null, verifica se já possui se a quantidade de respostas e a quantidade de questões no quiz são iguais
-            if (match.Responses.Count == match.Quiz.Questions.Count)
-            {
-                //Se forem iguais, finaliza a partida   
-                match.Status = Core.Enums.EMatchStatus.Finished;
-                await _matchRepository.UpdateAsync(match);
-
-            }else if (match.Responses.Count == 0)
+            if (match.Responses.Count == 0)
             {
                 nextQuestion = await _questionRepository.GetQuizQuestionByOrder(match.QuizId, 0);
 
@@ -58,17 +49,23 @@ public class GetNextQuestionUseCase
                 {
                     throw new ArgumentException("Não foi possível buscar a primeira questão do Quiz");
                 }
+
+            }else
+            {
+                return new ResultDto(null);
             }
         }
 
-        if (nextQuestion == null)
+        //Finaliza a partida caso essa seja a última questão
+        if (nextQuestion.Order + 1 == match.Quiz.Questions.Count)
         {
-            return new ResultDto(null);
+            match.Status = Core.Enums.EMatchStatus.Finished;
+            await _matchRepository.UpdateAsync(match);
         }
 
         var dto = new
         {
-            IsLastQuestion = nextQuestion.Order - 1 == match.Quiz.Questions.Count,
+            IsLastQuestion = nextQuestion.Order + 1 == match.Quiz.Questions.Count,
             Question = new GetQuestionDto(nextQuestion.Id, nextQuestion.Text, nextQuestion.QuizId, nextQuestion.Order, nextQuestion.Options)
         };
 

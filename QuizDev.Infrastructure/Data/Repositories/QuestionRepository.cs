@@ -38,7 +38,7 @@ public class QuestionRepository : IQuestionRepository
                 .Include(x => x.Options)
             .Where(x => x.QuizId.Equals(quizId))
             .Where(x => x.Order.Equals(order))
-            .Select(x => new Question { Id = x.Id, Text = x.Text, Options = x.Options, QuizId = x.QuizId })
+            .Select(x => new Question { Id = x.Id, Text = x.Text, Order = x.Order , Options = x.Options, QuizId = x.QuizId })
             .FirstOrDefaultAsync();
     }
 

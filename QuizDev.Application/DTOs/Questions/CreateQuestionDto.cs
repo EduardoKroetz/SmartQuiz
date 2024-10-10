@@ -1,4 +1,4 @@
-﻿using QuizDev.Application.DTOs.QuestionOptions;
+﻿using QuizDev.Application.DTOs.AnswerOptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuizDev.Application.DTOs.Questions;
@@ -13,7 +13,7 @@ public class CreateQuestionDto
 
     [Required(ErrorMessage = "Informe as opções de resposta da questão")]
     [MinLength(2, ErrorMessage = "Informe pelo menos duas opções de resposta para a questão")]
-    public List<CreateOptionInQuestionDto> CreateOptionsDtos { get; set; }
+    public List<CreateAnswerOptionInQuestionDto> CreateOptionsDtos { get; set; }
 
     [Required(ErrorMessage = "Informe a ordem dessa questão no Quiz")]
     public int Order { get; set; }

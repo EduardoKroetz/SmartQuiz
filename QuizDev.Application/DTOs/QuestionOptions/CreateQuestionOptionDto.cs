@@ -1,7 +1,7 @@
 ﻿
-namespace QuizDev.Application.DTOs.QuestionOptions;
+namespace QuizDev.Application.DTOs.AnswerOptions;
 
-public class CreateQuestionOptionDto
+public class CreateAnswerOptionDto
 {
     public string Response { get; set; }
     public bool IsCorrectOption { get; set; }

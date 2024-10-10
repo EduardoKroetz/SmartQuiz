@@ -102,7 +102,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IQuizRepository, QuizRepository>();
     services.AddScoped<IQuestionRepository, QuestionRepository>();
-    services.AddScoped<IQuestionOptionRepository, QuestionOptionRepository>();
+    services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
     services.AddScoped<IMatchRepository, MatchRepository>();
     services.AddScoped<IResponseRepository, ResponseRepository>();
 

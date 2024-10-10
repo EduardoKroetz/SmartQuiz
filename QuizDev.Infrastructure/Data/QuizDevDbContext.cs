@@ -11,7 +11,7 @@ public class QuizDevDbContext : DbContext
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Question> Questions { get; set; }
-    public DbSet<QuestionOption> QuestionOptions { get; set; }
+    public DbSet<AnswerOption> AnswerOptions { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Response> Responses { get; set; }
 
@@ -71,9 +71,9 @@ public class QuizDevDbContext : DbContext
                 .WithMany(x => x.Responses)
                 .HasForeignKey(x => x.MatchId);
 
-            options.HasOne(x => x.QuestionOption)
+            options.HasOne(x => x.AnswerOption)
                 .WithMany()
-                .HasForeignKey(x => x.QuestionOptionId);
+                .HasForeignKey(x => x.AnswerOptionId);
         });
 
 

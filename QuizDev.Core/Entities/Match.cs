@@ -17,7 +17,7 @@ public class Match
     public Review Review { get; set; }
     public List<Response> Responses { get; set; }
 
-    public Response CreateResponse(QuestionOption option)
+    public Response CreateResponse(AnswerOption option)
     {
         //Verificar se a questão da opção de resposta está entre as questões do quiz
         if (Quiz.Questions.Any(x => x.Id.Equals(option.QuestionId)) == false)
@@ -30,7 +30,7 @@ public class Match
             Id = Guid.NewGuid(),
             MatchId = this.Id,
             IsCorrect = option.IsCorrectOption,
-            QuestionOptionId = option.Id
+            AnswerOptionId = option.Id
         };
        
         return response;

@@ -1,7 +1,7 @@
 ﻿
 namespace QuizDev.Core.Entities;
 
-public class QuestionOption
+public class AnswerOption
 {
     public Guid Id { get; set; }
     public string Response { get; set; }

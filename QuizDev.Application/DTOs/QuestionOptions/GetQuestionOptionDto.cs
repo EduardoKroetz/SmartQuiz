@@ -1,8 +1,8 @@
-﻿namespace QuizDev.Application.DTOs.QuestionOptions;
+﻿namespace QuizDev.Application.DTOs.AnswerOptions;
 
-public class GetQuestionOptionDto
+public class GetAnswerOptionDto
 {
-    public GetQuestionOptionDto(Guid id, string response, Guid questionId)
+    public GetAnswerOptionDto(Guid id, string response, Guid questionId)
     {
         Id = id;
         Response = response;

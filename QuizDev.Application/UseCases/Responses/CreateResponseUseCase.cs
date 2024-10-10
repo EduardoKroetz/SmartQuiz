@@ -6,22 +6,22 @@ namespace QuizDev.Application.UseCases.Responses;
 
 public class CreateResponseUseCase
 {
-    private readonly IQuestionOptionRepository _questionOptionRepository;
+    private readonly IAnswerOptionRepository _answerOptionRepository;
     private readonly IResponseRepository _matchResponseRepository;
     private readonly IMatchRepository _matchRepository;
 
-    public CreateResponseUseCase(IQuestionOptionRepository questionOptionRepository, IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
+    public CreateResponseUseCase(IAnswerOptionRepository answerOptionRepository, IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
     {
-        _questionOptionRepository = questionOptionRepository;
+        _answerOptionRepository = answerOptionRepository;
         _matchResponseRepository = matchResponseRepository;
         _matchRepository = matchRepository;
     }
 
-    public async Task<ResultDto> Execute(Guid userId ,Guid matchId, Guid questionOptionId)
+    public async Task<ResultDto> Execute(Guid userId ,Guid matchId, Guid answerOptionId)
     {
         //Buscar opção
-        var questionOption = await _questionOptionRepository.GetById(questionOptionId);
-        if (questionOption == null)
+        var answerOption = await _answerOptionRepository.GetById(answerOptionId);
+        if (answerOption == null)
         {
             throw new ArgumentException("Opção não encontrada");
         }
@@ -39,12 +39,12 @@ public class CreateResponseUseCase
         }
 
         //Criar resposta
-        var matchResponse = match.CreateResponse(questionOption);
+        var matchResponse = match.CreateResponse(answerOption);
 
         await _matchResponseRepository.CreateAsync(matchResponse);
 
         //Após criação da resposta, adicionar pontuação caso a resposta esteja correta
-        if (questionOption.IsCorrectOption)
+        if (answerOption.IsCorrectOption)
         {
             match.AddScore();
             await _matchRepository.UpdateAsync(match);

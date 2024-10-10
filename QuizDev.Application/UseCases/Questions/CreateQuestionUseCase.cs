@@ -9,13 +9,13 @@ public class CreateQuestionUseCase
 {
     private readonly IQuestionRepository _questionRepository;
     private readonly IQuizRepository _quizRepository;
-    private readonly IQuestionOptionRepository _questionOptionRepository;
+    private readonly IAnswerOptionRepository _answerOptionRepository;
 
-    public CreateQuestionUseCase(IQuestionRepository questionRepository, IQuizRepository quizRepository, IQuestionOptionRepository questionOptionRepository)
+    public CreateQuestionUseCase(IQuestionRepository questionRepository, IQuizRepository quizRepository, IAnswerOptionRepository answerOptionRepository)
     {
         _questionRepository = questionRepository;
         _quizRepository = quizRepository;
-        _questionOptionRepository = questionOptionRepository;
+        _answerOptionRepository = answerOptionRepository;
     }
 
     public async Task<ResultDto> Execute(CreateQuestionDto createQuestionDto)
@@ -70,17 +70,17 @@ public class CreateQuestionUseCase
 
         await _questionRepository.CreateAsync(question);
 
-        foreach (var questionOption in createQuestionDto.CreateOptionsDtos)
+        foreach (var answerOption in createQuestionDto.CreateOptionsDtos)
         {
-            var newOption = new QuestionOption
+            var newOption = new AnswerOption
             {
                 Id = Guid.NewGuid(),
-                IsCorrectOption = questionOption.IsCorrectOption,
+                IsCorrectOption = answerOption.IsCorrectOption,
                 QuestionId = question.Id,
-                Response = questionOption.Response,
+                Response = answerOption.Response,
             };
 
-            await _questionOptionRepository.CreateAsync(newOption);
+            await _answerOptionRepository.CreateAsync(newOption);
         }
 
         return new ResultDto(new { question.Id });
