@@ -15,7 +15,7 @@ public class CreateQuizUseCase
         _quizRepository = quizRepository;
     }
 
-    public async Task<ResultDto> Execute(CreateQuizDto createQuizDto, Guid userId)
+    public async Task<ResultDto> Execute(EditorQuizDto createQuizDto, Guid userId)
     {
         var quiz = new Quiz
         {

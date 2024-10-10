@@ -6,12 +6,35 @@ public class Quiz
     public string Title { get; set; }
     public string Description { get; set; }
     public bool Expires { get; set; }
-    public int ExpiresInSeconds { get; set; }
+
+    private int _expiresInSeconds {  get; set; }
+    public int ExpiresInSeconds 
+    { 
+        get {
+            return _expiresInSeconds;
+        } 
+        set {
+            if (Expires)
+            {
+                ValidateExpiresInSeconds(value);
+            }
+
+            _expiresInSeconds = value;
+        }
+    }
     public bool IsActive { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     public List<Question> Questions { get; set; }
     public List<Match> Matchs { get; set; }
+
+    private void ValidateExpiresInSeconds(int expiresInSeconds)
+    {
+        if (expiresInSeconds < 10)
+        {
+            throw new ArgumentException("A expiração do Quiz deve ser maior que 10 segundos");
+        }
+    }
 
     public bool VerifyQuestionsSequenceOrder()
     {

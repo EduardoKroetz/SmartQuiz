@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuizDev.Application.DTOs.Quizzes;
 
-public class CreateQuizDto
+public class EditorQuizDto
 {
     [Required(ErrorMessage = "Informe o título")]
     public string Title { get; set; }

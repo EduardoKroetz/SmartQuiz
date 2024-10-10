@@ -18,7 +18,7 @@ public class QuizzesController : ControllerBase
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateQuizDto dto, [FromServices] CreateQuizUseCase useCase)
+    public async Task<IActionResult> CreateAsync([FromBody] EditorQuizDto dto, [FromServices] CreateQuizUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(dto, userId);
@@ -80,13 +80,34 @@ public class QuizzesController : ControllerBase
     /// <param name="quizId"></param>
     /// <param name="useCase"></param>
     /// <returns></returns>
-    [HttpPost("toogle/{quizId:guid}")]
+    [HttpPost("toogle/{quizId:guid}"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ToggleQuizAsync([FromRoute] Guid quizId, [FromServices] ToggleQuizUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(quizId, userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Atualiza as informações de um Quiz
+    /// </summary>
+    /// <param name="editorQuizDto"></param>
+    /// <param name="quizId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    /// <response code="200">Atualizado com sucesso</response>
+    /// <response code="403">Quem está atualizando não é quem criou o Quiz</response>
+    [HttpPut("{quizId:guid}"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> UpdateQuizAsync([FromBody] EditorQuizDto editorQuizDto, [FromRoute] Guid quizId, [FromServices] UpdateQuizUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(quizId, editorQuizDto, userId);
         return Ok(result);
     }
 }
