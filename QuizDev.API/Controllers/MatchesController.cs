@@ -45,10 +45,37 @@ public class MatchesController : ControllerBase
         return Created(nameof(response) ,response);
     }
 
+    /// <summary>
+    /// Buscar a próxima questão a ser respondida da partida
+    /// </summary>
+    /// <param name="matchId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
     [HttpGet("{matchId:guid}/next-question"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetNextQuestion([FromRoute] Guid matchId, [FromServices] GetNextQuestionUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(matchId, userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Buscar detalhes da partida
+    /// </summary>
+    /// <param name="matchId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    /// <response code="200">Retorna os detalhes da partida (Não inclui relações com outras entidades)</response>
+    /// <response code="404">Não encontrou a partida</response>
+    /// <response code="403">Acessou partida de outro usuário</response>
+
+    [HttpGet("{matchId:guid}"),  Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetMatchDetails([FromRoute] Guid matchId, [FromServices] GetMatchUseCase useCase) 
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(matchId, userId);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QuizDev.Infrastructure.Data;
@@ -11,9 +12,11 @@ using QuizDev.Infrastructure.Data;
 namespace QuizDev.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(QuizDevDbContext))]
-    partial class QuizDevDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241010122546_Rename_QuestionOption_To_AnswerOption")]
+    partial class Rename_QuestionOption_To_AnswerOption
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
