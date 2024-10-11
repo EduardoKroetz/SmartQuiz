@@ -15,7 +15,7 @@ public class ToggleQuizUseCase
 
     public async Task<ResultDto> Execute(Guid quizId, Guid userId)
     {
-        var quiz = await _quizRepository.GetAsync(quizId);
+        var quiz = await _quizRepository.GetAsync(quizId, true);
         if (quiz == null)
         {
             throw new NotFoundException("Quiz não encontrado");
@@ -24,6 +24,14 @@ public class ToggleQuizUseCase
         if (quiz.UserId != userId)
         {
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        }
+
+        if (quiz.IsActive == false)
+        {
+            if (quiz.Questions.Count == 0)
+            {
+                throw new ArgumentException("Não é possível ativar o Quiz pois ele não possui nenhuma questão relacionada");
+            }
         }
 
         quiz.IsActive = !quiz.IsActive;

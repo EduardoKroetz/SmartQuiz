@@ -27,7 +27,7 @@ public class GetMatchUseCase
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
-        var matchDto = new GetMatchDto(match.Id, match.Score, match.CreatedAt, match.Status, match.QuizId, match.UserId, match.Reviewed, match.ReviewId);
+        var matchDto = new GetMatchDto(match.Id, match.Score, match.CreatedAt, match.Status, match.QuizId, match.Quiz, match.UserId, match.Reviewed, match.ReviewId);
         return new ResultDto(matchDto); 
     }
 }

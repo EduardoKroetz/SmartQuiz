@@ -12,4 +12,5 @@ public interface IMatchRepository
     Task<Match?> GetAsync(Guid matchId, bool includeRelations = false);
     Task UpdateAsync(Match match);
     Task DeleteAsync(Match match);
+    Task<List<Match>> GetMatchesAsync(Guid userId, int skip, int take, string? reference = null, string? status = null, bool? reviewed = null, string? orderBy = null);
 }

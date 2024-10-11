@@ -134,4 +134,32 @@ public class MatchesController : ControllerBase
         var result = await useCase.Execute(matchId, userId);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Buscar partidas
+    /// </summary>
+    /// <param name="useCase"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="pageNumber"></param>
+    /// <param name="reference">Parâmetro de pesquisa para buscar por título ou descrição de um Quiz relacionado</param>
+    /// <param name="status">Status da partida. Valores: created, finished </param>
+    /// <param name="reviewed">Se foi revisado</param>
+    /// <param name="orderBy">Ordernar. Valores: score, created_at</param>
+    /// <returns></returns>
+    [HttpGet, Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetMatchesAsync(
+        [FromServices] GetMatchesUseCase useCase,
+        [FromQuery] int pageSize = 25,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] string? reference = null, 
+        [FromQuery] string? status = null,
+        [FromQuery] bool? reviewed = null,
+        [FromQuery] string? orderBy = null)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(userId, pageSize, pageNumber, reference, status, reviewed, orderBy);
+        return Ok(result);
+    }
 }

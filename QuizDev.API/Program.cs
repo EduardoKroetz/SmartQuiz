@@ -130,4 +130,5 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<FinalizeMatchUseCase>();
     services.AddScoped<GetResponsesByMatchUseCase>();
     services.AddScoped<DeleteMatchUseCase>();
+    services.AddScoped<GetMatchesUseCase>();
 }

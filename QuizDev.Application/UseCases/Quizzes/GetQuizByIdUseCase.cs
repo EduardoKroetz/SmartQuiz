@@ -21,7 +21,7 @@ public class GetQuizByIdUseCase
             throw new ArgumentException("Quiz não encontrado");
         }
 
-        var quizDto = new GetQuizDto(quiz.Id, quiz.Title, quiz.Description, quiz.Expires, quiz.ExpiresInSeconds, quiz.IsActive, quiz.UserId, quiz.Questions);
+        var quizDto = new GetQuizDto(quiz.Id, quiz.Title, quiz.Description, quiz.Expires, quiz.ExpiresInSeconds, quiz.IsActive, quiz.UserId);
 
         return new ResultDto(quizDto);
     }

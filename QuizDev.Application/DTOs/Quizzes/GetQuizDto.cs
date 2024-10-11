@@ -1,11 +1,9 @@
-﻿using QuizDev.Application.DTOs.Questions;
-using QuizDev.Core.Entities;
-
+﻿
 namespace QuizDev.Application.DTOs.Quizzes;
 
 public class GetQuizDto
 {
-    public GetQuizDto(Guid id, string title, string description, bool expires, int expiresInSeconds, bool isActive, Guid userId, List<Question> questions)
+    public GetQuizDto(Guid id, string title, string description, bool expires, int expiresInSeconds, bool isActive, Guid userId)
     {
         Id = id;
         Title = title;
@@ -14,7 +12,6 @@ public class GetQuizDto
         ExpiresInSeconds = expiresInSeconds;
         IsActive = isActive;
         UserId = userId;
-        Questions = questions.Select(x => new GetQuestionDto(x.Id, x.Text, x.QuizId, x.Order ,x.Options)).ToList();
     }
 
     public Guid Id { get; set; }
@@ -24,5 +21,4 @@ public class GetQuizDto
     public int ExpiresInSeconds { get; set; }
     public bool IsActive { get; set; }
     public Guid UserId { get; set; }
-    public List<GetQuestionDto> Questions { get; set; }
 }

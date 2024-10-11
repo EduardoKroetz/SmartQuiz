@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using QuizDev.Core.Entities;
+using QuizDev.Core.Enums;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Infrastructure.Data.Repositories;
@@ -53,7 +54,7 @@ public class MatchRepository : IMatchRepository
         {
             query = query
                 .Include(x => x.Responses)
-                .Include(x => x.Quiz)              
+                .Include(x => x.Quiz)
                 .ThenInclude(x => x.Questions)
                 .Select(x => new Match
                 {
@@ -74,15 +75,7 @@ public class MatchRepository : IMatchRepository
                         Expires = x.Quiz.Expires,
                         ExpiresInSeconds = x.Quiz.ExpiresInSeconds,
                         IsActive = x.Quiz.IsActive,
-                        Title = x.Quiz.Title,
-                        Questions = x.Quiz.Questions.Select(question => new Question
-                        {
-                            Id = question.Id,
-                            QuizId = question.QuizId,
-                            Text = question.Text,
-                            Options = question.Options,
-                            Order = question.Order,
-                        }).ToList(),
+                        Title = x.Quiz.Title
                     }
                 });
         }
@@ -100,5 +93,81 @@ public class MatchRepository : IMatchRepository
     {
         _dbContext.Matches.Remove(match);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<Match>> GetMatchesAsync(Guid userId, int skip, int take , string? reference = null, string? status = null, bool? reviewed = null, string? orderBy = null)
+    {
+        var query = _dbContext.Matches.AsQueryable();
+        
+        if (reference != null)
+        {
+            var keyWords = reference.ToLower().Split(" ");
+
+            query = query.Where(x => keyWords.Any(k => 
+                x.Quiz.Title.ToLower().Contains(k) ||
+                x.Quiz.Description.ToLower().Contains(k)
+            ));
+        }
+
+        if (status != null)
+        {
+            if (status == "created")
+            {
+                query = query.Where(x => x.Status.Equals(EMatchStatus.Created));
+            }else if (status == "finished")
+            {
+                query = query.Where(x => x.Status.Equals(EMatchStatus.Finished));
+            }
+        }
+
+        if (reviewed != null)
+        {
+            query = query.Where(x => x.Reviewed.Equals(reviewed));
+        }
+        
+        if (orderBy != null)
+        {
+            if (orderBy == "score")
+            {
+                query = query.OrderBy(x => x.Score);
+            }
+            else if (orderBy == "created_at")
+            {
+                query = query.OrderBy(x => x.CreatedAt);
+            }
+        }else
+        {
+            query = query.OrderByDescending(x => x.Score);
+        }
+
+        return await query
+            .Include(x => x.Quiz)
+            .Where(x => x.UserId == userId)
+            .Skip(skip)
+            .Take(take)
+            .Select(x => new Match
+            {
+                Id = x.Id,
+                QuizId = x.QuizId,
+                CreatedAt = x.CreatedAt,
+                Reviewed = x.Reviewed,
+                Score = x.Score,
+                UserId = x.UserId,
+                Status = x.Status,
+                ReviewId = x.ReviewId,
+                Responses = x.Responses,
+                Quiz = new Quiz
+                {
+                    Id = x.Quiz.Id,
+                    UserId = x.Quiz.UserId,
+                    Description = x.Quiz.Description,
+                    Expires = x.Quiz.Expires,
+                    ExpiresInSeconds = x.Quiz.ExpiresInSeconds,
+                    IsActive = x.Quiz.IsActive,
+                    Title = x.Quiz.Title  
+                }
+            })
+            .ToListAsync();
+
     }
 }
