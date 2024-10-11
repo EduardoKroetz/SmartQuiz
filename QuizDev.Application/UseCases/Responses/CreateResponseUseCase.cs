@@ -33,6 +33,11 @@ public class CreateResponseUseCase
             throw new ArgumentException("Partida não encontrada");
         }
 
+        if (match.Status == Core.Enums.EMatchStatus.Finished)
+        {
+            throw new InvalidOperationException("Essa partida já foi finalizada");
+        }
+
         if (match.UserId != userId)
         {
             throw new UnauthorizedAccessException("Você não tem permissão acessar esse recurso");

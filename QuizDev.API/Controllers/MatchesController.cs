@@ -28,7 +28,7 @@ public class MatchesController : ControllerBase
     }
 
     /// <summary>
-    /// Cria resposta para uma questão de uma partida
+    /// Enviar resposta para uma questão de uma partida
     /// </summary>
     /// <param name="matchId"></param>
     /// <param name="optionId"></param>
@@ -114,6 +114,24 @@ public class MatchesController : ControllerBase
     public async Task<IActionResult> GetResponsesAsync([FromRoute] Guid matchId, [FromServices] GetResponsesByMatchUseCase useCase)
     {
         var result = await useCase.Execute(matchId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Deletar partida
+    /// </summary>
+    /// <param name="matchId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpDelete("{matchId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType (StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteMatchAsync([FromRoute] Guid matchId, [FromServices] DeleteMatchUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(matchId, userId);
         return Ok(result);
     }
 }

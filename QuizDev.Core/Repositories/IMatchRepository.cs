@@ -11,4 +11,5 @@ public interface IMatchRepository
     Task<Question?> GetNextQuestion(Match match);
     Task<Match?> GetAsync(Guid matchId, bool includeRelations = false);
     Task UpdateAsync(Match match);
+    Task DeleteAsync(Match match);
 }

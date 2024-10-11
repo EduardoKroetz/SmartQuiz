@@ -95,4 +95,10 @@ public class MatchRepository : IMatchRepository
         _dbContext.Matches.Update(match);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(Match match)
+    {
+        _dbContext.Matches.Remove(match);
+        await _dbContext.SaveChangesAsync();
+    }
 }
