@@ -1,5 +1,5 @@
-﻿using QuizDev.Application.DTOs.Questions;
-using QuizDev.Application.DTOs.Responses;
+﻿using QuizDev.Core.DTOs.Questions;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 

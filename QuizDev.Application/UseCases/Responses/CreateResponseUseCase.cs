@@ -1,5 +1,5 @@
 ﻿
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Responses;
@@ -27,7 +27,7 @@ public class CreateResponseUseCase
         }
 
         //Buscar partida
-        var match = await _matchRepository.GetAsync(matchId, true);
+        var match = await _matchRepository.GetAsync(matchId);
         if (match == null)
         {
             throw new ArgumentException("Partida não encontrada");
@@ -62,6 +62,13 @@ public class CreateResponseUseCase
         var matchResponse = match.CreateResponse(answerOption);
 
         await _matchResponseRepository.CreateAsync(matchResponse);
+
+        //Finaliza a partida caso essa seja a última questão
+        if (answerOption.Question.Order + 1 == match.Quiz.Questions.Count)
+        {
+            match.Status = Core.Enums.EMatchStatus.Finished;
+            await _matchRepository.UpdateAsync(match);
+        }
 
         //Após criação da resposta, adicionar pontuação caso a resposta esteja correta
         if (answerOption.IsCorrectOption)

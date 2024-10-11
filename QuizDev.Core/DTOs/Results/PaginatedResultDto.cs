@@ -1,6 +1,6 @@
 ﻿
 
-namespace QuizDev.Application.DTOs.Results;
+namespace QuizDev.Core.DTOs.Results;
 
 public class PaginatedResultDto
 {

@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuizDev.Application.DTOs.Users;
+namespace QuizDev.Core.DTOs.Users;
 
-public class CreateUserDto
+public class LoginUserDto
 {
-    [Required(ErrorMessage = "Informe o nome de usuário")]
-    public string Username { get; set; }
-
     [Required(ErrorMessage = "Informe o e-mail")]
     [EmailAddress(ErrorMessage = "Informe o e-mail em um formato válido")]
     public string Email { get; set; }

@@ -1,8 +1,8 @@
 ﻿
-using QuizDev.Application.DTOs.AnswerOptions;
+using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.Entities;
 
-namespace QuizDev.Application.DTOs.Questions;
+namespace QuizDev.Core.DTOs.Questions;
 
 public class GetQuestionDto
 {

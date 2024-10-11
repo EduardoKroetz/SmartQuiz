@@ -1,6 +1,6 @@
 ﻿
-using QuizDev.Application.DTOs.Quizzes;
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Quizzes;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 

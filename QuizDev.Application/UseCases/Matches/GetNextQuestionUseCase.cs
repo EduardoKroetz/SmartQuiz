@@ -1,6 +1,6 @@
 ﻿
-using QuizDev.Application.DTOs.Questions;
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Questions;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Matches;
@@ -19,7 +19,7 @@ public class GetNextQuestionUseCase
     public async Task<ResultDto> Execute(Guid matchId, Guid userId)
     {
         //Busca a partida
-        var match = await _matchRepository.GetAsync(matchId, includeRelations: true);
+        var match = await _matchRepository.GetAsync(matchId);
         if (match == null)
         {
             throw new ArgumentException("Partida não encontrada");
@@ -60,13 +60,6 @@ public class GetNextQuestionUseCase
             {
                 return new ResultDto(null);
             }
-        }
-
-        //Finaliza a partida caso essa seja a última questão
-        if (nextQuestion.Order + 1 == match.Quiz.Questions.Count)
-        {
-            match.Status = Core.Enums.EMatchStatus.Finished;
-            await _matchRepository.UpdateAsync(match);
         }
 
         var dto = new

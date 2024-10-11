@@ -1,4 +1,4 @@
-﻿using QuizDev.Application.DTOs.Responses;
+﻿using QuizDev.Core.DTOs.Responses;
 using QuizDev.Application.Exceptions;
 using QuizDev.Core.Repositories;
 

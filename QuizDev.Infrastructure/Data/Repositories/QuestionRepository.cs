@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 
@@ -46,5 +47,15 @@ public class QuestionRepository : IQuestionRepository
     {
         _dbContext.Questions.UpdateRange(questions);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<GetQuestionDto>> GetQuestionByQuizId(Guid quizId)
+    {
+        return await _dbContext.Questions
+            .Include(x => x.Options)
+            .Where(x => x.QuizId == quizId)
+            .Select(x => new GetQuestionDto(x.Id, x.Text, x.QuizId, x.Order, x.Options))
+            .OrderBy(x => x.Order)
+            .ToListAsync();
     }
 }

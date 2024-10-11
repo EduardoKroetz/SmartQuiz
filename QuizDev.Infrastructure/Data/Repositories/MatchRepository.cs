@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.Matches;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Enums;
 using QuizDev.Core.Repositories;
@@ -46,41 +47,23 @@ public class MatchRepository : IMatchRepository
         return await _questionRepository.GetQuizQuestionByOrder(match.QuizId, lastResponse.Order + 1);
     }
 
-    public async Task<Match?> GetAsync(Guid matchId, bool includeRelations = false)
+    public async Task<Match?> GetAsync(Guid matchId)
     {
-        var query = _dbContext.Matches.AsQueryable();
+        return await _dbContext.Matches
+            .Include(x => x.Responses)
+            .Include(x => x.Quiz)
+            .ThenInclude(x => x.Questions)
+            .FirstOrDefaultAsync(x => x.Id == matchId);
+    }
 
-        if (includeRelations)
-        {
-            query = query
-                .Include(x => x.Responses)
-                .Include(x => x.Quiz)
-                .ThenInclude(x => x.Questions)
-                .Select(x => new Match
-                {
-                    Id = x.Id,
-                    QuizId = x.QuizId,
-                    CreatedAt = x.CreatedAt,
-                    Reviewed = x.Reviewed,
-                    Score = x.Score,
-                    UserId = x.UserId,
-                    Status = x.Status,
-                    ReviewId = x.ReviewId,
-                    Responses = x.Responses,
-                    Quiz = new Quiz
-                    {
-                        Id = x.Quiz.Id,
-                        UserId = x.Quiz.UserId,
-                        Description = x.Quiz.Description,
-                        Expires = x.Quiz.Expires,
-                        ExpiresInSeconds = x.Quiz.ExpiresInSeconds,
-                        IsActive = x.Quiz.IsActive,
-                        Title = x.Quiz.Title
-                    }
-                });
-        }
-
-        return await query.FirstOrDefaultAsync(x => x.Id.Equals(matchId));
+    public async Task<GetMatchDto?> GetDetailsAsync(Guid matchId)
+    {
+        return await _dbContext.Matches
+            .Include(x => x.Responses)
+            .Include(x => x.Quiz)
+            .ThenInclude(x => x.Questions)
+            .Select(x => new GetMatchDto(x.Id, x.Score, x.CreatedAt, x.ExpiresIn, x.Status, x.QuizId, x.Quiz, x.UserId, x.Reviewed, x.ReviewId))
+            .FirstOrDefaultAsync(x => x.Id == matchId);     
     }
 
     public async Task UpdateAsync(Match match)

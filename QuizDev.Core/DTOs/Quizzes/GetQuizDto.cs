@@ -1,5 +1,5 @@
 ﻿
-namespace QuizDev.Application.DTOs.Quizzes;
+namespace QuizDev.Core.DTOs.Quizzes;
 
 public class GetQuizDto
 {

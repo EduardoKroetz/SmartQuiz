@@ -1,6 +1,6 @@
 ﻿
-using QuizDev.Application.DTOs.Quizzes;
-using QuizDev.Application.DTOs.Results;
+using QuizDev.Core.DTOs.Quizzes;
+using QuizDev.Core.DTOs.Results;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Quizzes;

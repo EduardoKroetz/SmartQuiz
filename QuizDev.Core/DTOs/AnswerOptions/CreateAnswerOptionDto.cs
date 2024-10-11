@@ -1,5 +1,5 @@
 ﻿
-namespace QuizDev.Application.DTOs.AnswerOptions;
+namespace QuizDev.Core.DTOs.AnswerOptions;
 
 public class CreateAnswerOptionDto
 {

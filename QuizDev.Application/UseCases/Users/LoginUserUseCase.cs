@@ -1,6 +1,6 @@
 ﻿using QuizDev.Application.Services;
-using QuizDev.Application.DTOs.Users;
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Users;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Users;

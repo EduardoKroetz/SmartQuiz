@@ -1,7 +1,7 @@
 ﻿
 
-using QuizDev.Application.DTOs.Questions;
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Questions;
+using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 
@@ -54,7 +54,7 @@ public class CreateMatchUseCase
         }
 
         var questionDto = new GetQuestionDto(nextQuestion.Id, nextQuestion.Text, nextQuestion.QuizId, nextQuestion.Order, nextQuestion.Options);
-      
-        return new ResultDto(new { MatchId = match.Id, NextQuestion = questionDto });
+
+        return new ResultDto(new { MatchId = match.Id, match.ExpiresIn, NextQuestion = questionDto });
     }
 }

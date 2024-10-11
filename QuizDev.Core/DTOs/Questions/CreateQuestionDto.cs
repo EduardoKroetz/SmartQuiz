@@ -1,7 +1,7 @@
-﻿using QuizDev.Application.DTOs.AnswerOptions;
+﻿using QuizDev.Core.DTOs.AnswerOptions;
 using System.ComponentModel.DataAnnotations;
 
-namespace QuizDev.Application.DTOs.Questions;
+namespace QuizDev.Core.DTOs.Questions;
 
 public class CreateQuestionDto
 {

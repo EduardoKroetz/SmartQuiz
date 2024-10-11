@@ -14,15 +14,12 @@ public class Match
     public Guid UserId{ get; set; }
     public User User { get; set; }
 
-    private DateTime _expiresIn { get; set; }
     public DateTime ExpiresIn 
     { 
-        get {
-            return _expiresIn;
+        get 
+        {
+            return CreatedAt.AddSeconds(Quiz.ExpiresInSeconds);
         }
-        private set {
-            _expiresIn = CreatedAt.AddSeconds(Quiz.ExpiresInSeconds);
-        } 
     }
     public bool Reviewed { get; set; }
     public Guid? ReviewId { get; set; }

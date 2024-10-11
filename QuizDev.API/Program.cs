@@ -120,6 +120,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<ToggleQuizUseCase>();
     services.AddScoped<UpdateQuizUseCase>();
     services.AddScoped<DeleteQuizUseCase>();
+    services.AddScoped<GetQuestionByQuizUseCase>();
 
     services.AddScoped<CreateQuestionUseCase>();
 

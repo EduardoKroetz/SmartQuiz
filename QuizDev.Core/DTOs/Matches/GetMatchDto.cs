@@ -1,17 +1,18 @@
 ﻿
-using QuizDev.Application.DTOs.Quizzes;
+using QuizDev.Core.DTOs.Quizzes;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Enums;
 
-namespace QuizDev.Application.DTOs.Matches;
+namespace QuizDev.Core.DTOs.Matches;
 
 public class GetMatchDto
 {
-    public GetMatchDto(Guid id, int score, DateTime createdAt, EMatchStatus status, Guid quizId, Quiz quiz, Guid userId, bool reviewed, Guid? reviewId)
+    public GetMatchDto(Guid id, int score, DateTime createdAt, DateTime expiresIn, EMatchStatus status, Guid quizId, Quiz quiz, Guid userId, bool reviewed, Guid? reviewId)
     {
         Id = id;
         Score = score;
         CreatedAt = createdAt;
+        ExpiresIn = expiresIn;
         Status = status.ToString();
         QuizId = quizId;
         UserId = userId;
@@ -23,6 +24,7 @@ public class GetMatchDto
     public Guid Id { get; set; }
     public int Score { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime ExpiresIn { get; set; }
     public string Status { get; set; }
     public Guid QuizId { get; set; }
     public GetQuizDto Quiz { get; set; }

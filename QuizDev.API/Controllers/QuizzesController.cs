@@ -4,6 +4,7 @@ using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Quizzes;
 using QuizDev.Core.DTOs.Quizzes;
 using System.Formats.Asn1;
+using System.Runtime.InteropServices;
 
 namespace QuizDev.API.Controllers;
 
@@ -127,6 +128,21 @@ public class QuizzesController : ControllerBase
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(quizId, userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Buscar todas as questões do Quiz
+    /// </summary>
+    /// <param name="quizId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet("{quizId:guid}/questions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetQuestionByQuiz([FromRoute] Guid quizId, [FromServices] GetQuestionByQuizUseCase useCase)
+    {
+        var result = await useCase.Execute(quizId);
         return Ok(result);
     }
 }

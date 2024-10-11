@@ -1,5 +1,5 @@
 ﻿
-namespace QuizDev.Application.DTOs.Responses;
+namespace QuizDev.Core.DTOs.Responses;
 
 public class ResultDto
 {
