@@ -3,5 +3,6 @@
 public enum EMatchStatus
 {
     Created,
-    Finished
+    Finished,
+    Failed
 }

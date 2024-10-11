@@ -1,4 +1,5 @@
 ﻿using QuizDev.Core.Enums;
+using System.Reflection.Metadata.Ecma335;
 
 namespace QuizDev.Core.Entities;
 
@@ -12,6 +13,17 @@ public class Match
     public Quiz Quiz { get; set; }
     public Guid UserId{ get; set; }
     public User User { get; set; }
+
+    private DateTime _expiresIn { get; set; }
+    public DateTime ExpiresIn 
+    { 
+        get {
+            return _expiresIn;
+        }
+        private set {
+            _expiresIn = CreatedAt.AddSeconds(Quiz.ExpiresInSeconds);
+        } 
+    }
     public bool Reviewed { get; set; }
     public Guid? ReviewId { get; set; }
     public Review Review { get; set; }
@@ -40,4 +52,11 @@ public class Match
     {
         Score++;
     }
+
+    public bool AlreadyExpiration()
+    {
+       return ExpiresIn > DateTime.UtcNow ? false : true;
+    }
+
+
 }

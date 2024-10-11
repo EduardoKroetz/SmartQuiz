@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Quizzes;
-using QuizDev.Application.DTOs.Quizzes;
+using QuizDev.Core.DTOs.Quizzes;
 using System.Formats.Asn1;
 
 namespace QuizDev.API.Controllers;

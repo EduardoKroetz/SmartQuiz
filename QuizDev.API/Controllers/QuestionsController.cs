@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizDev.Application.UseCases.Questions;
-using QuizDev.Application.DTOs.Questions;
+using QuizDev.Core.DTOs.Questions;
 
 namespace QuizDev.API.Controllers;
 

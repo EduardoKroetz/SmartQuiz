@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using QuizDev.API.Extensions;
-using QuizDev.Application.DTOs.Responses;
+using QuizDev.Core.DTOs.Responses;
 
 namespace QuizDev.API.Filters;
 

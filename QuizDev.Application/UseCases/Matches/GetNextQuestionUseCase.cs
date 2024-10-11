@@ -33,7 +33,13 @@ public class GetNextQuestionUseCase
         //Verifica se já foi finalizada
         if (match.Status == Core.Enums.EMatchStatus.Finished)
         {
-            throw new ArgumentException("Essa partida já foi finalizada");
+            throw new InvalidOperationException("Essa partida já foi finalizada");
+        }
+
+        if (match.Status == Core.Enums.EMatchStatus.Failed)
+        {
+            throw new InvalidOperationException("Partida expirada");
+
         }
 
         //Busca próxima questão

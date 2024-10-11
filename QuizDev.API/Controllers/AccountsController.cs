@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizDev.Application.UseCases.Users;
-using QuizDev.Application.DTOs.Users;
+using QuizDev.Core.DTOs.Users;
 
 namespace QuizDev.API.Controllers;
 

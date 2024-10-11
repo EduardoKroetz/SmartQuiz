@@ -33,14 +33,29 @@ public class CreateResponseUseCase
             throw new ArgumentException("Partida não encontrada");
         }
 
+        if (match.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("Você não tem permissão acessar esse recurso");
+        }
+
         if (match.Status == Core.Enums.EMatchStatus.Finished)
         {
             throw new InvalidOperationException("Essa partida já foi finalizada");
         }
 
-        if (match.UserId != userId)
+        if (match.Status == Core.Enums.EMatchStatus.Failed)
         {
-            throw new UnauthorizedAccessException("Você não tem permissão acessar esse recurso");
+            throw new InvalidOperationException("Partida expirada");
+        }
+
+        //Verificar se o tempo de expiração já passou
+        if (match.AlreadyExpiration())
+        {
+            //Finalizar a partida caso já tenha expirado
+            match.Status = Core.Enums.EMatchStatus.Failed;
+            await _matchRepository.UpdateAsync(match);
+
+            throw new InvalidOperationException("Partida expirada");
         }
 
         //Criar resposta
