@@ -24,4 +24,10 @@ public class AnswerOptionRepository : IAnswerOptionRepository
         await _dbContext.AnswerOptions.AddAsync(option);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(AnswerOption option)
+    {
+        _dbContext.AnswerOptions.Update(option);
+        await _dbContext.SaveChangesAsync();
+    }
 }

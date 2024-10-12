@@ -73,4 +73,22 @@ public class QuestionsController : ControllerBase
         var result = await useCase.Execute(questionId, userId);
         return Ok(result);
     }
+
+
+    /// <summary>
+    /// Alterar opção de resposta correta da questão
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpPatch("{questionId:guid}/correct-option/{answerOptionId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid questionId, [FromRoute] Guid answerOptionId, [FromServices] UpdateCorrectOptionUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(questionId, answerOptionId ,userId);
+        return Ok(result);
+    }
 }
