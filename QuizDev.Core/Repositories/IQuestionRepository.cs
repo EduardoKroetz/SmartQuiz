@@ -12,4 +12,5 @@ public interface IQuestionRepository
     Task<List<GetQuestionDto>> GetQuestionsByQuizId(Guid quizId);
     Task<GetQuestionDto?> GetQuestionDetails(Guid questionId);
     Task UpdateAsync(Question question);
+    Task DeleteAsync(Question question);
 }

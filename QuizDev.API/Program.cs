@@ -14,6 +14,7 @@ using QuizDev.Infrastructure.Data;
 using QuizDev.Infrastructure.Data.Repositories;
 using System.Reflection;
 using System.Text;
+using QuizDev.Core.DTOs.Questions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +126,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<CreateQuestionUseCase>();
     services.AddScoped<GetQuestionDetailsUseCase>();
     services.AddScoped<UpdateQuestionUseCase>();
+    services.AddScoped<DeleteQuestionUseCase>();
     
     services.AddScoped<CreateMatchUseCase>();
     services.AddScoped<CreateResponseUseCase>();
