@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Questions;
 using QuizDev.Core.DTOs.Questions;
 
@@ -23,11 +24,31 @@ public class QuestionsController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Buscar questão pelo Id
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
     [HttpGet("{questionId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetQuestionDetailsAsync([FromRoute] Guid questionId, [FromServices] GetQuestionDetailsUseCase useCase)
     {
         var result = await useCase.Execute(questionId);
         return Ok(result);
+    }
+
+    [HttpPatch("{questionId:guid}/text"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid questionId, [FromBody] UpdateQuestionDto dto, [FromServices] UpdateQuestionUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(questionId, dto, userId);
+        return Ok(result);
+
     }
 
 }

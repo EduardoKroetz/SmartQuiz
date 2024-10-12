@@ -3,7 +3,6 @@ using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace QuizDev.Infrastructure.Data.Repositories;
 
@@ -22,7 +21,7 @@ public class QuestionRepository : IQuestionRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<Question?> GetAsync(Guid id, bool includeRelations = false)
+    public async Task<Question?> GetAsync(Guid id, bool includeRelations = true)
     {
         var query = _dbContext.Questions.AsQueryable();
 
@@ -81,5 +80,11 @@ public class QuestionRepository : IQuestionRepository
                 Options = x.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == questionId);
+    }
+
+    public async Task UpdateAsync(Question question)
+    {
+        _dbContext.Questions.Update(question);
+        await _dbContext.SaveChangesAsync();
     }
 }
