@@ -16,7 +16,7 @@ public class AnswerOptionRepository : IAnswerOptionRepository
 
     public async Task<AnswerOption?> GetById(Guid id)
     {
-        return await _dbContext.AnswerOptions.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        return await _dbContext.AnswerOptions.Include(x => x.Question).FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public async Task CreateAsync(AnswerOption option)
@@ -28,6 +28,12 @@ public class AnswerOptionRepository : IAnswerOptionRepository
     public async Task UpdateAsync(AnswerOption option)
     {
         _dbContext.AnswerOptions.Update(option);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(AnswerOption option)
+    {
+        _dbContext.AnswerOptions.Remove(option);
         await _dbContext.SaveChangesAsync();
     }
 }

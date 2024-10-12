@@ -141,4 +141,5 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetMatchesUseCase>();
 
     services.AddScoped<CreateAnswerOptionUseCase>();
+    services.AddScoped<DeleteAnswerOptionUseCase>();
 }
