@@ -23,4 +23,11 @@ public class QuestionsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{questionId:guid}")]
+    public async Task<IActionResult> GetQuestionDetailsAsync([FromRoute] Guid questionId, [FromServices] GetQuestionDetailsUseCase useCase)
+    {
+        var result = await useCase.Execute(questionId);
+        return Ok(result);
+    }
+
 }

@@ -4,18 +4,18 @@ using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Quizzes;
 
-public class GetQuestionByQuizUseCase
+public class GetQuestionsByQuizUseCase
 {
     private readonly IQuestionRepository _questionRepository;
 
-    public GetQuestionByQuizUseCase(IQuestionRepository questionRepository)
+    public GetQuestionsByQuizUseCase(IQuestionRepository questionRepository)
     {
         _questionRepository = questionRepository;
     }
 
     public async Task<ResultDto> Execute(Guid quizId)
     {
-        var questions = await _questionRepository.GetQuestionByQuizId(quizId);
+        var questions = await _questionRepository.GetQuestionsByQuizId(quizId);
         return new ResultDto(questions);
     }
 }

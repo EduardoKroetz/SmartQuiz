@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace QuizDev.Infrastructure.Data.Repositories;
 
@@ -49,13 +51,35 @@ public class QuestionRepository : IQuestionRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<GetQuestionDto>> GetQuestionByQuizId(Guid quizId)
+    public async Task<List<GetQuestionDto>> GetQuestionsByQuizId(Guid quizId)
     {
         return await _dbContext.Questions
-            .Include(x => x.Options)
+            .AsNoTracking()
             .Where(x => x.QuizId == quizId)
-            .Select(x => new GetQuestionDto(x.Id, x.Text, x.QuizId, x.Order, x.Options))
+            .Select(x => new GetQuestionDto
+            {
+                Id = x.Id,
+                Text =  x.Text,
+                QuizId = x.QuizId,
+                Order = x.Order,
+                Options = x.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+            })
             .OrderBy(x => x.Order)
             .ToListAsync();
+    }
+
+    public async Task<GetQuestionDto?> GetQuestionDetails(Guid questionId)
+    {
+        return await _dbContext.Questions
+            .AsNoTracking()
+            .Select(x => new GetQuestionDto
+            {
+                Id = x.Id,
+                Text = x.Text,
+                QuizId = x.QuizId,
+                Order = x.Order,
+                Options = x.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+            })
+            .FirstOrDefaultAsync(x => x.Id == questionId);
     }
 }

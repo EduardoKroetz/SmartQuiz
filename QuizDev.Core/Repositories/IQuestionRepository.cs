@@ -9,5 +9,6 @@ public interface IQuestionRepository
     Task<Question?> GetAsync(Guid id, bool includeRelations = false);
     Task<Question?> GetQuizQuestionByOrder(Guid quizId, int order);
     Task UpdateRangeAsync(List<Question> questions);
-    Task<List<GetQuestionDto>> GetQuestionByQuizId(Guid quizId);
+    Task<List<GetQuestionDto>> GetQuestionsByQuizId(Guid quizId);
+    Task<GetQuestionDto?> GetQuestionDetails(Guid questionId);
 }

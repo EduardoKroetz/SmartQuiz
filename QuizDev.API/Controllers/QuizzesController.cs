@@ -140,7 +140,7 @@ public class QuizzesController : ControllerBase
     [HttpGet("{quizId:guid}/questions")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetQuestionByQuiz([FromRoute] Guid quizId, [FromServices] GetQuestionByQuizUseCase useCase)
+    public async Task<IActionResult> GetQuestionByQuiz([FromRoute] Guid quizId, [FromServices] GetQuestionsByQuizUseCase useCase)
     {
         var result = await useCase.Execute(quizId);
         return Ok(result);

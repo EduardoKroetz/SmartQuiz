@@ -1,4 +1,5 @@
 ﻿
+using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Repositories;
@@ -65,7 +66,14 @@ public class GetNextQuestionUseCase
         var dto = new
         {
             IsLastQuestion = nextQuestion.Order + 1 == match.Quiz.Questions.Count,
-            Question = new GetQuestionDto(nextQuestion.Id, nextQuestion.Text, nextQuestion.QuizId, nextQuestion.Order, nextQuestion.Options)
+            Question = new GetQuestionDto
+            {
+                Id = nextQuestion.Id,
+                Text = nextQuestion.Text,
+                QuizId = nextQuestion.QuizId,
+                Order = nextQuestion.Order,
+                Options = nextQuestion.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+            }
         };
 
         return new ResultDto(dto);
