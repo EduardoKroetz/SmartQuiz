@@ -15,6 +15,8 @@ using QuizDev.Infrastructure.Data.Repositories;
 using System.Reflection;
 using System.Text;
 using QuizDev.Core.DTOs.Questions;
+using QuizDev.Core.DTOs.AnswerOptions;
+using QuizDev.Application.UseCases.AnswerOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,4 +139,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetResponsesByMatchUseCase>();
     services.AddScoped<DeleteMatchUseCase>();
     services.AddScoped<GetMatchesUseCase>();
+
+    services.AddScoped<CreateAnswerOptionUseCase>();
 }
