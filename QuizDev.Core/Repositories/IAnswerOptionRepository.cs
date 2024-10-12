@@ -1,4 +1,5 @@
-﻿using QuizDev.Core.Entities;
+﻿using QuizDev.Core.DTOs.AnswerOptions;
+using QuizDev.Core.Entities;
 
 namespace QuizDev.Core.Repositories;
 
@@ -8,4 +9,5 @@ public interface IAnswerOptionRepository
     Task CreateAsync(AnswerOption option);
     Task UpdateAsync(AnswerOption option);
     Task DeleteAsync(AnswerOption option);
+    Task<List<GetAnswerOptionDto>> GetByQuestionId(Guid questionId);
 }

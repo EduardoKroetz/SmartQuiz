@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizDev.API.Extensions;
+using QuizDev.Application.UseCases.AnswerOptions;
 using QuizDev.Application.UseCases.Questions;
 using QuizDev.Core.DTOs.Questions;
 
@@ -89,6 +90,22 @@ public class QuestionsController : ControllerBase
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(questionId, answerOptionId ,userId);
+        return Ok(result);
+    }
+
+
+    /// <summary>
+    /// Buscar opções de resposta de uma Questão
+    /// </summary>
+    /// <param name="questionId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet("{questionId:guid}/answer-options")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAnswerOptionsFromQuestion([FromRoute] Guid questionId, [FromServices] GetAnswerOptionsByQuestionUseCase useCase)
+    {
+        var result = await useCase.Execute(questionId);
         return Ok(result);
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 
@@ -35,5 +36,13 @@ public class AnswerOptionRepository : IAnswerOptionRepository
     {
         _dbContext.AnswerOptions.Remove(option);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<GetAnswerOptionDto>> GetByQuestionId(Guid questionId)
+    {
+        return await _dbContext.AnswerOptions
+            .Where(x => x.QuestionId == questionId)
+            .Select(x => new GetAnswerOptionDto(x.Id, x.Response, x.QuestionId))
+            .ToListAsync();
     }
 }
