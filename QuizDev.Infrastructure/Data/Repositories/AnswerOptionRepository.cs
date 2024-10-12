@@ -41,6 +41,7 @@ public class AnswerOptionRepository : IAnswerOptionRepository
     public async Task<List<GetAnswerOptionDto>> GetByQuestionId(Guid questionId)
     {
         return await _dbContext.AnswerOptions
+            .AsNoTracking()
             .Where(x => x.QuestionId == questionId)
             .Select(x => new GetAnswerOptionDto(x.Id, x.Response, x.QuestionId))
             .ToListAsync();

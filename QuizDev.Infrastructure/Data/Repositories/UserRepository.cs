@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.Users;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 
@@ -22,6 +23,18 @@ public class UserRepository : IUserRepository
     {
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<GetUserDto?> GetDetailsAsync(Guid userId)
+    {
+        return await _dbContext.Users
+            .Select(x => new GetUserDto
+            {
+                Id = x.Id,
+                Email = x.Email,
+                Username = x.Username
+            })
+            .FirstOrDefaultAsync(x => x.Id == userId);
     }
 
 }

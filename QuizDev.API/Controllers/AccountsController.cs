@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Users;
 using QuizDev.Core.DTOs.Users;
 
@@ -37,4 +39,35 @@ public class AccountsController : ControllerBase
         var result = await useCase.Execute(dto);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Buscar usuário pelo Id
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet("{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDetailsAsync([FromRoute] Guid userId, [FromServices] GetUserUseCase useCase)
+    {
+        var result = await useCase.Execute(userId);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Obter informações do usuário autenticado
+    /// </summary>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet, Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDetailsAsync([FromServices] GetUserUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(userId);
+        return Ok(result);
+    }
+
 }
