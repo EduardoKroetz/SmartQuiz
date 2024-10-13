@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using QuizDev.Application.Services.Interfaces;
 using QuizDev.Core.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace QuizDev.Application.Services;
 
-public class AuthService
+public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
 

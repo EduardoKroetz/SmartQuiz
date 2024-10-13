@@ -1,16 +1,16 @@
-﻿using QuizDev.Application.Services;
-using QuizDev.Core.DTOs.Users;
+﻿using QuizDev.Core.DTOs.Users;
 using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Repositories;
+using QuizDev.Application.Services.Interfaces;
 
 namespace QuizDev.Application.UseCases.Users;
 
 public class LoginUserUseCase
 {
     private readonly IUserRepository _userRepository;
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
 
-    public LoginUserUseCase(IUserRepository userRepository, AuthService authService)
+    public LoginUserUseCase(IUserRepository userRepository, IAuthService authService)
     {
         _userRepository = userRepository;
         _authService = authService;
@@ -31,6 +31,6 @@ public class LoginUserUseCase
         }
 
         var token = _authService.GenerateJwtToken(user);
-        return new ResultDto(new { token });
+        return new ResultDto(new { Token = token });
     }
 }
