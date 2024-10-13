@@ -44,6 +44,13 @@ public class ReviewController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Atualizar avaliação
+    /// </summary>
+    /// <param name="reviewId"></param>
+    /// <param name="dto"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
     [HttpPut("{reviewId:guid}"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -54,4 +61,21 @@ public class ReviewController : ControllerBase
         var result = await useCase.Execute(dto, reviewId, userId);
         return Ok(result);
     }
+
+
+    /// <summary>
+    /// Buscar detalhes da avaliação
+    /// </summary>
+    /// <param name="reviewId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpGet("{reviewId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDetailsAsync([FromRoute] Guid reviewId, [FromServices] GetReviewDetailsUseCase useCase)
+    {
+        var result = await useCase.Execute(reviewId);
+        return Ok(result);
+    }
+
 }

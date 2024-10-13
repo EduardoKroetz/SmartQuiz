@@ -31,6 +31,11 @@ public class CreateReviewUseCase
             throw new InvalidOperationException("Não é possível criar avaliação para uma partida não concluída");
         }
 
+        if (match.Reviewed)
+        {
+            throw new InvalidOperationException("Já foi criada uma avaliação para a partida");
+        }
+
         if (match.UserId != userId)
         {
             throw new UnauthorizedAccessException("Você não tem permissão para criar avaliação de partidas de outros usuários");

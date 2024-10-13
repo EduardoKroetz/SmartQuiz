@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizDev.Core.DTOs.Reviews;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
 
@@ -35,6 +36,24 @@ public class ReviewRepository : IReviewRepository
 
     public async Task<Review?> GetById(Guid reviewId)
     {
-        return await _dbContext.Reviews.Include(x => x.Match).FirstOrDefaultAsync(x => x.Id == reviewId);
+        return await _dbContext.Reviews
+            .Include(x => x.Match)
+            .ThenInclude(x => x.Quiz)
+            .FirstOrDefaultAsync(x => x.Id == reviewId);
+    }
+
+    public async Task<GetReviewDto?> GetDetailsAsync(Guid reviewId)
+    {
+        return await _dbContext.Reviews
+            .Select(x => new GetReviewDto
+            {
+                Id = x.Id,
+                Description = x.Description,
+                MatchId = x.MatchId,
+                QuizId = x.QuizId,
+                Rating = x.Rating,
+                UserId = x.UserId
+            })
+            .FirstOrDefaultAsync(x => x.Id == reviewId);
     }
 }
