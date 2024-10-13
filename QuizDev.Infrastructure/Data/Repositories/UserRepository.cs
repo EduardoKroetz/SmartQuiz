@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizDev.Core.DTOs.Matches;
+using QuizDev.Core.DTOs.Quizzes;
 using QuizDev.Core.DTOs.Users;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
@@ -50,4 +51,14 @@ public class UserRepository : IUserRepository
             .ToListAsync();
     }
 
+    public async Task<List<GetQuizDto>> GetUserQuizzesAsync(Guid userId, int skip, int take)
+    {
+        return await _dbContext.Quizzes
+            .AsNoTracking()
+            .Where(x => x.UserId == userId)
+            .Skip(skip)
+            .Take(take)
+            .Select(x => new GetQuizDto(x.Id, x.Title, x.Description, x.Expires, x.ExpiresInSeconds, x.IsActive, x.UserId))
+            .ToListAsync();
+    }
 }

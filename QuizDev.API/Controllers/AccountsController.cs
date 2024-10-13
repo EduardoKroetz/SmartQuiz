@@ -86,4 +86,19 @@ public class AccountsController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Buscar quizzes de um usuário
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="useCase"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="pageNumber"></param>
+    /// <returns></returns>
+    [HttpGet("{userId:guid}/quizzes")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserQuizzesAsync([FromRoute] Guid userId, [FromServices] GetUserQuizzesUseCase useCase, [FromQuery] int pageSize = 15, [FromQuery] int pageNumber = 1)
+    {
+        var result = await useCase.Execute(userId, pageSize, pageNumber);
+        return Ok(result);
+    }
 }
