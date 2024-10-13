@@ -50,10 +50,6 @@ public class QuizDevDbContext : DbContext
         builder.Entity<Match>(options =>
         {
             options.HasKey(x => x.Id);
-            options.HasOne(x => x.Review)
-                .WithOne(x => x.Match)
-                .HasForeignKey<Match>(x => x.ReviewId)
-                .OnDelete(DeleteBehavior.SetNull);
         });
 
         builder.Entity<Question>(options =>
@@ -76,6 +72,17 @@ public class QuizDevDbContext : DbContext
                 .HasForeignKey(x => x.AnswerOptionId);
         });
 
+        builder.Entity<Review>(options =>
+        {
+            options.HasKey(x => x.Id);
+            options.HasOne(x => x.Match)
+                .WithOne(x => x.Review)
+                .HasForeignKey<Match>(x => x.ReviewId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            options.HasOne(x => x.Quiz)
+                .WithMany();
+        });
 
     }
 }

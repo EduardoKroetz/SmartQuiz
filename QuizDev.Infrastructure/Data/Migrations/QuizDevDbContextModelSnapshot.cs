@@ -54,9 +54,6 @@ namespace QuizDev.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("ExpiresIn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uuid");
 

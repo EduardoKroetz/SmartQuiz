@@ -27,7 +27,7 @@ public class CreateQuestionUseCase
         }
 
         //Valida se possui opção correta
-        var correctOptionsCount = createQuestionDto.CreateOptionsDtos.Count(x => x.IsCorrectOption);
+        var correctOptionsCount = createQuestionDto.Options.Count(x => x.IsCorrectOption);
         if(correctOptionsCount == 0)
         {
             throw new ArgumentException("Informe uma opção de resposta correta");
@@ -70,7 +70,7 @@ public class CreateQuestionUseCase
 
         await _questionRepository.CreateAsync(question);
 
-        foreach (var answerOption in createQuestionDto.CreateOptionsDtos)
+        foreach (var answerOption in createQuestionDto.Options)
         {
             var newOption = new AnswerOption
             {

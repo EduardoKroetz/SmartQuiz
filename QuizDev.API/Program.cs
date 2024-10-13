@@ -17,6 +17,7 @@ using System.Text;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Application.UseCases.AnswerOptions;
+using QuizDev.Application.UseCases.Reviews;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +109,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
     services.AddScoped<IMatchRepository, MatchRepository>();
     services.AddScoped<IResponseRepository, ResponseRepository>();
+    services.AddScoped<IReviewRepository, ReviewRepository>();
 
     //Services
     services.AddScoped<AuthService>();
@@ -146,4 +148,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<CreateAnswerOptionUseCase>();
     services.AddScoped<DeleteAnswerOptionUseCase>();
     services.AddScoped<GetAnswerOptionsByQuestionUseCase>();
+
+    services.AddScoped<CreateReviewUseCase>();
 }

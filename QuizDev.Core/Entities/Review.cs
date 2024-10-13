@@ -6,7 +6,23 @@ public class Review
 {
     public Guid Id { get; set; }
     public string Description { get; set; }
-    public int Rating { get; set; }
+    private int _rating { get; set; }
+    public int Rating 
+    {
+        get
+        {
+            return _rating;
+        }
+        set
+        {
+            if (value < 0 || value > 10)
+            {
+                throw new ArgumentException("A nota deve ser entre 0 e 10");
+            }
+
+            _rating = value;
+        }
+    }
     public Guid QuizId { get; set; }
     public Quiz Quiz { get; set; }
     public Guid MatchId { get; set; }
