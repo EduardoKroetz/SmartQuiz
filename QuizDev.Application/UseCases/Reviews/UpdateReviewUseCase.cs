@@ -1,22 +1,21 @@
 ﻿
 using QuizDev.Application.Exceptions;
 using QuizDev.Core.DTOs.Responses;
+using QuizDev.Core.DTOs.Reviews;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Reviews;
 
-public class DeleteReviewUseCase
+public class UpdateReviewUseCase
 {
     private readonly IReviewRepository _reviewRepository;
-    private readonly IMatchRepository _matchRepository;
 
-    public DeleteReviewUseCase(IReviewRepository reviewRepository, IMatchRepository matchRepository)
+    public UpdateReviewUseCase(IReviewRepository reviewRepository)
     {
         _reviewRepository = reviewRepository;
-        _matchRepository = matchRepository;
     }
 
-    public async Task<ResultDto> Execute(Guid reviewId, Guid userId)
+    public async Task<ResultDto> Execute(UpdateReviewDto dto, Guid reviewId, Guid userId)
     {
         var review = await _reviewRepository.GetById(reviewId);
         if (review == null)
@@ -29,11 +28,10 @@ public class DeleteReviewUseCase
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
-        await _reviewRepository.DeleteAsync(review);
+        review.Description = dto.Description;
+        review.Rating = dto.Rating;
 
-        review.Match.Reviewed = false;
-
-        await _matchRepository.UpdateAsync(review.Match);
+        await _reviewRepository.UpdateAsync(review);
 
         return new ResultDto(new { review.Id });
     }

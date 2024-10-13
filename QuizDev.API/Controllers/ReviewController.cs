@@ -43,4 +43,15 @@ public class ReviewController : ControllerBase
         var result = await useCase.Execute(reviewId, userId);
         return Ok(result);
     }
+
+    [HttpPut("{reviewId:guid}"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid reviewId, [FromBody] UpdateReviewDto dto, [FromServices] UpdateReviewUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(dto, reviewId, userId);
+        return Ok(result);
+    }
 }

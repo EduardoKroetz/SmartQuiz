@@ -11,13 +11,11 @@ public class CreateReviewUseCase
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IMatchRepository _matchRepository;
-    private readonly IQuizRepository _quizRepository;
 
-    public CreateReviewUseCase(IReviewRepository reviewRepository, IMatchRepository matchRepository, IQuizRepository quizRepository)
+    public CreateReviewUseCase(IReviewRepository reviewRepository, IMatchRepository matchRepository)
     {
         _reviewRepository = reviewRepository;
         _matchRepository = matchRepository;
-        _quizRepository = quizRepository;
     }
 
     public async Task<ResultDto> Execute(CreateReviewDto dto, Guid userId)
@@ -49,6 +47,11 @@ public class CreateReviewUseCase
         };
 
         await _reviewRepository.CreateAsync(review);
+
+        match.ReviewId = review.Id;
+        match.Reviewed = true;
+
+        await _matchRepository.UpdateAsync(match);
 
         return new ResultDto(new { review.Id });
     }

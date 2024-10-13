@@ -35,6 +35,6 @@ public class ReviewRepository : IReviewRepository
 
     public async Task<Review?> GetById(Guid reviewId)
     {
-        return await _dbContext.Reviews.FirstOrDefaultAsync(x => x.Id == reviewId);
+        return await _dbContext.Reviews.Include(x => x.Match).FirstOrDefaultAsync(x => x.Id == reviewId);
     }
 }

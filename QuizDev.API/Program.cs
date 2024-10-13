@@ -151,5 +151,6 @@ void InjectDependencies(IServiceCollection services)
 
     services.AddScoped<CreateReviewUseCase>();
     services.AddScoped<DeleteReviewUseCase>();
+    services.AddScoped<UpdateReviewUseCase>();
 
 }
