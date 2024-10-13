@@ -150,4 +150,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetAnswerOptionsByQuestionUseCase>();
 
     services.AddScoped<CreateReviewUseCase>();
+    services.AddScoped<DeleteReviewUseCase>();
+
 }

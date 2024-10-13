@@ -27,4 +27,20 @@ public class ReviewController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Deletar avaliação de uma partida
+    /// </summary>
+    /// <param name="reviewId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpDelete("{reviewId:guid}"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> CreateAsync([FromRoute] Guid reviewId, [FromServices] DeleteReviewUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(reviewId, userId);
+        return Ok(result);
+    }
 }
