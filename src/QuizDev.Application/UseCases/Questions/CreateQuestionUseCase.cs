@@ -1,4 +1,5 @@
-﻿using QuizDev.Core.DTOs.Questions;
+﻿using QuizDev.Application.Exceptions;
+using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.Responses;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Repositories;
@@ -18,12 +19,17 @@ public class CreateQuestionUseCase
         _answerOptionRepository = answerOptionRepository;
     }
 
-    public async Task<ResultDto> Execute(CreateQuestionDto createQuestionDto)
+    public async Task<ResultDto> Execute(CreateQuestionDto createQuestionDto, Guid userId)
     {
         var quiz = await _quizRepository.GetAsync(createQuestionDto.QuizId, true);
         if (quiz == null)
         {
-            throw new ArgumentException("Quiz não encontrado");
+            throw new NotFoundException("Quiz não encontrado");
+        }
+
+        if (quiz.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
         //Valida se possui opção correta
