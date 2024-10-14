@@ -40,7 +40,9 @@ public class Match
             IsCorrect = option.IsCorrectOption,
             AnswerOptionId = option.Id
         };
-       
+
+        Responses.Add(response);
+
         return response;
     }
 

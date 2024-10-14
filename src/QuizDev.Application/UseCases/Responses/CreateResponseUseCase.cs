@@ -7,13 +7,13 @@ namespace QuizDev.Application.UseCases.Responses;
 public class CreateResponseUseCase
 {
     private readonly IAnswerOptionRepository _answerOptionRepository;
-    private readonly IResponseRepository _matchResponseRepository;
+    private readonly IResponseRepository _responseRepository;
     private readonly IMatchRepository _matchRepository;
 
     public CreateResponseUseCase(IAnswerOptionRepository answerOptionRepository, IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
     {
         _answerOptionRepository = answerOptionRepository;
-        _matchResponseRepository = matchResponseRepository;
+        _responseRepository = matchResponseRepository;
         _matchRepository = matchRepository;
     }
 
@@ -61,7 +61,7 @@ public class CreateResponseUseCase
         //Criar resposta
         var matchResponse = match.CreateResponse(answerOption);
 
-        await _matchResponseRepository.CreateAsync(matchResponse);
+        await _responseRepository.CreateAsync(matchResponse);
 
         //Finaliza a partida caso essa seja a última questão
         if (answerOption.Question.Order + 1 == match.Quiz.Questions.Count)
