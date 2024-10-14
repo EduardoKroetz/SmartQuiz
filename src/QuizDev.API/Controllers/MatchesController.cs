@@ -77,8 +77,7 @@ public class MatchesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetMatchDetails([FromRoute] Guid matchId, [FromServices] GetMatchUseCase useCase) 
     {
-        var userId = User.GetUserId();
-        var result = await useCase.Execute(matchId, userId);
+        var result = await useCase.Execute(matchId);
         return Ok(result);
     }
 

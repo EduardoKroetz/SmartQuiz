@@ -27,6 +27,16 @@ public class FinalizeMatchUseCase
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
+        if (match.Status == Core.Enums.EMatchStatus.Finished)
+        {
+            throw new InvalidOperationException("Essa partida já foi finalizada");
+        }
+
+        if (match.Status == Core.Enums.EMatchStatus.Failed)
+        {
+            throw new InvalidOperationException("Não é possível finalizar essa partida");
+        }
+
         match.Status = Core.Enums.EMatchStatus.Finished;
 
         await _matchRepository.UpdateAsync(match);
