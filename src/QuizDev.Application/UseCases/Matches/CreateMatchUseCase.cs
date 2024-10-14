@@ -1,5 +1,6 @@
 ﻿
 
+using QuizDev.Application.Exceptions;
 using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.Responses;
@@ -26,7 +27,7 @@ public class CreateMatchUseCase
         var quiz = await _quizRepository.GetAsync(quizId, false);
         if (quiz == null)
         {
-            throw new ArgumentException("Quiz não encontrado");
+            throw new NotFoundException("Quiz não encontrado");
         }
 
         if (quiz.IsActive == false)
@@ -38,6 +39,7 @@ public class CreateMatchUseCase
         {
             Id = Guid.NewGuid(),
             QuizId = quizId,
+            Quiz = quiz,
             Reviewed = false,
             Score = 0,
             UserId = userId,
