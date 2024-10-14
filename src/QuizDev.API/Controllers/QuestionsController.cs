@@ -21,7 +21,8 @@ public class QuestionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateQuestionDto dto, [FromServices] CreateQuestionUseCase useCase)
     {
-        var result = await useCase.Execute(dto);
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(dto, userId);
         return Ok(result);
     }
 

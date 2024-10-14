@@ -15,9 +15,10 @@ using QuizDev.Infrastructure.Data.Repositories;
 using System.Reflection;
 using System.Text;
 using QuizDev.Core.DTOs.Questions;
-using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Application.UseCases.AnswerOptions;
 using QuizDev.Application.UseCases.Reviews;
+using QuizDev.API.Middlewares;
+using QuizDev.Application.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ if (app.Environment.IsDevelopment())
 };
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseExceptionHandler();
 app.MapControllers();
 
 app.Run();
@@ -96,11 +100,15 @@ void InjectDependencies(IServiceCollection services)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {  
+            ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
             ValidateIssuer = false,
             ValidateAudience = false,
         };
     });
+
+    services.AddProblemDetails();
+    services.AddExceptionHandler<ExceptionHandler>();
 
     //Repositories
     services.AddScoped<IUserRepository, UserRepository>();
@@ -112,7 +120,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IReviewRepository, ReviewRepository>();
 
     //Services
-    services.AddScoped<AuthService>();
+    services.AddScoped<IAuthService, AuthService>();
 
     //UseCases
     services.AddScoped<CreateUserUseCase>();
