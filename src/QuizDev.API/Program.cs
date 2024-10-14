@@ -85,11 +85,14 @@ void InjectDependencies(IServiceCollection services)
         options.Filters.Add<ValidateModelStateFilter>();
     });
 
-    var connectionString = builder.Configuration.GetConnectionString("DbConnection") ?? throw new Exception("Invalid db connection");
-    services.AddDbContext<QuizDevDbContext>(options =>
+    if (services.SingleOrDefault(x => x.ServiceType == typeof(QuizDevDbContext)) == null)
     {
-        options.UseNpgsql(connectionString);
-    });
+        var connectionString = builder.Configuration.GetConnectionString("DbConnection") ?? throw new Exception("Invalid db connection");
+        services.AddDbContext<QuizDevDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
+    }
 
     var jwtKey = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Jwt:Key") ?? throw new Exception("Invalid jwt key"));
     services.AddAuthentication(options =>
@@ -163,3 +166,5 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetReviewDetailsUseCase>();
 
 }
+
+public class Startup { }
