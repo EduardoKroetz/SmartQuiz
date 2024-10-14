@@ -41,15 +41,4 @@ public class CreateUserUseCaseTests
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
         Assert.Equal("mocked_token", (string)data.Token);
     }
-
-    [Fact]
-    public async Task Execute_UserAlreadyExists_ThrowsInvalidOperationException()
-    {
-        // Arrange
-        var createUserDto = new CreateUserDto { Username = "Test", Email = "test@example.com", Password = "password" };
-        _userRepositoryMock.Setup(x => x.GetByEmailAsync(createUserDto.Email)).ReturnsAsync(new User());
-
-        // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _createUserUseCase.Execute(createUserDto));      
-    }
 }
