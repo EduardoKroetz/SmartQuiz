@@ -25,4 +25,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+      env:
+        ConnectionStrings__DbConnection: ${{ secrets.ConnectionStrings__DbConnection }}
+        Jwt__Key: ${{ secrets.Jwt__Key }}
       run: dotnet test --no-build --verbosity normal
