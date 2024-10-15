@@ -28,7 +28,7 @@ jobs:
         env:
           ConnectionStrings__DbConnection: ${{ secrets.ConnectionStrings__DbConnection }}
           Jwt__Key: ${{ secrets.Jwt__Key }}
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --configuration Release --no-build --verbosity normal
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
