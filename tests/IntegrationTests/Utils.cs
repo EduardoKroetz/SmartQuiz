@@ -47,6 +47,15 @@ public static class Utils
         return content.data;
     }
 
+    public static async Task<dynamic> GetQuizAsync(HttpClient client, string token, Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"api/quizzes/{quizId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
     public static async Task<dynamic> GetQuestionAsync(HttpClient client, Guid questionId)
     {
         var response = await client.GetAsync($"api/questions/{questionId}");
@@ -258,5 +267,21 @@ public static class Utils
         var reviewDto = new CreateReviewDto { MatchId = matchId, Description = "Ok", Rating = 6 };
         var response = await CreateReviewAsync(client, token, reviewDto);
         return (Guid) response.id;
+    }
+
+    public static async Task<Guid> SeedQuestionAsync(HttpClient client, string token, Guid quizId)
+    {
+        var questionDto = new CreateQuestionDto
+        {
+            Text = "Sample Question",
+            QuizId = quizId,
+            Options = new List<CreateAnswerOptionInQuestionDto>
+            {
+                new CreateAnswerOptionInQuestionDto { IsCorrectOption = false, Response = "Sample Option 1" },
+                new CreateAnswerOptionInQuestionDto { IsCorrectOption = true, Response = "Sample Option 2" }
+            }
+        };
+        var questionResponse = await Utils.CreateQuestionAsync(client, token, questionDto);
+        return (Guid)questionResponse.id;
     }
 }

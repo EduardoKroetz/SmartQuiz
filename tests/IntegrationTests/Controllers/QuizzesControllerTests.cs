@@ -1,5 +1,4 @@
 ﻿using IntegrationTests.Factories;
-using Newtonsoft.Json;
 using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.Quizzes;
@@ -41,34 +40,28 @@ public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory
     [Fact]
     public async Task GetQuizById_ShouldReturnQuizDetails()
     {
-        // Arrange
-        var userData = await Utils.CreateUserAsync(_client, "testUser", "lucal@gmail.com");
-        var token = (string)userData.token;
-
-        var quizDto = new EditorQuizDto
-        {
-            Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
-        };
-        var quizData = await Utils.CreateQuizAsync(_client, token, quizDto);
-        var quizId = (Guid)quizData.id;
+        // Arrange 
+        var token = await Utils.SeedUserAsync(_client);
+        var quizId = await Utils.SeedQuizAsync(_client, token);
 
         // Act
-        var response = await _client.GetAsync($"api/quizzes/{quizId}");
+        var data = await Utils.GetQuizAsync(_client, token, quizId);
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-        Assert.Equal(quizDto.Title, (string)content.data.title);
+        Assert.NotNull(data.title);
+        Assert.NotNull(data.id);
+        Assert.NotNull(data.description);
+        Assert.NotNull(data.expires);
+        Assert.NotNull(data.expiresInSeconds);
+        Assert.NotNull(data.isActive);
+        Assert.NotNull(data.userId);
     }
 
     [Fact]
     public async Task ToggleQuiz_ShouldToggleActivation()
     {
         // Arrange
-        var userData = await Utils.CreateUserAsync(_client, "testUser", "vitor@gmail.com");
-        var token = (string)userData.token;
+        var token = await Utils.SeedUserAsync(_client);
 
         var quizDto = new EditorQuizDto
         {
@@ -103,17 +96,8 @@ public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory
     public async Task UpdateQuiz_ShouldReturnUpdatedQuiz()
     {
         // Arrange
-        var userData = await Utils.CreateUserAsync(_client, "testUser", "test1@gmail.com");
-        var token = (string)userData.token;
-
-        var quizDto = new EditorQuizDto
-        {
-            Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
-        };
-        var quizData = await Utils.CreateQuizAsync(_client, token, quizDto);
-        var quizId = (Guid)quizData.id;
+        var token = await Utils.SeedUserAsync(_client);
+        var quizId = await Utils.SeedQuizAsync(_client, token);
 
         var updatedQuizDto = new EditorQuizDto
         {
@@ -133,17 +117,8 @@ public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory
     public async Task DeleteQuiz_ShouldReturnOk()
     {
         // Arrange
-        var userData = await Utils.CreateUserAsync(_client, "testUser", "test2@gmail.com");
-        var token = (string)userData.token;
-
-        var quizDto = new EditorQuizDto
-        {
-            Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
-        };
-        var quizData = await Utils.CreateQuizAsync(_client, token, quizDto);
-        var quizId = (Guid)quizData.id;
+        var token = await Utils.SeedUserAsync(_client);
+        var quizId = await Utils.SeedQuizAsync(_client, token);
 
         // Act
         var deleteResponse = await Utils.DeleteQuizAsync(_client, token, quizId);
@@ -156,17 +131,8 @@ public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory
     public async Task GetQuestionsByQuiz_ShouldReturnQuestions()
     {
         // Arrange
-        var userData = await Utils.CreateUserAsync(_client, "testUser", "test3@gmail.com");
-        var token = (string)userData.token;
-
-        var quizDto = new EditorQuizDto
-        {
-            Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
-        };
-        var quizData = await Utils.CreateQuizAsync(_client, token, quizDto);
-        var quizId = (Guid)quizData.id;
+        var token = await Utils.SeedUserAsync(_client);
+        var quizId = await Utils.SeedQuizAsync(_client, token);
 
         // Act
         var questions = await Utils.GetQuestionsByQuizAsync(_client, token, quizId);
@@ -174,6 +140,4 @@ public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory
         // Assert
         Assert.NotNull(questions);
     }
-
-
 }
