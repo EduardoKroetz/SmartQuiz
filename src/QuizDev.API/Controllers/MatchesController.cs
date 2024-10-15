@@ -88,11 +88,11 @@ public class MatchesController : ControllerBase
     /// <param name="useCase"></param>
     /// <returns></returns>
     /// <response code="403">Tentou finalizar partida de outro usuário</response>
-    [HttpPost("{matchId:guid}"), Authorize]
+    [HttpPost("{matchId:guid}/end"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> FinalizeMatchAsync([FromRoute] Guid matchId, [FromServices] FinalizeMatchUseCase useCase)
+    public async Task<IActionResult> EndMatchAsync([FromRoute] Guid matchId, [FromServices] FinalizeMatchUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(matchId, userId);

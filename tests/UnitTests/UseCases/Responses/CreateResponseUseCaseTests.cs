@@ -53,7 +53,7 @@ public class CreateResponseUseCaseTests
         var userId = Guid.NewGuid();
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
-        var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()] };
+        var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()], Expires = true };
         var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);

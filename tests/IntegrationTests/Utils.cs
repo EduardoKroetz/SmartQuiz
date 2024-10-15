@@ -115,4 +115,83 @@ public static class Utils
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         return content.data;
     }
+
+    public static async Task<dynamic> EndMatchAsync(HttpClient client, string token, Guid matchId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PostAsJsonAsync($"/api/matches/{matchId}/end", new {});
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> GetMatchResultAsync(HttpClient client, string token, Guid matchId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"/api/matches/{matchId}/responses");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> ListMatchesAsync(HttpClient client, string token)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"/api/matches?status=created&reviewed=false&orderby=score&pageSize=10&pageNumber=1");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> DeleteMatchAsync(HttpClient client, string token, Guid matchId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.DeleteAsync($"/api/matches/{matchId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+
+    // SEEDs
+    public static async Task<Guid> SeedMatchAsync(HttpClient client ,string token)
+    {
+        var quizId = await SeedQuizAsync(client ,token);
+        var matchData = await CreateMatchAsync(client, token, quizId);
+        return (Guid) matchData.matchId;
+    }
+
+    public static async Task<Guid> SeedQuizAsync(HttpClient client ,string token)
+    {
+        var quizDto = new EditorQuizDto
+        {
+            Title = "Sample Quiz",
+            Description = "Sample Description",
+            Expires = false
+        };
+
+        var quizData = await CreateQuizAsync(client, token, quizDto);
+        var quizId = (Guid)quizData.id;
+        var questionDto = new CreateQuestionDto
+        {
+            Text = "Sample Question",
+            QuizId = quizId,
+            Options = new List<CreateAnswerOptionInQuestionDto>
+            {
+                new CreateAnswerOptionInQuestionDto { IsCorrectOption = false, Response = "Sample Option 1" },
+                new CreateAnswerOptionInQuestionDto { IsCorrectOption = true, Response = "Sample Option 2" },
+                new CreateAnswerOptionInQuestionDto { IsCorrectOption = false, Response = "Sample Option 3" },
+            }
+        };
+        await CreateQuestionAsync(client, token, questionDto);
+        await ToggleQuizAsync(client, token, quizId);
+        return quizId;
+    }
+
+    public static async Task<string> SeedUserAsync(HttpClient client)
+    {
+        var random = new Random().Next(0, 10000);
+        var userData = await CreateUserAsync(client, "testUser23", $"test{random}@gmail.com");
+        return (string)userData.token;
+    }
 }
