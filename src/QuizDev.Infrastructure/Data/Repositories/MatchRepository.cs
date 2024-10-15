@@ -2,9 +2,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using QuizDev.Core.DTOs.Matches;
+using QuizDev.Core.DTOs.Quizzes;
 using QuizDev.Core.Entities;
 using QuizDev.Core.Enums;
 using QuizDev.Core.Repositories;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace QuizDev.Infrastructure.Data.Repositories;
 
@@ -62,7 +64,28 @@ public class MatchRepository : IMatchRepository
             .Include(x => x.Responses)
             .Include(x => x.Quiz)
             .ThenInclude(x => x.Questions)
-            .Select(x => new GetMatchDto(x.Id, x.Score, x.CreatedAt, x.ExpiresIn, x.Status, x.QuizId, x.Quiz, x.UserId, x.Reviewed, x.ReviewId))
+            .Select(x => new GetMatchDto 
+            {
+                Id = x.Id,
+                Score = x.Score, 
+                CreatedAt = x.CreatedAt, 
+                ExpiresIn = x.ExpiresIn, 
+                Status = x.Status.ToString(),
+                QuizId = x.QuizId, 
+                UserId = x.UserId, 
+                Reviewed = x.Reviewed, 
+                ReviewId = x.ReviewId,
+                Quiz = new GetQuizDto 
+                (
+                    x.Quiz.Id,
+                    x.Quiz.Title,
+                    x.Quiz.Description,
+                    x.Quiz.Expires,
+                    x.Quiz.ExpiresInSeconds,
+                    x.Quiz.IsActive,
+                    x.Quiz.UserId
+                )
+            })
             .FirstOrDefaultAsync(x => x.Id == matchId);     
     }
 
@@ -78,10 +101,12 @@ public class MatchRepository : IMatchRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<Match>> GetMatchesAsync(Guid userId, int skip, int take , string? reference = null, string? status = null, bool? reviewed = null, string? orderBy = null)
+    public async Task<List<GetMatchDto>> GetMatchesAsync(Guid userId, int skip, int take , string? reference = null, string? status = null, bool? reviewed = null, string? orderBy = null)
     {
         var query = _dbContext.Matches.AsQueryable();
-        
+
+        query = query.Include(x => x.Quiz);
+
         if (reference != null)
         {
             var keyWords = reference.ToLower().Split(" ");
@@ -100,6 +125,10 @@ public class MatchRepository : IMatchRepository
             }else if (status == "finished")
             {
                 query = query.Where(x => x.Status.Equals(EMatchStatus.Finished));
+            }
+            else if (status == "failed")
+            {
+                query = query.Where(x => x.Status.Equals(EMatchStatus.Failed));
             }
         }
 
@@ -124,31 +153,30 @@ public class MatchRepository : IMatchRepository
         }
 
         return await query
-            .Include(x => x.Quiz)
             .Where(x => x.UserId == userId)
             .Skip(skip)
             .Take(take)
-            .Select(x => new Match
+            .Select(x => new GetMatchDto
             {
                 Id = x.Id,
-                QuizId = x.QuizId,
-                CreatedAt = x.CreatedAt,
-                Reviewed = x.Reviewed,
                 Score = x.Score,
+                CreatedAt = x.CreatedAt,
+                ExpiresIn = x.ExpiresIn,
+                Status = x.Status.ToString(),
+                QuizId = x.QuizId,
                 UserId = x.UserId,
-                Status = x.Status,
+                Reviewed = x.Reviewed,
                 ReviewId = x.ReviewId,
-                Responses = x.Responses,
-                Quiz = new Quiz
-                {
-                    Id = x.Quiz.Id,
-                    UserId = x.Quiz.UserId,
-                    Description = x.Quiz.Description,
-                    Expires = x.Quiz.Expires,
-                    ExpiresInSeconds = x.Quiz.ExpiresInSeconds,
-                    IsActive = x.Quiz.IsActive,
-                    Title = x.Quiz.Title  
-                }
+                Quiz = new GetQuizDto
+                (
+                    x.Quiz.Id,
+                    x.Quiz.Title,
+                    x.Quiz.Description,
+                    x.Quiz.Expires,
+                    x.Quiz.ExpiresInSeconds,
+                    x.Quiz.IsActive,
+                    x.Quiz.UserId
+                )
             })
             .ToListAsync();
 

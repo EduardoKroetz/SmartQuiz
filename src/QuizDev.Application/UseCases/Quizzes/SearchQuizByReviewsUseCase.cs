@@ -14,9 +14,9 @@ public class SearchQuizByReviewsUseCase
         _quizRepository = quizRepository;
     }
 
-    public async Task<PaginatedResultDto> Execute(string reference, int pageSize, int pageNumber)
+    public async Task<PaginatedResultDto> Execute(string? reference, int pageSize, int pageNumber)
     {
-        var keyWords = reference.Split(" ");
+        var keyWords = reference?.Split(" ");
         var skip = pageSize * ( pageNumber - 1 );
 
         var quizzes = await _quizRepository.SearchQuizByReviews(keyWords, skip, pageSize);

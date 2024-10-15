@@ -16,13 +16,13 @@ public class QuizzesController : ControllerBase
     /// <returns>Id do Quiz criado</returns>
     [HttpPost]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] EditorQuizDto dto, [FromServices] CreateQuizUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(dto, userId);
-        return Created(nameof(GetQuizById), result);
+        return Ok(result);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class QuizzesController : ControllerBase
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> SearchQuizAsync([FromQuery] string reference, [FromServices] SearchQuizUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1)
+    public async Task<IActionResult> SearchQuizAsync([FromServices] SearchQuizUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1, [FromQuery] string? reference = null)
     {
         var result = await useCase.Execute(reference, pageSize, pageNumber);
         return Ok(result);
@@ -68,7 +68,7 @@ public class QuizzesController : ControllerBase
     [HttpGet("reviews/search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> SearchQuizByReviewsAsync([FromQuery] string reference, [FromServices] SearchQuizByReviewsUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1)
+    public async Task<IActionResult> SearchQuizByReviewsAsync([FromServices] SearchQuizByReviewsUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1, [FromQuery] string? reference = null)
     {
         var result = await useCase.Execute(reference, pageSize, pageNumber);
         return Ok(result);

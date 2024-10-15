@@ -15,15 +15,15 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="createUserDto"></param>
     /// <returns>Token de autenticação e Id do usuário criado</returns>
-    /// <response code="201">Retorna o token de autenticação e o Id do usuário criado</response>
+    /// <response code="200">Retorna o token de autenticação e o Id do usuário criado</response>
     /// <response code="400">Se os parâmetros são inválidos</response>
     [HttpPost("register")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterAsync([FromBody] CreateUserDto createUserDto, [FromServices] CreateUserUseCase useCase)
     {
         var result = await useCase.Execute(createUserDto);
-        return Created(nameof(result), result); //Trocar para GetById quando tiver o método
+        return Ok(result); //Trocar para GetById quando tiver o método
     }
 
     /// <summary>

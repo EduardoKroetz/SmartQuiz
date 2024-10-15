@@ -44,13 +44,21 @@ public class QuizRepository : IQuizRepository
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
     
-    public async Task<List<Quiz>> SearchQuizByReviews(string[] keyWords, int skip, int take)
+    public async Task<List<Quiz>> SearchQuizByReviews(string[]? keyWords, int skip, int take)
     {
-        return await _dbContext.Reviews  //Filtra por Review
-            .Include(x => x.Quiz)
-            .Where(x =>  //Buscar os Quiz pelas palavras chaves
-                keyWords.Any(k => x.Quiz.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
-                keyWords.Any(k => x.Quiz.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+        var query = _dbContext.Reviews.AsQueryable();
+
+        query = query.Include(x => x.Quiz);
+
+        if (keyWords != null)
+        {
+            query = query.Where(x => keyWords.Any(k =>
+                x.Quiz.Title.ToLower().Contains(k) ||
+                x.Quiz.Description.ToLower().Contains(k)
+            ));
+        }
+
+        return await query
             .Where(x => x.Quiz.IsActive == true)
             .OrderBy(x => x.Rating) //Ordernar as Reviews pela maior avaliação
             .Skip(skip)
@@ -68,12 +76,19 @@ public class QuizRepository : IQuizRepository
             .ToListAsync();
     }
 
-    public async Task<List<Quiz>> SearchQuiz(string[] keyWords, int skip, int take)
+    public async Task<List<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take)
     {
-        return await _dbContext.Quizzes 
-            .Where(x =>  //Buscar os Quiz pelas palavras chaves
-                keyWords.Any(k => x.Title.ToLower().Contains(k.ToLower())) || //Buscar pelo título
-                keyWords.Any(k => x.Description.ToLower().Contains(k.ToLower())))    //Buscar pela descrição
+        var query = _dbContext.Quizzes.AsQueryable();
+
+        if (keyWords != null)
+        {
+            query = query.Where(x => keyWords.Any(k =>
+                x.Title.ToLower().Contains(k) ||
+                x.Description.ToLower().Contains(k)
+            ));
+        }
+
+        return await query
             .Where(x => x.IsActive == true)
             .Skip(skip)
             .Take(take)

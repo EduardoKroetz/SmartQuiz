@@ -15,16 +15,16 @@ public class MatchesController : ControllerBase
     /// <param name="quizId"></param>
     /// <param name="useCase"></param>
     /// <returns>Retorna a próxima questão a ser respondida e o Id da partida</returns>
-    /// <response code="201" >Retorna o Id da partida e a primeira questão (objeto)</response>
+    /// <response code="200" >Retorna o Id da partida e a primeira questão (objeto)</response>
     [HttpPost("play/quiz/{quizId:guid}")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateMatchAsync([FromRoute] Guid quizId, [FromServices] CreateMatchUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(quizId, userId);
-        return Created(nameof(result), result); //alterar para o endpoint posteriormente
+        return Ok(result); //alterar para o endpoint posteriormente
     }
 
     /// <summary>
@@ -33,16 +33,16 @@ public class MatchesController : ControllerBase
     /// <param name="matchId"></param>
     /// <param name="optionId"></param>
     /// <param name="useCase"></param>
-    /// <response code="201">Retorna o Id da resposta criada e o Id da partida</response>
+    /// <response code="200">Retorna o Id da resposta criada e o Id da partida</response>
     [HttpPost("{matchId:guid}/submit/{optionId:guid}")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SubmitResponseAsync([FromRoute] Guid matchId, [FromRoute] Guid optionId, [FromServices] CreateResponseUseCase useCase)
     {
         var userId = User.GetUserId();
         var response = await useCase.Execute(userId ,matchId, optionId);
-        return Created(nameof(response) ,response);
+        return Ok(response);
     }
 
     /// <summary>
@@ -141,7 +141,7 @@ public class MatchesController : ControllerBase
     /// <param name="pageSize"></param>
     /// <param name="pageNumber"></param>
     /// <param name="reference">Parâmetro de pesquisa para buscar por título ou descrição de um Quiz relacionado</param>
-    /// <param name="status">Status da partida. Valores: created, finished </param>
+    /// <param name="status">Status da partida. Valores: created, finished, failed </param>
     /// <param name="reviewed">Se foi revisado</param>
     /// <param name="orderBy">Ordernar. Valores: score, created_at</param>
     /// <returns></returns>

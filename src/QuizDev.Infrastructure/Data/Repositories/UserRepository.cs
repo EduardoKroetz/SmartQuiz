@@ -47,7 +47,28 @@ public class UserRepository : IUserRepository
             .Skip(skip)
             .Take(take)
             .Include(x => x.Quiz)
-            .Select(x => new GetMatchDto(x.Id, x.Score, x.CreatedAt, x.ExpiresIn, x.Status, x.QuizId, x.Quiz, x.UserId, x.Reviewed, x.ReviewId))
+            .Select(x => new GetMatchDto
+            {
+                Id = x.Id,
+                Score = x.Score,
+                CreatedAt = x.CreatedAt,
+                ExpiresIn = x.ExpiresIn,
+                Status = x.Status.ToString(),
+                QuizId = x.QuizId,
+                UserId = x.UserId,
+                Reviewed = x.Reviewed,
+                ReviewId = x.ReviewId,
+                Quiz = new GetQuizDto
+                (
+                    x.Quiz.Id,
+                    x.Quiz.Title,
+                    x.Quiz.Description,
+                    x.Quiz.Expires,
+                    x.Quiz.ExpiresInSeconds,
+                    x.Quiz.IsActive,
+                    x.Quiz.UserId
+                )
+            })
             .ToListAsync();
     }
 

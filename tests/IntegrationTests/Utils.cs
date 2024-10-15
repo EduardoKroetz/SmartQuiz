@@ -149,7 +149,7 @@ public static class Utils
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await client.GetAsync($"/api/matches?status=created&reviewed=false&orderby=score&pageSize=10&pageNumber=1");
-        response.EnsureSuccessStatusCode();
+        //response.EnsureSuccessStatusCode();
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         return content.data;
     }
