@@ -7,7 +7,7 @@ using QuizDev.Core.DTOs.Reviews;
 namespace QuizDev.API.Controllers;
 
 [Route("api/[controller]")]
-public class ReviewController : ControllerBase
+public class ReviewsController : ControllerBase
 {
     
     /// <summary>
@@ -37,7 +37,7 @@ public class ReviewController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> CreateAsync([FromRoute] Guid reviewId, [FromServices] DeleteReviewUseCase useCase)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid reviewId, [FromServices] DeleteReviewUseCase useCase)
     {
         var userId = User.GetUserId();
         var result = await useCase.Execute(reviewId, userId);

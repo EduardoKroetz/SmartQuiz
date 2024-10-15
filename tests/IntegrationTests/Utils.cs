@@ -2,7 +2,9 @@
 using QuizDev.Core.DTOs.AnswerOptions;
 using QuizDev.Core.DTOs.Questions;
 using QuizDev.Core.DTOs.Quizzes;
+using QuizDev.Core.DTOs.Reviews;
 using QuizDev.Core.DTOs.Users;
+using QuizDev.Core.Entities;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -171,6 +173,41 @@ public static class Utils
         return content.data;
     }
 
+    public static async Task<dynamic> CreateReviewAsync(HttpClient client, string token, CreateReviewDto dto)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PostAsJsonAsync($"/api/reviews", dto);
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> DeleteReviewAsync(HttpClient client, string token, Guid reviewId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.DeleteAsync($"/api/reviews/{reviewId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> UpdateReviewAsync(HttpClient client, string token, UpdateReviewDto dto, Guid reviewId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PutAsJsonAsync($"/api/reviews/{reviewId}", dto);
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> GetReviewDetailsAsync(HttpClient client, string token, Guid reviewId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"/api/reviews/{reviewId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
 
     // SEEDs
     public static async Task<Guid> SeedMatchAsync(HttpClient client ,string token)
@@ -214,4 +251,12 @@ public static class Utils
         return (string)userData.token;
     }
 
+    public static async Task<Guid> SeedReviewAsync(HttpClient client, string token)
+    {
+        var matchId = await SeedMatchAsync(client, token);
+        await EndMatchAsync(client, token, matchId);
+        var reviewDto = new CreateReviewDto { MatchId = matchId, Description = "Ok", Rating = 6 };
+        var response = await CreateReviewAsync(client, token, reviewDto);
+        return (Guid) response.id;
+    }
 }
