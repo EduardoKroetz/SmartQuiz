@@ -52,4 +52,40 @@ public static class Utils
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         return content.data;
     }
+
+    public static async Task<dynamic> ToggleQuizAsync(HttpClient client, string token ,Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PostAsJsonAsync($"api/quizzes/toggle/{quizId}", new { });
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> UpdateQuizAsync(HttpClient client, string token, EditorQuizDto dto, Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PutAsJsonAsync($"api/quizzes/{quizId}", dto);
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> DeleteQuizAsync(HttpClient client, string token, Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.DeleteAsync($"api/quizzes/{quizId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> GetQuestionsByQuizAsync(HttpClient client, string token, Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"api/quizzes/{quizId}");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
 }

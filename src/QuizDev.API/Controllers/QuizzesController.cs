@@ -80,7 +80,7 @@ public class QuizzesController : ControllerBase
     /// <param name="quizId"></param>
     /// <param name="useCase"></param>
     /// <returns></returns>
-    [HttpPost("toogle/{quizId:guid}"), Authorize]
+    [HttpPost("toggle/{quizId:guid}"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ToggleQuizAsync([FromRoute] Guid quizId, [FromServices] ToggleQuizUseCase useCase)
