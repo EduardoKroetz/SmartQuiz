@@ -49,7 +49,7 @@ public class CreateResponseUseCase
         }
 
         //Verificar se o tempo de expiração já passou
-        if (match.AlreadyExpiration())
+        if (match.AlreadyExpiration() && match.Quiz.Expires)
         {
             //Finalizar a partida caso já tenha expirado
             match.Status = Core.Enums.EMatchStatus.Failed;

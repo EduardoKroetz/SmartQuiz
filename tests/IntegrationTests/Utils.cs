@@ -88,4 +88,31 @@ public static class Utils
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         return content.data;
     }
+
+    public static async Task<dynamic> CreateMatchAsync(HttpClient client, string token, Guid quizId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PostAsJsonAsync($"api/matches/play/quiz/{quizId}", new { });
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> SubmitResponseAsync(HttpClient client, string token,Guid matchId , Guid optionId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.PostAsJsonAsync($"api/matches/{matchId}/submit/{optionId}", new { });
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
+
+    public static async Task<dynamic> GetNextQuestionAsync(HttpClient client, string token, Guid matchId)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await client.GetAsync($"api/matches/{matchId}/next-question");
+        response.EnsureSuccessStatusCode();
+        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        return content.data;
+    }
 }
