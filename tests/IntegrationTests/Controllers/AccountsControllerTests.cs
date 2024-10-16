@@ -5,7 +5,7 @@ using QuizDev.Core.DTOs.Users;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace IntegrationTests.Users;
+namespace IntegrationTests.Controllers.Users;
 
 public class AccountsControllerTests : IClassFixture<QuizDevWebApplicationFactory>
 {

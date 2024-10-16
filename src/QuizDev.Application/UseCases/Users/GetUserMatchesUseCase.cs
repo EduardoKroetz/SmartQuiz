@@ -1,5 +1,6 @@
 ﻿
 using QuizDev.Core.DTOs.Responses;
+using QuizDev.Core.DTOs.Results;
 using QuizDev.Core.Repositories;
 
 namespace QuizDev.Application.UseCases.Users;
@@ -13,10 +14,10 @@ public class GetUserMatchesUseCase
         _userRepository = userRepository;
     }
 
-    public async Task<ResultDto> Execute(Guid userId, int pageSize, int pageNumber)
+    public async Task<PaginatedResultDto> Execute(Guid userId, int pageSize, int pageNumber)
     {
         var skip = pageSize * ( pageNumber - 1 );
         var matches = await _userRepository.GetUserMatchesAsync(userId, skip, pageSize);
-        return new ResultDto(matches);
+        return new PaginatedResultDto(pageSize, pageNumber, matches.Count, pageNumber + 1 ,matches);
     }
 }
