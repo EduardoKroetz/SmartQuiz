@@ -32,10 +32,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 };
 
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsProduction() || app.Environment.IsDevelopment())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<QuizDevDbContext>();
-    dbContext.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<QuizDevDbContext>();
+        dbContext.Database.Migrate();
+    }
 }
 
 app.UseHttpsRedirection();
