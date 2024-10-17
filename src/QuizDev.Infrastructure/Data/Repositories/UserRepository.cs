@@ -34,7 +34,8 @@ public class UserRepository : IUserRepository
             {
                 Id = x.Id,
                 Email = x.Email,
-                Username = x.Username
+                Username = x.Username,
+                EmailIsVerified = x.EmailIsVerified
             })
             .FirstOrDefaultAsync(x => x.Id == userId);
     }

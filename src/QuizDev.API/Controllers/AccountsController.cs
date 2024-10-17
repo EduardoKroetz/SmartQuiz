@@ -117,6 +117,12 @@ public class AccountsController : ControllerBase
         
     }
 
+    /// <summary>
+    /// Verificar se o código de verificação de e-mail é válido e validar e-mail
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
     [HttpPost("verify-email-code/{code}"), Authorize]
     public async Task<IActionResult> VerifyEmailCodeAsync([FromRoute] string code,[FromServices] VerifyEmailCodeUseCase useCase)
     {
