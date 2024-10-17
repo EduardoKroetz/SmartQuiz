@@ -14,6 +14,7 @@ public class QuizDevDbContext : DbContext
     public DbSet<AnswerOption> AnswerOptions { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Response> Responses { get; set; }
+    public DbSet<EmailCode> EmailCodes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -84,5 +85,10 @@ public class QuizDevDbContext : DbContext
                 .WithMany();
         });
 
+        builder.Entity<EmailCode>(options =>
+        {
+            options.HasKey(x => x.Code);
+            options.HasIndex(x => x.Email).IsUnique(true);
+        });
     }
 }

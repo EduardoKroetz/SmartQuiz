@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizDev.API.Extensions;
 using QuizDev.Application.UseCases.Users;
 using QuizDev.Core.DTOs.Users;
+using System.Reflection.Metadata.Ecma335;
 
 namespace QuizDev.API.Controllers;
 
@@ -100,5 +101,20 @@ public class AccountsController : ControllerBase
     {
         var result = await useCase.Execute(userId, pageSize, pageNumber);
         return Ok(result);
+    }
+
+
+    /// <summary>
+    /// Criar código de autenticação de dois fatores e enviar por e-mail
+    /// </summary>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpPost("verify-email"), Authorize]
+    public async Task<IActionResult> VerifyEmailAsync([FromServices] VerifyEmailUseCase useCase)
+    {
+        var email = User.GetUserEmail();
+        var result = await useCase.Execute(email);
+        return Ok(result);
+        
     }
 }

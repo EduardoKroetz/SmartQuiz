@@ -127,9 +127,11 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IMatchRepository, MatchRepository>();
     services.AddScoped<IResponseRepository, ResponseRepository>();
     services.AddScoped<IReviewRepository, ReviewRepository>();
+    services.AddScoped<IEmailCodeRepository, EmailCodeRepository>();
 
     //Services
     services.AddScoped<IAuthService, AuthService>();
+    services.AddScoped<IEmailService, EmailService>();
 
     //UseCases
     services.AddScoped<CreateUserUseCase>();
@@ -170,6 +172,8 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<DeleteReviewUseCase>();
     services.AddScoped<UpdateReviewUseCase>();
     services.AddScoped<GetReviewDetailsUseCase>();
+
+    services.AddScoped<VerifyEmailUseCase>();
 
 }
 
