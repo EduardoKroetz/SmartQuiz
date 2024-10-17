@@ -174,7 +174,7 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<GetReviewDetailsUseCase>();
 
     services.AddScoped<VerifyEmailUseCase>();
-
+    services.AddScoped<VerifyEmailCodeUseCase>();
 }
 
 public class Startup { }

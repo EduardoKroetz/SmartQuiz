@@ -103,9 +103,8 @@ public class AccountsController : ControllerBase
         return Ok(result);
     }
 
-
     /// <summary>
-    /// Criar código de autenticação de dois fatores e enviar por e-mail
+    /// Criar código de verificação de e-mail e enviar pro e-mail do usuário autenticado
     /// </summary>
     /// <param name="useCase"></param>
     /// <returns></returns>
@@ -116,5 +115,14 @@ public class AccountsController : ControllerBase
         var result = await useCase.Execute(email);
         return Ok(result);
         
+    }
+
+    [HttpPost("verify-email-code/{code}"), Authorize]
+    public async Task<IActionResult> VerifyEmailCodeAsync([FromRoute] string code,[FromServices] VerifyEmailCodeUseCase useCase)
+    {
+        var email = User.GetUserEmail();
+        var result = await useCase.Execute(code,email);
+        return Ok(result);
+
     }
 }

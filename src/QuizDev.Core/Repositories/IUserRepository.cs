@@ -12,4 +12,5 @@ public interface IUserRepository
     Task<GetUserDto?> GetDetailsAsync(Guid userId);
     Task<List<GetMatchDto>> GetUserMatchesAsync(Guid userId, int skip, int take);
     Task<List<GetQuizDto>> GetUserQuizzesAsync(Guid userId, int skip, int take);
+    Task UpdateAsync(User user);
 }

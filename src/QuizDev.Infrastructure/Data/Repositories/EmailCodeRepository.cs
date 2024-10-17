@@ -25,6 +25,11 @@ public class EmailCodeRepository : IEmailCodeRepository
         return await _dbContext.EmailCodes.FirstOrDefaultAsync(x => x.Email.Equals(email));
     }
 
+    public async Task<EmailCode?> GetByCodeAsync(string code)
+    {
+        return await _dbContext.EmailCodes.FirstOrDefaultAsync(x => x.Code.Equals(code));
+    }
+
     public async Task DeleteAsync(EmailCode emailCode)
     {
         _dbContext.EmailCodes.Remove(emailCode);

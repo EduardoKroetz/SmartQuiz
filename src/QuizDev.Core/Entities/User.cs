@@ -9,4 +9,5 @@ public class User
     public List<Match> Matchs { get; set; }
     public List<Quiz> Quizes { get; set; }
     public List<Review> Reviews { get; set; }
+    public bool EmailIsVerified { get; set; }
 }
