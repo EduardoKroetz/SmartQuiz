@@ -1,18 +1,18 @@
 ﻿
-using IntegrationTests.Factories;
-using Newtonsoft.Json;
-using QuizDev.Core.DTOs.Users;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using IntegrationTests.Factories;
+using Newtonsoft.Json;
+using SmartQuiz.Core.DTOs.Users;
 
 namespace IntegrationTests.Controllers.Users;
 
-public class AccountsControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class AccountsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public AccountsControllerTests(QuizDevWebApplicationFactory factory)
+    public AccountsControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -64,7 +64,7 @@ public class AccountsControllerTests : IClassFixture<QuizDevWebApplicationFactor
         //Assert
         response.EnsureSuccessStatusCode();
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-        Assert.Equal(userId , (Guid)content.data.id);
+        Assert.Equal(userId, (Guid)content.data.id);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class AccountsControllerTests : IClassFixture<QuizDevWebApplicationFactor
         //Arrange
         var data = await Utils.CreateUserAsync(_client, "authUser", "authUser@gmail.com");
         var userId = (Guid)data.id;
-        var token= (string)data.token;
+        var token = (string)data.token;
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         //Act

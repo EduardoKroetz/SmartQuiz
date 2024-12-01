@@ -3,12 +3,12 @@ using IntegrationTests.Factories;
 
 namespace IntegrationTests.Controllers;
 
-public class MatchesControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class MatchesControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public MatchesControllerTests(QuizDevWebApplicationFactory factory)
+    public MatchesControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -36,10 +36,10 @@ public class MatchesControllerTests : IClassFixture<QuizDevWebApplicationFactory
         var token = await Utils.SeedUserAsync(_client);
         var quizId = await Utils.SeedQuizAsync(_client, token);
         var matchData = await Utils.CreateMatchAsync(_client, token, quizId);
-        var optionId = (Guid) matchData.nextQuestion.options[0].id;
+        var optionId = (Guid)matchData.nextQuestion.options[0].id;
 
         // Act
-        var responseData = await Utils.SubmitResponseAsync(_client, token, (Guid) matchData.matchId, optionId);
+        var responseData = await Utils.SubmitResponseAsync(_client, token, (Guid)matchData.matchId, optionId);
 
         // Assert
         Assert.NotNull(responseData);

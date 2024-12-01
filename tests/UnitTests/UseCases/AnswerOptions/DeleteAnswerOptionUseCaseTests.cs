@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.AnswerOptions;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.AnswerOptions;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.AnswerOptions;
 

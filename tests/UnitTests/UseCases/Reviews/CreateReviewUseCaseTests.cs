@@ -1,11 +1,11 @@
 ﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.Reviews;
-using QuizDev.Core.DTOs.Reviews;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Enums;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.Reviews;
+using SmartQuiz.Core.DTOs.Reviews;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Enums;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Reviews;
 
@@ -27,7 +27,7 @@ public class CreateReviewUseCaseTests
     {
         // Arrange
         var dto = new CreateReviewDto { MatchId = Guid.NewGuid() };
-        _mockMatchRepository.Setup(repo => repo.GetAsync(dto.MatchId)).ReturnsAsync((QuizDev.Core.Entities.Match)null);
+        _mockMatchRepository.Setup(repo => repo.GetAsync(dto.MatchId)).ReturnsAsync((SmartQuiz.Core.Entities.Match)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -41,7 +41,7 @@ public class CreateReviewUseCaseTests
         var userId = Guid.NewGuid();
         var matchId = Guid.NewGuid();
         var dto = new CreateReviewDto { MatchId = matchId };
-        var match = new QuizDev.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Created };
+        var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Created };
 
         _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
 
@@ -57,7 +57,7 @@ public class CreateReviewUseCaseTests
         var userId = Guid.NewGuid();
         var matchId = Guid.NewGuid();
         var dto = new CreateReviewDto { MatchId = matchId };
-        var match = new QuizDev.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Finished, Reviewed = true };
+        var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Finished, Reviewed = true };
 
         _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
 
@@ -73,7 +73,7 @@ public class CreateReviewUseCaseTests
         var userId = Guid.NewGuid();
         var matchId = Guid.NewGuid();
         var dto = new CreateReviewDto { MatchId = matchId };
-        var match = new QuizDev.Core.Entities.Match { Id = matchId, UserId = Guid.NewGuid(), Status = EMatchStatus.Finished }; // Outro usuário é o dono
+        var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = Guid.NewGuid(), Status = EMatchStatus.Finished }; // Outro usuário é o dono
 
         _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
 
@@ -89,7 +89,7 @@ public class CreateReviewUseCaseTests
         var userId = Guid.NewGuid();
         var matchId = Guid.NewGuid();
         var dto = new CreateReviewDto { MatchId = matchId, Description = "Great match", Rating = 5 };
-        var match = new QuizDev.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Finished, Reviewed = false };
+        var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Finished, Reviewed = false };
 
         _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
 
@@ -99,7 +99,7 @@ public class CreateReviewUseCaseTests
         // Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
         _mockReviewRepository.Verify(repo => repo.CreateAsync(It.IsAny<Review>()), Times.Once);
-        _mockMatchRepository.Verify(repo => repo.UpdateAsync(It.Is<QuizDev.Core.Entities.Match>(m => m.Reviewed == true && m.ReviewId != null)), Times.Once);
-        Assert.NotNull((Guid) data.Id);
+        _mockMatchRepository.Verify(repo => repo.UpdateAsync(It.Is<SmartQuiz.Core.Entities.Match>(m => m.Reviewed == true && m.ReviewId != null)), Times.Once);
+        Assert.NotNull((Guid)data.Id);
     }
 }

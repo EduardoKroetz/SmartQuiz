@@ -1,17 +1,17 @@
-﻿using IntegrationTests.Factories;
+﻿using System.Net.Http.Json;
+using IntegrationTests.Factories;
 using Newtonsoft.Json;
-using QuizDev.Core.DTOs.AnswerOptions;
-using QuizDev.Core.DTOs.Questions;
-using System.Net.Http.Json;
+using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.DTOs.Questions;
 
 namespace IntegrationTests.Controllers;
 
-public class QuestionsControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class QuestionsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public QuestionsControllerTests(QuizDevWebApplicationFactory factory)
+    public QuestionsControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();

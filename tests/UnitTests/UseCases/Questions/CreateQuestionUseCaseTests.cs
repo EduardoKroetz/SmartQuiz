@@ -1,11 +1,10 @@
-﻿
-using Moq;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.Questions;
-using QuizDev.Core.DTOs.AnswerOptions;
-using QuizDev.Core.DTOs.Questions;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+﻿using Moq;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.Questions;
+using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Questions;
 
@@ -21,7 +20,7 @@ public class CreateQuestionUseCaseTests
         _questionRepositoryMock = new Mock<IQuestionRepository>();
         _quizRepositoryMock = new Mock<IQuizRepository>();
         _answerOptionRepositoryMock = new Mock<IAnswerOptionRepository>();
-        _useCase = new CreateQuestionUseCase(_questionRepositoryMock.Object , _quizRepositoryMock.Object , _answerOptionRepositoryMock.Object);
+        _useCase = new CreateQuestionUseCase(_questionRepositoryMock.Object, _quizRepositoryMock.Object, _answerOptionRepositoryMock.Object);
     }
 
     [Fact]
@@ -33,18 +32,18 @@ public class CreateQuestionUseCaseTests
         {
             Id = Guid.NewGuid(),
             Questions = new List<Question>(),
-            UserId = userId 
+            UserId = userId
         };
-        var createQuestionDto = new CreateQuestionDto 
-        { 
-            QuizId = quiz.Id, 
-            Order = 0, 
-            Text = "Teste?", 
-            Options = new List<CreateAnswerOptionInQuestionDto>() 
-            { 
-                new () { IsCorrectOption = true }, 
+        var createQuestionDto = new CreateQuestionDto
+        {
+            QuizId = quiz.Id,
+            Order = 0,
+            Text = "Teste?",
+            Options = new List<CreateAnswerOptionInQuestionDto>()
+            {
+                new () { IsCorrectOption = true },
                 new () { IsCorrectOption = false }
-            } 
+            }
         };
 
         _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);

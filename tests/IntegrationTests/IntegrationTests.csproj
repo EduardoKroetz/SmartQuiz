@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\QuizDev.API\QuizDev.API.csproj" />
-    <ProjectReference Include="..\..\src\QuizDev.Infrastructure\QuizDev.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\SmartQuiz.API\SmartQuiz.API.csproj" />
+    <ProjectReference Include="..\..\src\SmartQuiz.Infrastructure\SmartQuiz.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

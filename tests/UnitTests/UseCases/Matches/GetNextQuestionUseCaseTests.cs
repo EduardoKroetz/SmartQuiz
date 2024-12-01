@@ -1,9 +1,8 @@
-﻿
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.UseCases.Matches;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.UseCases.Matches;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Matches;
 
@@ -25,9 +24,9 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [],  QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { nextQuestion } };
-        var match = new QuizDev.Core.Entities.Match { Id = Guid.NewGuid(),Quiz = quiz , UserId = userId, Status = QuizDev.Core.Enums.EMatchStatus.Created };
+        var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created };
 
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
         _matchRepositoryMock.Setup(x => x.GetNextQuestion(match)).ReturnsAsync(nextQuestion);
@@ -38,7 +37,7 @@ public class GetNextQuestionUseCaseTests
         //Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
         Assert.True((bool)data.IsLastQuestion);
-        Assert.Equal(QuizDev.Core.Enums.EMatchStatus.Created, match.Status);
+        Assert.Equal(SmartQuiz.Core.Enums.EMatchStatus.Created, match.Status);
     }
 
     [Fact]
@@ -48,7 +47,7 @@ public class GetNextQuestionUseCaseTests
         var userId = Guid.NewGuid();
         var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
-        var match = new QuizDev.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = QuizDev.Core.Enums.EMatchStatus.Created, Responses = new List<Response>() };
+        var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Responses = new List<Response>() };
 
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
         _questionRepositoryMock.Setup(x => x.GetQuizQuestionByOrder(match.QuizId, 0)).ReturnsAsync(nextQuestion);
@@ -57,7 +56,7 @@ public class GetNextQuestionUseCaseTests
         var result = await _useCase.Execute(match.Id, userId);
 
         //Assert
-        Assert.Equal(QuizDev.Core.Enums.EMatchStatus.Created, match.Status);
+        Assert.Equal(SmartQuiz.Core.Enums.EMatchStatus.Created, match.Status);
     }
 
     [Fact]
@@ -66,8 +65,8 @@ public class GetNextQuestionUseCaseTests
         //Arrange
         var userId = Guid.NewGuid();
         var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
-        var quiz = new Quiz { Questions = new List<Question>() { new (), new () } };
-        var match = new QuizDev.Core.Entities.Match { UserId = userId, Status = QuizDev.Core.Enums.EMatchStatus.Finished };
+        var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
+        var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Finished };
 
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
 
@@ -82,7 +81,7 @@ public class GetNextQuestionUseCaseTests
         var userId = Guid.NewGuid();
         var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
-        var match = new QuizDev.Core.Entities.Match { UserId = userId, Status = QuizDev.Core.Enums.EMatchStatus.Failed };
+        var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
 
@@ -97,7 +96,7 @@ public class GetNextQuestionUseCaseTests
         var userId = Guid.NewGuid();
         var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
-        var match = new QuizDev.Core.Entities.Match { UserId = Guid.NewGuid(), Status = QuizDev.Core.Enums.EMatchStatus.Failed };
+        var match = new SmartQuiz.Core.Entities.Match { UserId = Guid.NewGuid(), Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
 

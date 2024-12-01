@@ -1,10 +1,10 @@
 ﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.AnswerOptions;
-using QuizDev.Core.DTOs.AnswerOptions;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.AnswerOptions;
+using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.AnswerOptions;
 
@@ -103,7 +103,7 @@ public class CreateAnswerOptionUseCaseTests
             Options = new List<AnswerOption>()
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true )).ReturnsAsync(question);
+        _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true)).ReturnsAsync(question);
 
         // Act
         var result = await _useCase.Execute(createAnswerOption, userId);

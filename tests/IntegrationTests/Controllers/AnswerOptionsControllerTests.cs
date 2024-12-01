@@ -1,15 +1,15 @@
 ﻿
 using IntegrationTests.Factories;
-using QuizDev.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.DTOs.AnswerOptions;
 
 namespace IntegrationTests.Controllers;
 
-public class AnswerOptionsControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class AnswerOptionsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public AnswerOptionsControllerTests(QuizDevWebApplicationFactory factory)
+    public AnswerOptionsControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -30,7 +30,7 @@ public class AnswerOptionsControllerTests : IClassFixture<QuizDevWebApplicationF
 
         //Assert
         Assert.NotNull(response.answerOptionId);
-        Assert.Equal(questionId,(Guid) response.questionId);
+        Assert.Equal(questionId, (Guid)response.questionId);
     }
 
     [Fact]

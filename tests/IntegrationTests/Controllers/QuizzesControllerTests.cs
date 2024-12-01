@@ -1,16 +1,16 @@
 ﻿using IntegrationTests.Factories;
-using QuizDev.Core.DTOs.AnswerOptions;
-using QuizDev.Core.DTOs.Questions;
-using QuizDev.Core.DTOs.Quizzes;
+using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Core.DTOs.Quizzes;
 
 namespace IntegrationTests.Controllers;
 
-public class QuizzesControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class QuizzesControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public QuizzesControllerTests(QuizDevWebApplicationFactory factory)
+    public QuizzesControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();

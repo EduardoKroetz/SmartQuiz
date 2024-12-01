@@ -1,12 +1,9 @@
-﻿
-
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases;
-using QuizDev.Application.UseCases.Quizzes;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.Quizzes;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Quizzes;
 
@@ -96,7 +93,7 @@ public class ToggleQuizUseCaseTests
             Id = quizId,
             UserId = userId,
             IsActive = false,
-            Questions = new List<Question>() 
+            Questions = new List<Question>()
         };
 
         _quizRepositoryMock.Setup(q => q.GetAsync(quizId, true)).ReturnsAsync(quiz);

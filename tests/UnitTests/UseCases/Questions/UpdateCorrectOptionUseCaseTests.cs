@@ -1,11 +1,8 @@
-﻿
-using Microsoft.Extensions.Options;
-using Moq;
-using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.Questions;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+﻿using Moq;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.Questions;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Questions;
 
@@ -31,9 +28,9 @@ public class UpdateCorrectOptionUseCaseTests
         var currentCorrectOption = new AnswerOption { Id = Guid.NewGuid(), IsCorrectOption = true };
         var newCorrectOption = new AnswerOption { Id = Guid.NewGuid(), IsCorrectOption = false };
 
-        var question = new Question 
-        { 
-            Id = Guid.NewGuid(), 
+        var question = new Question
+        {
+            Id = Guid.NewGuid(),
             Options = new List<AnswerOption> { currentCorrectOption, newCorrectOption },
             Quiz = new Quiz { Id = Guid.NewGuid(), UserId = userId, }
         };
@@ -72,13 +69,13 @@ public class UpdateCorrectOptionUseCaseTests
         // Arrange
         var questionId = Guid.NewGuid();
         var newCorrectOptionId = Guid.NewGuid();
-        var userId = Guid.NewGuid(); 
-        var quizOwnerId = Guid.NewGuid(); 
+        var userId = Guid.NewGuid();
+        var quizOwnerId = Guid.NewGuid();
 
         var question = new Question
         {
             Id = questionId,
-            Quiz = new Quiz { UserId = quizOwnerId }, 
+            Quiz = new Quiz { UserId = quizOwnerId },
             Options = new List<AnswerOption>
             {
                 new AnswerOption { Id = newCorrectOptionId }
@@ -96,7 +93,7 @@ public class UpdateCorrectOptionUseCaseTests
     {
         // Arrange
         var questionId = Guid.NewGuid();
-        var newCorrectOptionId = Guid.NewGuid(); 
+        var newCorrectOptionId = Guid.NewGuid();
         var userId = Guid.NewGuid();
 
         var question = new Question

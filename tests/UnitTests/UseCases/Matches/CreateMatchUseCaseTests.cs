@@ -1,10 +1,9 @@
-﻿
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.Exceptions;
-using QuizDev.Application.UseCases.Matches;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.UseCases.Matches;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Matches;
 
@@ -30,7 +29,7 @@ public class CreateMatchUseCaseTests
         var userId = Guid.NewGuid();
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = true, ExpiresInSeconds = 120 };
         var nextQuestion = new Question { Id = Guid.NewGuid(), QuizId = quiz.Id, Order = 0, Text = "", Options = [] };
-        
+
         _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, false)).ReturnsAsync(quiz);
         _questionRepositoryMock.Setup(x => x.GetQuizQuestionByOrder(quiz.Id, 0)).ReturnsAsync(nextQuestion);
 

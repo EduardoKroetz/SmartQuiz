@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\QuizDev.Application\QuizDev.Application.csproj" />
-    <ProjectReference Include="..\..\src\QuizDev.Core\QuizDev.Core.csproj" />
-    <ProjectReference Include="..\..\src\QuizDev.Infrastructure\QuizDev.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\SmartQuiz.Application\SmartQuiz.Application.csproj" />
+    <ProjectReference Include="..\..\src\SmartQuiz.Core\SmartQuiz.Core.csproj" />
+    <ProjectReference Include="..\..\src\SmartQuiz.Infrastructure\SmartQuiz.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

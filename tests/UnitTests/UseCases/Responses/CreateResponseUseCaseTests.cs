@@ -1,9 +1,8 @@
-﻿
-using Moq;
-using QuizDev.Application.UseCases.Responses;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Enums;
-using QuizDev.Core.Repositories;
+﻿using Moq;
+using SmartQuiz.Application.UseCases.Responses;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Enums;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Responses;
 
@@ -29,8 +28,8 @@ public class CreateResponseUseCaseTests
         var userId = Guid.NewGuid();
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
-        var quiz = new Quiz { ExpiresInSeconds = 120, Questions = [ question, new () ] };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var quiz = new Quiz { ExpiresInSeconds = 120, Questions = [question, new()] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -40,7 +39,7 @@ public class CreateResponseUseCaseTests
 
         //Assert
         _responseRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Response>()), Times.Once);
-        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<QuizDev.Core.Entities.Match>()), Times.Once);
+        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<SmartQuiz.Core.Entities.Match>()), Times.Once);
         Assert.Equal(EMatchStatus.Created, match.Status);
         Assert.Equal(1, match.Score);
         Assert.Single(match.Responses);
@@ -54,7 +53,7 @@ public class CreateResponseUseCaseTests
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
         var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()], Expires = true };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -63,7 +62,7 @@ public class CreateResponseUseCaseTests
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _useCase.Execute(userId, match.Id, answerOption.Id));
-        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<QuizDev.Core.Entities.Match>()), Times.Once);
+        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<SmartQuiz.Core.Entities.Match>()), Times.Once);
         Assert.Equal(EMatchStatus.Failed, match.Status);
     }
 
@@ -75,7 +74,7 @@ public class CreateResponseUseCaseTests
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
         var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()] };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Finished  /* Finished */, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Finished  /* Finished */, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -94,7 +93,7 @@ public class CreateResponseUseCaseTests
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
         var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()] };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Failed /* Failed */, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Failed /* Failed */, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -112,7 +111,7 @@ public class CreateResponseUseCaseTests
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
         var quiz = new Quiz { ExpiresInSeconds = 11, Questions = [question, new()] };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = Guid.NewGuid() /* random user id*/, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = Guid.NewGuid() /* random user id*/, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -131,7 +130,7 @@ public class CreateResponseUseCaseTests
         var question = new Question { Id = Guid.NewGuid() };
         var answerOption = new AnswerOption { Id = Guid.NewGuid(), Question = question, QuestionId = question.Id, IsCorrectOption = true };
         var quiz = new Quiz { ExpiresInSeconds = 120, Questions = [question] /* Just one question */ };
-        var match = new QuizDev.Core.Entities.Match { Status = QuizDev.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
+        var match = new SmartQuiz.Core.Entities.Match { Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Quiz = quiz, UserId = userId, CreatedAt = DateTime.UtcNow, Responses = [] };
 
         _answerOptionRepositoryMock.Setup(x => x.GetById(answerOption.Id)).ReturnsAsync(answerOption);
         _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
@@ -141,7 +140,7 @@ public class CreateResponseUseCaseTests
 
         //Assert
         _responseRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Response>()), Times.Once);
-        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<QuizDev.Core.Entities.Match>()), Times.AtMost(2));
+        _matchRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<SmartQuiz.Core.Entities.Match>()), Times.AtMost(2));
         Assert.Equal(EMatchStatus.Finished, match.Status);
     }
 }

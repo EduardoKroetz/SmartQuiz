@@ -1,15 +1,15 @@
 ﻿
 using IntegrationTests.Factories;
-using QuizDev.Core.DTOs.Reviews;
+using SmartQuiz.Core.DTOs.Reviews;
 
 namespace IntegrationTests.Controllers;
 
-public class ReviewsControllerTests : IClassFixture<QuizDevWebApplicationFactory>
+public class ReviewsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly QuizDevWebApplicationFactory _factory;
+    private readonly SmartQuizWebApplicationFactory _factory;
 
-    public ReviewsControllerTests(QuizDevWebApplicationFactory factory)
+    public ReviewsControllerTests(SmartQuizWebApplicationFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -55,7 +55,7 @@ public class ReviewsControllerTests : IClassFixture<QuizDevWebApplicationFactory
 
         //Act
         var response = await Utils.UpdateReviewAsync(_client, token, updateDto, reviewId);
-        
+
         //Assert
         Assert.NotNull(response.id);
     }

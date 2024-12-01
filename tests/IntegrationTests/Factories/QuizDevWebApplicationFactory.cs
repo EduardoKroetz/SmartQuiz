@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using QuizDev.Infrastructure.Data;
+using SmartQuiz.Infrastructure.Data;
 
 namespace IntegrationTests.Factories;
 
-public class QuizDevWebApplicationFactory : WebApplicationFactory<Startup>
+public class SmartQuizWebApplicationFactory : WebApplicationFactory<Startup>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -18,14 +18,14 @@ public class QuizDevWebApplicationFactory : WebApplicationFactory<Startup>
         {
             // Remove a configuração do DbContext real
             var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<QuizDevDbContext>));
+                d => d.ServiceType == typeof(DbContextOptions<SmartQuizDbContext>));
 
             if (descriptor != null)
             {
                 services.Remove(descriptor);
             }
-            
-            services.AddDbContext<QuizDevDbContext>(options =>
+
+            services.AddDbContext<SmartQuizDbContext>(options =>
             {
                 options.UseInMemoryDatabase("InMemoryTestDb");
             });

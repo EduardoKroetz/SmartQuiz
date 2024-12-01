@@ -1,10 +1,9 @@
-﻿
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
-using QuizDev.Application.UseCases.Quizzes;
-using QuizDev.Core.DTOs.Quizzes;
-using QuizDev.Core.Entities;
-using QuizDev.Core.Repositories;
+using SmartQuiz.Application.UseCases.Quizzes;
+using SmartQuiz.Core.DTOs.Quizzes;
+using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.Quizzes;
 

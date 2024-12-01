@@ -1,18 +1,17 @@
-﻿using Newtonsoft.Json;
-using QuizDev.Core.DTOs.AnswerOptions;
-using QuizDev.Core.DTOs.Questions;
-using QuizDev.Core.DTOs.Quizzes;
-using QuizDev.Core.DTOs.Reviews;
-using QuizDev.Core.DTOs.Users;
-using QuizDev.Core.Entities;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Newtonsoft.Json;
+using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Core.DTOs.Quizzes;
+using SmartQuiz.Core.DTOs.Reviews;
+using SmartQuiz.Core.DTOs.Users;
 
 namespace IntegrationTests;
 
 public static class Utils
 {
-    public static async Task<dynamic> CreateUserAsync(HttpClient client ,string username, string email, string password = "password")
+    public static async Task<dynamic> CreateUserAsync(HttpClient client, string username, string email, string password = "password")
     {
         var createUserDto = new CreateUserDto { Username = username, Email = email, Password = password };
         var createUserResponse = await client.PostAsJsonAsync("api/accounts/register", createUserDto); //Criar novo usuário
@@ -38,7 +37,7 @@ public static class Utils
         return content.data;
     }
 
-    public static async Task<dynamic> CreateQuizAsync(HttpClient client, string token ,EditorQuizDto dto)
+    public static async Task<dynamic> CreateQuizAsync(HttpClient client, string token, EditorQuizDto dto)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await client.PostAsJsonAsync("api/quizzes", dto);
@@ -64,7 +63,7 @@ public static class Utils
         return content.data;
     }
 
-    public static async Task<dynamic> ToggleQuizAsync(HttpClient client, string token ,Guid quizId)
+    public static async Task<dynamic> ToggleQuizAsync(HttpClient client, string token, Guid quizId)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await client.PostAsJsonAsync($"api/quizzes/toggle/{quizId}", new { });
@@ -109,7 +108,7 @@ public static class Utils
         return content.data;
     }
 
-    public static async Task<dynamic> SubmitResponseAsync(HttpClient client, string token,Guid matchId , Guid optionId)
+    public static async Task<dynamic> SubmitResponseAsync(HttpClient client, string token, Guid matchId, Guid optionId)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await client.PostAsJsonAsync($"api/matches/{matchId}/submit/{optionId}", new { });
@@ -130,7 +129,7 @@ public static class Utils
     public static async Task<dynamic> EndMatchAsync(HttpClient client, string token, Guid matchId)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var response = await client.PostAsJsonAsync($"/api/matches/{matchId}/end", new {});
+        var response = await client.PostAsJsonAsync($"/api/matches/{matchId}/end", new { });
         response.EnsureSuccessStatusCode();
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         return content.data;
@@ -219,14 +218,14 @@ public static class Utils
     }
 
     // SEEDs
-    public static async Task<Guid> SeedMatchAsync(HttpClient client ,string token)
+    public static async Task<Guid> SeedMatchAsync(HttpClient client, string token)
     {
-        var quizId = await SeedQuizAsync(client ,token);
+        var quizId = await SeedQuizAsync(client, token);
         var matchData = await CreateMatchAsync(client, token, quizId);
-        return (Guid) matchData.matchId;
+        return (Guid)matchData.matchId;
     }
 
-    public static async Task<Guid> SeedQuizAsync(HttpClient client ,string token)
+    public static async Task<Guid> SeedQuizAsync(HttpClient client, string token)
     {
         var quizDto = new EditorQuizDto
         {
@@ -266,7 +265,7 @@ public static class Utils
         await EndMatchAsync(client, token, matchId);
         var reviewDto = new CreateReviewDto { MatchId = matchId, Description = "Ok", Rating = 6 };
         var response = await CreateReviewAsync(client, token, reviewDto);
-        return (Guid) response.id;
+        return (Guid)response.id;
     }
 
     public static async Task<Guid> SeedQuestionAsync(HttpClient client, string token, Guid quizId)
