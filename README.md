@@ -1,10 +1,6 @@
 
-# QuizDevAPI
-API para desenvolvedores jogarem Quizzes
-
-## Visão geral
-
-A API foi criada com ASP.NET Core e PostgreSQL e permite que os desenvolvedores joguem e criem Quizzes. A autenticação é via JWT.
+# QuizGenerator
+Aplicação para criar, gerar e jogar Quizzes
 
 ### Relações das entidades
 
