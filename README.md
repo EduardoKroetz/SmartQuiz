@@ -1,5 +1,5 @@
 
-# QuizGenerator
+# SmartQuiz
 Aplicação para criar, gerar e jogar Quizzes
 
 ### Relações das entidades
