@@ -39,6 +39,8 @@ public class SmartQuizDbContext : DbContext
         builder.Entity<Quiz>(options =>
         {
             options.HasKey(x => x.Id);
+            options.Property(x => x.Difficulty).HasConversion<string>();
+            
             options.HasMany(x => x.Questions)
                 .WithOne(x => x.Quiz)
                 .HasForeignKey(x => x.QuizId);
@@ -56,7 +58,7 @@ public class SmartQuizDbContext : DbContext
         builder.Entity<Question>(options =>
         {
             options.HasKey(x => x.Id);
-            options.HasMany(x => x.Options)
+            options.HasMany(x => x.AnswerOptions)
                 .WithOne(x => x.Question)
                 .HasForeignKey(x => x.QuestionId);
         });

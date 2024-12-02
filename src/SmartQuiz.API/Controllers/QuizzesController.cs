@@ -118,7 +118,7 @@ public class QuizzesController : ControllerBase
     /// <param name="useCase"></param>
     /// <returns></returns>
     /// <response code="400">Caso hajam partidas relacionadas</response>
-    [HttpDelete("{quizId:guid}")]
+    [HttpDelete("{quizId:guid}"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -141,6 +141,22 @@ public class QuizzesController : ControllerBase
     public async Task<IActionResult> GetQuestionByQuiz([FromRoute] Guid quizId, [FromServices] GetQuestionsByQuizUseCase useCase)
     {
         var result = await useCase.Execute(quizId);
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Gerar um quiz automaticamente
+    /// </summary>
+    /// <param name="quizId"></param>
+    /// <param name="useCase"></param>
+    /// <returns></returns>
+    [HttpPost("generate"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GenerateQuizAsync([FromBody] GenerateQuizDto generateQuizDto, [FromServices] GenerateQuizUseCase useCase)
+    {
+        var userId = User.GetUserId();
+        var result = await useCase.Execute(generateQuizDto, userId);
         return Ok(result);
     }
 }

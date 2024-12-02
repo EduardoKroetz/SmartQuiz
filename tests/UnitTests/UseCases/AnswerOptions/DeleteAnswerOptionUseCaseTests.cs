@@ -81,7 +81,7 @@ public class DeleteAnswerOptionUseCaseTests
         {
             Id = answerOption.QuestionId,
             Quiz = new Quiz { UserId = userId },
-            Options = new List<AnswerOption> { new AnswerOption(), new AnswerOption() } // Exatamente 2 opções
+            AnswerOptions = new List<AnswerOption> { new AnswerOption(), new AnswerOption() } // Exatamente 2 opções
         };
 
         _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync(answerOption);
@@ -104,7 +104,7 @@ public class DeleteAnswerOptionUseCaseTests
         {
             Id = answerOption.QuestionId,
             Quiz = new Quiz { UserId = userId },
-            Options = new List<AnswerOption>
+            AnswerOptions = new List<AnswerOption>
             {
                 new AnswerOption(), new AnswerOption(), new AnswerOption() // Mais de 2 opções
             }

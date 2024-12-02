@@ -73,7 +73,7 @@ public class GetNextQuestionUseCase
                 Text = nextQuestion.Text,
                 QuizId = nextQuestion.QuizId,
                 Order = nextQuestion.Order,
-                Options = nextQuestion.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+                Options = nextQuestion.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
             }
         };
 

@@ -28,7 +28,7 @@ public class CreateMatchUseCaseTests
         //Arrange
         var userId = Guid.NewGuid();
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = true, ExpiresInSeconds = 120 };
-        var nextQuestion = new Question { Id = Guid.NewGuid(), QuizId = quiz.Id, Order = 0, Text = "", Options = [] };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), QuizId = quiz.Id, Order = 0, Text = "", AnswerOptions = [] };
 
         _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, false)).ReturnsAsync(quiz);
         _questionRepositoryMock.Setup(x => x.GetQuizQuestionByOrder(quiz.Id, 0)).ReturnsAsync(nextQuestion);

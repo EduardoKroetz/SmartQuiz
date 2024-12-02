@@ -31,7 +31,7 @@ public class UpdateCorrectOptionUseCaseTests
         var question = new Question
         {
             Id = Guid.NewGuid(),
-            Options = new List<AnswerOption> { currentCorrectOption, newCorrectOption },
+            AnswerOptions = new List<AnswerOption> { currentCorrectOption, newCorrectOption },
             Quiz = new Quiz { Id = Guid.NewGuid(), UserId = userId, }
         };
 
@@ -76,7 +76,7 @@ public class UpdateCorrectOptionUseCaseTests
         {
             Id = questionId,
             Quiz = new Quiz { UserId = quizOwnerId },
-            Options = new List<AnswerOption>
+            AnswerOptions = new List<AnswerOption>
             {
                 new AnswerOption { Id = newCorrectOptionId }
             }
@@ -100,7 +100,7 @@ public class UpdateCorrectOptionUseCaseTests
         {
             Id = questionId,
             Quiz = new Quiz { UserId = userId },
-            Options = new List<AnswerOption>
+            AnswerOptions = new List<AnswerOption>
             {
                 new AnswerOption { Id = Guid.NewGuid() } // Não contém newCorrectOptionId
             }

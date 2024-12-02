@@ -19,4 +19,8 @@
     <ProjectReference Include="..\SmartQuiz.Core\SmartQuiz.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

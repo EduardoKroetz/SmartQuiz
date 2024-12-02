@@ -24,7 +24,7 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", AnswerOptions = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { nextQuestion } };
         var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created };
 
@@ -45,7 +45,7 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", AnswerOptions = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Responses = new List<Response>() };
 
@@ -64,7 +64,7 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", AnswerOptions = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Finished };
 
@@ -79,7 +79,7 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", AnswerOptions = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 
@@ -94,7 +94,7 @@ public class GetNextQuestionUseCaseTests
     {
         //Arrange
         var userId = Guid.NewGuid();
-        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", Options = [], QuizId = Guid.NewGuid() };
+        var nextQuestion = new Question { Id = Guid.NewGuid(), Order = 0, Text = "", AnswerOptions = [], QuizId = Guid.NewGuid() };
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = Guid.NewGuid(), Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 

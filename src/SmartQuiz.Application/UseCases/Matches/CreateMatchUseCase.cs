@@ -62,7 +62,7 @@ public class CreateMatchUseCase
             Text = nextQuestion.Text,
             QuizId = nextQuestion.QuizId,
             Order = nextQuestion.Order,
-            Options = nextQuestion.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+            Options = nextQuestion.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
         };
 
         return new ResultDto(new { MatchId = match.Id, match.ExpiresIn, NextQuestion = questionDto });

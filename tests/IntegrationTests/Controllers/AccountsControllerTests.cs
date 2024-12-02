@@ -5,7 +5,7 @@ using IntegrationTests.Factories;
 using Newtonsoft.Json;
 using SmartQuiz.Core.DTOs.Users;
 
-namespace IntegrationTests.Controllers.Users;
+namespace IntegrationTests.Controllers;
 
 public class AccountsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {

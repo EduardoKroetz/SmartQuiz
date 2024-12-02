@@ -27,7 +27,7 @@ public class QuestionRepository : IQuestionRepository
 
         if (includeRelations)
         {
-            query = query.Include(x => x.Options).Include(x => x.Quiz);
+            query = query.Include(x => x.AnswerOptions).Include(x => x.Quiz);
         }
 
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
@@ -37,10 +37,10 @@ public class QuestionRepository : IQuestionRepository
     {
         return await _dbContext
             .Questions
-                .Include(x => x.Options)
+                .Include(x => x.AnswerOptions)
             .Where(x => x.QuizId.Equals(quizId))
             .Where(x => x.Order.Equals(order))
-            .Select(x => new Question { Id = x.Id, Text = x.Text, Order = x.Order, Options = x.Options, QuizId = x.QuizId })
+            .Select(x => new Question { Id = x.Id, Text = x.Text, Order = x.Order, AnswerOptions = x.AnswerOptions, QuizId = x.QuizId })
             .FirstOrDefaultAsync();
     }
 
@@ -61,7 +61,7 @@ public class QuestionRepository : IQuestionRepository
                 Text = x.Text,
                 QuizId = x.QuizId,
                 Order = x.Order,
-                Options = x.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+                Options = x.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
             })
             .OrderBy(x => x.Order)
             .ToListAsync();
@@ -77,7 +77,7 @@ public class QuestionRepository : IQuestionRepository
                 Text = x.Text,
                 QuizId = x.QuizId,
                 Order = x.Order,
-                Options = x.Options.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
+                Options = x.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response, o.QuestionId)).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == questionId);
     }

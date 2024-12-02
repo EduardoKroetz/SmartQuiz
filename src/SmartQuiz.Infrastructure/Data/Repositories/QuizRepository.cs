@@ -17,6 +17,7 @@ public class QuizRepository : IQuizRepository
     {
         await _dbContext.Quizzes.AddAsync(quiz);
         await _dbContext.SaveChangesAsync();
+        _dbContext.Entry(quiz).State = EntityState.Detached;
     }
 
     public async Task<Quiz?> GetAsync(Guid id, bool includeQuestions = false)
@@ -27,7 +28,7 @@ public class QuizRepository : IQuizRepository
         {
             query = query
                 .Include(x => x.Questions)
-                .ThenInclude(x => x.Options)
+                .ThenInclude(x => x.AnswerOptions)
                 .Select(x => new Quiz
                 {
                     Id = x.Id,
@@ -37,6 +38,8 @@ public class QuizRepository : IQuizRepository
                     Expires = x.Expires,
                     ExpiresInSeconds = x.ExpiresInSeconds,
                     IsActive = x.IsActive,
+                    Difficulty = x.Difficulty,
+                    Theme = x.Theme,
                     Questions = x.Questions.OrderBy(q => q.Order).ToList()
                 });
         }

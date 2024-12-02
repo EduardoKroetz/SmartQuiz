@@ -1,15 +1,29 @@
-﻿#nullable disable
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace SmartQuiz.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "EmailCodes",
+                columns: table => new
+                {
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailCodes", x => x.Code);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -17,7 +31,8 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: false)
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    EmailIsVerified = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +46,8 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    Theme = table.Column<string>(type: "text", nullable: false),
+                    Difficulty = table.Column<string>(type: "text", nullable: false),
                     Expires = table.Column<bool>(type: "boolean", nullable: false),
                     ExpiresInSeconds = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
@@ -183,6 +200,12 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmailCodes_Email",
+                table: "EmailCodes",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Matches_QuizId",
                 table: "Matches",
                 column: "QuizId");
@@ -232,6 +255,9 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "EmailCodes");
+
             migrationBuilder.DropTable(
                 name: "Responses");
 

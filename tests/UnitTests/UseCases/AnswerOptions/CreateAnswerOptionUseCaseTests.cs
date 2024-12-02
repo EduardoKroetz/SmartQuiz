@@ -69,7 +69,7 @@ public class CreateAnswerOptionUseCaseTests
         {
             Id = createAnswerOption.QuestionId,
             Quiz = new Quiz { UserId = userId },
-            Options = new List<AnswerOption>
+            AnswerOptions = new List<AnswerOption>
             {
                 new AnswerOption { IsCorrectOption = true }
             }
@@ -100,7 +100,7 @@ public class CreateAnswerOptionUseCaseTests
         {
             Id = createAnswerOption.QuestionId,
             Quiz = new Quiz { UserId = userId },
-            Options = new List<AnswerOption>()
+            AnswerOptions = new List<AnswerOption>()
         };
 
         _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true)).ReturnsAsync(question);

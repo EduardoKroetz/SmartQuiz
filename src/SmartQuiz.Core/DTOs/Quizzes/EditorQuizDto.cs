@@ -12,4 +12,10 @@ public class EditorQuizDto
 
     public bool Expires { get; set; }
     public int ExpiresInSeconds { get; set; }
+
+    [Required(ErrorMessage = "Informe a dificuldade")]
+    public string Difficulty { get; set; }
+    
+    [Required(ErrorMessage = "Informe o tema do Quiz")]
+    public string Theme { get; set; }
 }

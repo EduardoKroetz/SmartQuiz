@@ -137,6 +137,10 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Difficulty")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("Expires")
                         .HasColumnType("boolean");
 
@@ -145,6 +149,10 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -244,7 +252,7 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
             modelBuilder.Entity("SmartQuiz.Core.Entities.AnswerOption", b =>
                 {
                     b.HasOne("SmartQuiz.Core.Entities.Question", "Question")
-                        .WithMany("Options")
+                        .WithMany("AnswerOptions")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -345,7 +353,7 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SmartQuiz.Core.Entities.Question", b =>
                 {
-                    b.Navigation("Options");
+                    b.Navigation("AnswerOptions");
                 });
 
             modelBuilder.Entity("SmartQuiz.Core.Entities.Quiz", b =>

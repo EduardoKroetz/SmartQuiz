@@ -34,7 +34,7 @@ public class CreateAnswerOptionUseCase
         //Caso seja a opção que está sendo criada é a correta da questão, vai remover a opção correta atual da questão
         if (createAnswerOption.IsCorrectOption)
         {
-            var correctOption = question.Options.FirstOrDefault(x => x.IsCorrectOption);
+            var correctOption = question.AnswerOptions.FirstOrDefault(x => x.IsCorrectOption);
 
             if (correctOption != null)
             {

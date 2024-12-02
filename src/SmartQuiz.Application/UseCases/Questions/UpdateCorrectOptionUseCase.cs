@@ -31,7 +31,7 @@ public class UpdateCorrectOptionUseCase
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
-        var currentCorrectOption = question.Options.FirstOrDefault(x => x.IsCorrectOption);
+        var currentCorrectOption = question.AnswerOptions.FirstOrDefault(x => x.IsCorrectOption);
         //Remove a opção correta atual
         if (currentCorrectOption != null)
         {
@@ -40,7 +40,7 @@ public class UpdateCorrectOptionUseCase
         }
 
         //Atualiza a opção correta
-        var newCorrectOption = question.Options.FirstOrDefault(x => x.Id == newCorrectOptionId);
+        var newCorrectOption = question.AnswerOptions.FirstOrDefault(x => x.Id == newCorrectOptionId);
         if (newCorrectOption == null)
         {
             throw new NotFoundException("Opção de resposta não encontrada");

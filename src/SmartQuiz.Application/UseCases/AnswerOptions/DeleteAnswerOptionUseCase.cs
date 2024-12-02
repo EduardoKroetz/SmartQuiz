@@ -35,7 +35,7 @@ public class DeleteAnswerOptionUseCase
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
         }
 
-        if (question.Options.Count <= 2)
+        if (question.AnswerOptions.Count <= 2)
         {
             throw new InvalidOperationException("Não é possível deletar a opção de resposta pois a Questão relacionada deve possuir no mínimo duas opções de resposta");
         }
