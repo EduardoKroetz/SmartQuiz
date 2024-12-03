@@ -1,0 +1,31 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  gap: 1.6rem;
+  padding: 10px 16px;
+  height: 100%;
+}
+
+.title {
+  cursor: pointer;
+}
+
+.sidebar > nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  cursor: pointer;
+}
+
+.section-container {
+  display: flex;
+  align-items: center;
+  gap: 	1rem;
+}
+
+.section-container > i {
+  font-size: 26px;
+}

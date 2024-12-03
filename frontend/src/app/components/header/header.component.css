@@ -1,0 +1,14 @@
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  background-color: var(--primary-color);
+  padding: 10px;
+  color: var(--text-white-color);
+  align-items: center;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+}
