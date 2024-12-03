@@ -1,11 +1,11 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  max-width: 200px;
+  width: 150px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   gap: 1.6rem;
-  padding: 10px 16px;
+  padding: 0 16px;
   height: 100%;
 }
 

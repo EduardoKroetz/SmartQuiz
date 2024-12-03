@@ -1,0 +1,13 @@
+.presentation-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 25px;
+  border-radius: 5px;
+  width: 200px;
+}
+

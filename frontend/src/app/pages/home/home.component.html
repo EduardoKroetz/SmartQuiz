@@ -1,3 +1,16 @@
-<div>
-
+<div class="home">
+  <div class="info-container">
+    <app-presentation-box title="Pontuação Total" [data]="totalScore"></app-presentation-box>
+    <app-presentation-box title="Pontuação Máxima" [data]="maxScore"></app-presentation-box>
+    <app-presentation-box title="Tempo Mínimo" [data]="[minTime + ' segundos']"></app-presentation-box>
+    <app-presentation-box title="Partidas Jogadas" [data]="matchesPlayed"></app-presentation-box>
+    <app-presentation-box title="Respostas Corretas" [data]="correctAnswers"></app-presentation-box>
+    <app-presentation-box title="Respostas Incorretas" [data]="maxScore"></app-presentation-box>
+    <app-presentation-box title="Quizzes Criados" [data]="createdQuizzes"></app-presentation-box>
+    <app-presentation-box title="Partidas Concluídas" [data]="[minTime + ' segundos']"></app-presentation-box>
+  </div>
+  <div class="list-container">
+    <app-data-list-box class="data-list" redirect="matches" title="Últimas Partidas"></app-data-list-box>
+    <app-data-list-box class="data-list" redirect="quizzes" title="Meus Quizzes"></app-data-list-box>
+  </div>
 </div>

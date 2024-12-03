@@ -16,10 +16,8 @@
 .main {
   display: flex;
   flex: 1;
-  color: #000;
   margin: 5px;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
+  background-color: var(--secondary-color);
+  color: var(--text-black-color);
   padding: 1.5rem;
 }

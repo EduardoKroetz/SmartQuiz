@@ -1,0 +1,26 @@
+.home {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.list-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.list-container > .data-list {
+  display: flex;
+  flex: 1;
+  background-color: aqua;
+}

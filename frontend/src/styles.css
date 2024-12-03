@@ -7,6 +7,10 @@
   --text-black-color: black;
 }
 
+body {
+  background-color: var(--secondary-color);
+}
+
 * {
   padding: 0;
   margin: 0;

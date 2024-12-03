@@ -1,7 +1,7 @@
 .header-container {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: space-between;
   background-color: var(--primary-color);
   padding: 10px;
   color: var(--text-white-color);
