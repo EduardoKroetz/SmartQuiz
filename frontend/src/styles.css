@@ -17,9 +17,14 @@ body {
   font-family: sans-serif;
 }
 
-input {
+input, select {
   padding: 5px;
   border: 0;
   border-radius: 5px;
   margin: 0;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  transform: all 200ms;
 }

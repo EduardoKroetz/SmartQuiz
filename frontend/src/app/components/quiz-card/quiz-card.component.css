@@ -16,6 +16,16 @@
   gap: .4rem;
 }
 
+.title-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-container > i {
+  cursor: pointer;
+  padding: 0 5px;
+}
+
 .quiz-info {
   display: flex;
   justify-content: space-between;
