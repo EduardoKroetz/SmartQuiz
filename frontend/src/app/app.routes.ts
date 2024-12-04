@@ -4,6 +4,7 @@ import { LayoutNoMainComponent } from './layouts/layout-no-main/layout-no-main.c
 import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component';
 import { QuizzesComponent } from './pages/quizzes/quizzes.component';
 import { GenerateQuizComponent } from './pages/generate-quiz/generate-quiz.component';
+import { HistoryComponent } from './pages/history/history.component';
 
 export const routes: Routes = [
   {
@@ -16,11 +17,16 @@ export const routes: Routes = [
   {
     path: "quizzes", component: BaseLayoutComponent, children: [
       {
-        path: "", component: QuizzesComponent, 
+        path: "", component: QuizzesComponent,
       },
       {
         path: "generate-quiz", component: GenerateQuizComponent 
       }
+    ]
+  },
+  {
+    path: "", component: BaseLayoutComponent, children: [
+      { path: "history", component: HistoryComponent }
     ]
   }
 ];

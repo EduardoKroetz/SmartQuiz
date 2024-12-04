@@ -1,0 +1,19 @@
+.history {
+  display: flex;
+  flex-direction: column;
+  width: 81vw;
+}
+
+.history-container {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  border-left: 2px solid var(--secondary-color);
+  padding: 10px;
+  margin-left: 5px;
+}
+
+.load-btn {
+  margin: 10px auto;
+  padding: 10px;
+}

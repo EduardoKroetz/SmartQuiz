@@ -17,7 +17,7 @@ body {
   font-family: sans-serif;
 }
 
-input, select {
+input, select, button {
   padding: 5px;
   border: 0;
   border-radius: 5px;
@@ -27,4 +27,5 @@ input, select {
 button:hover {
   background-color: var(--secondary-color);
   transform: all 200ms;
+  cursor: pointer;
 }
