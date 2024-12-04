@@ -1,0 +1,45 @@
+.quiz-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 10px;
+  border-radius: 7px;
+  height: 160px;
+  flex: 1 1 auto;
+}
+
+.quiz-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.quiz-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.play-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  gap: 1rem;
+  padding: 5px;
+  border: 0;
+  border-radius: 4px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  border: 1px solid var(--primary-color);
+  transition: all .2s;
+}
+
+.play-btn:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+
+}
+

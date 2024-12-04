@@ -1,0 +1,15 @@
+<div class="quiz-card">
+  <div class="quiz-card-content">
+    <h4>{{ quiz.title }}</h4>
+    <p>{{ quiz.description }}</p>
+    <p>{{ quiz.theme }}</p>
+    <div class="quiz-info">
+      <p>{{ quiz.numberOfQuestions}} perguntas</p>
+      <p>{{ quiz.expiresInSeconds / 60 }} min ( {{ quiz.expiresInSeconds}} seg )</p>
+    </div>
+  </div>
+  <button class="play-btn">
+    <p>Jogar</p>
+    <i class="bi bi-play-fill"></i>
+  </button>
+</div>
