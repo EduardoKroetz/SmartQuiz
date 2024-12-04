@@ -5,6 +5,7 @@ import { BaseLayoutComponent } from './layouts/base-layout/base-layout.component
 import { QuizzesComponent } from './pages/quizzes/quizzes.component';
 import { GenerateQuizComponent } from './pages/generate-quiz/generate-quiz.component';
 import { HistoryComponent } from './pages/history/history.component';
+import { AccountComponent } from './pages/account/account.component';
 
 export const routes: Routes = [
   {
@@ -26,7 +27,8 @@ export const routes: Routes = [
   },
   {
     path: "", component: BaseLayoutComponent, children: [
-      { path: "history", component: HistoryComponent }
+      { path: "history", component: HistoryComponent },
+      { path: "account", component: AccountComponent }
     ]
   }
 ];
