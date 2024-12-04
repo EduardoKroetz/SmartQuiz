@@ -1,25 +1,44 @@
 <div class="sidebar">
   <nav>
-    <section routerLink="/account" class="section-container">
-      <i class="bi bi-person-circle"></i>
-      <p>Conta</p>
+    <section 
+    (click)="setSection('home')" 
+    routerLink="/" 
+    [class.border-bottom]="currentSection === 'home'" 
+    class="section-container">
+    <i class="bi bi-house-fill"></i>
+    <p>Home</p>
     </section>
-    <section routerLink="/" class="section-container">
-      <i class="bi bi-house-fill"></i>
-      <p>Home</p>
-    </section>
-    <section routerLink="/quizzes" class="section-container">
+    <section 
+      (click)="setSection('quizzes')" 
+      routerLink="/quizzes" 
+      [class.border-bottom]="currentSection === 'quizzes'" 
+      class="section-container">
       <i class="bi bi-patch-question-fill"></i>
       <p>Quizzes</p>
     </section>
-    <section routerLink="/quizzes/generate-quiz" class="section-container">
+    <section 
+      (click)="setSection('generate-quiz')" 
+      routerLink="/quizzes/generate-quiz" 
+      [class.border-bottom]="currentSection === 'generate-quiz'" 
+      class="section-container">
       <i class="bi bi-arrow-clockwise"></i>
       <p>Gerar Quiz</p>
     </section>
-    <section routerLink="/history" class="section-container">
+    <section 
+      (click)="setSection('history')" 
+      routerLink="/history" 
+      [class.border-bottom]="currentSection === 'history'" 
+      class="section-container">
       <i class="bi bi-hourglass-split"></i>
       <p>Histórico</p>
     </section>
-
+    <section 
+      (click)="setSection('account')" 
+      routerLink="/account" 
+      [class.border-bottom]="currentSection === 'account'" 
+      class="section-container">
+      <i class="bi bi-person-circle"></i>
+      <p>Conta</p>
+    </section>
   </nav>
 </div>

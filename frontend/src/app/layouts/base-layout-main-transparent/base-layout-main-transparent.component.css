@@ -1,0 +1,13 @@
+.main {
+  display: flex;
+  flex: 1;
+  margin: 5px;
+  border-radius: 5px;
+  color: var(--secondary-color);
+  padding: 1.5rem;
+}
+
+:host {
+  display: flex;
+  flex: 1;
+}

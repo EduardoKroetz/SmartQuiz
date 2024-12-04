@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutNoMainComponent } from './layout-no-main.component';
+import { BaseLayoutMainComponent } from './base-layout-main.component';
 
-describe('LayoutNoMainComponent', () => {
-  let component: LayoutNoMainComponent;
-  let fixture: ComponentFixture<LayoutNoMainComponent>;
+describe('BaseLayoutMainComponent', () => {
+  let component: BaseLayoutMainComponent;
+  let fixture: ComponentFixture<BaseLayoutMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LayoutNoMainComponent]
+      imports: [BaseLayoutMainComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LayoutNoMainComponent);
+    fixture = TestBed.createComponent(BaseLayoutMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

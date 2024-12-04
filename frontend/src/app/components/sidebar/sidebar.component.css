@@ -24,8 +24,19 @@
   display: flex;
   align-items: center;
   gap: 	1rem;
+  transition: all 300ms;
+  padding: 5px;
+  border-bottom: 1px solid transparent;
 }
 
 .section-container > i {
   font-size: 26px;
+}
+
+.section-container:hover {
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+.border-bottom {
+  border-bottom: 1px solid var(--secondary-color);
 }
