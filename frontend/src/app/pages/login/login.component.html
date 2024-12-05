@@ -1,0 +1,20 @@
+<div class="login">
+  <div class="column-1">
+    <h1>Entrar</h1>
+    <form (submit)="submit()" class="login-form">
+      <div class="form-section">
+        <label id="email">E-mail</label>
+        <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="email" name="email" type="text" id="email">
+        <div *ngIf="emailError" class="error">{{ emailError }}</div>
+      </div>
+      <div class="form-section">
+        <label id="password">Senha</label>
+        <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="password" name="password" type="text" id="password">
+        <div *ngIf="passwordError" class="error">{{ passwordError }}</div>
+      </div>
+      <button class="login-btn">{{ isLoading ? "Entrando..." : "Entrar" }}</button>
+    </form>
+    <div routerLink="/register" class="not-registered">Não se registrou? Registre-se</div>
+  </div>
+  <app-smartquiz-desc class="column-2"></app-smartquiz-desc>
+</div>

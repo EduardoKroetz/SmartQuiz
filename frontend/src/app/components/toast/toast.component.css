@@ -1,0 +1,35 @@
+.toast-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  z-index: 0;
+}
+
+
+.toast {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  width: 300px;
+}
+
+.toast.is-open {
+  opacity: 1;
+}
+
+.toast-close {
+  display: flex;
+  justify-content: end;
+  cursor: pointer;
+}

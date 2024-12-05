@@ -1,0 +1,8 @@
+<div class="toast-container">
+  <div class="toast" [ngClass]="isOpen ? 'is-open' : ''" [ngStyle]="{'background-color': color}">
+    <div class="toast-close" (click)="close()">
+      <i class="bi bi-x-lg"></i>
+    </div>
+    <p class="toast-message">{{ message }}</p>
+  </div>
+</div>

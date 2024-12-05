@@ -38,7 +38,7 @@
 
 /* ------------------------- */
 
-.verify-email-container {
+.verify-email-container, .actions {
   display: flex;
   flex-direction: column;
   background-color: var(--secondary-color);
@@ -47,7 +47,7 @@
   gap: 1rem;
 }
 
-.send-verify-code-btn {
+.btn {
   padding: 10px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
@@ -56,7 +56,13 @@
   max-width: 250px;
 }
 
-.send-verify-code-btn:hover {
+.btn:hover  {
   background-color: var(--secondary-color);
   color: var(--primary-color);
+}
+
+.actions > button {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }

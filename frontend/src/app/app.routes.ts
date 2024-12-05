@@ -7,6 +7,8 @@ import { HistoryComponent } from './pages/history/history.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BaseLayoutMainComponent } from './layouts/base-layout-main/base-layout-main.component';
 import { BaseLayoutMainTransparentComponent } from './layouts/base-layout-main-transparent/base-layout-main-transparent.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   {
@@ -35,4 +37,6 @@ export const routes: Routes = [
       },
     ]
   },
+  { path:  "register", component: RegisterComponent },
+  { path:  "login", component: LoginComponent }
 ];
