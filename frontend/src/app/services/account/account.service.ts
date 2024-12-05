@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import User from '../../interfaces/User';
 import { ToastService } from '../toast/toast.service';
 import { Quiz } from '../../interfaces/Quiz';
+import { Match } from '../../interfaces/Match';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,17 @@ import { Quiz } from '../../interfaces/Quiz';
 export class AccountService {  
   private userSubject = new BehaviorSubject<User | null>(null);
   private userQuizzesSubject = new BehaviorSubject<Quiz[]>([]);
+  private userMatchesSubject = new BehaviorSubject<Match[]>([]);
 
   $user = this.userSubject.asObservable();
   $quizzes = this.userQuizzesSubject.asObservable();
+  $matches = this.userMatchesSubject.asObservable();
+
+  private firstQuizzesLoad = true;
+  private firstMatchesLoad = true;
 
   constructor (private apiService: ApiService, private toastService: ToastService) {
     this.setUser();
-    this.getAccountQuizzes();
   }
 
   setUser() {
@@ -40,7 +45,10 @@ export class AccountService {
     return this.apiService.post("accounts/login", { email, password });
   }
 
-  private getAccountQuizzes() {
+  getAccountQuizzes() {
+    if (!this.firstQuizzesLoad)
+      return
+
     this.$user.subscribe({
       next: (user) => {
         if (!user)
@@ -48,9 +56,32 @@ export class AccountService {
         this.apiService.get(`accounts/${user.id}/quizzes`).subscribe({
           next: (response: any) => {
             this.userQuizzesSubject.next(response.data)
+            this.firstQuizzesLoad = false;
           },
           error: () => {
             this.toastService.showToast("Não foi possível obter os quizzes", false);
+          }
+        })
+      }
+    })
+  }
+
+  getAccountMatches() {
+    if (!this.firstMatchesLoad)
+      return
+
+    this.$user.subscribe({
+      next: (user) => {
+        if (!user)
+          return
+
+        this.apiService.get(`matches`).subscribe({
+          next: (response: any) => {
+            this.userMatchesSubject.next(response.data)
+            this.firstMatchesLoad = false;
+          },
+          error: () => {
+            this.toastService.showToast("Não foi possível obter as partidas", false);
           }
         })
       }

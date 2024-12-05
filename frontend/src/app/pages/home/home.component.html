@@ -14,8 +14,9 @@
     <div class="data">
       <h2 routerLink="/history">Histórico</h2>
       <div class="histories">
-        <div *ngIf="let item of list" class="info-row">
-          
+        <div *ngFor="let match of matches" class="info-row">
+          <p>{{ match.quiz?.title }}</p>
+          <p>{{ formatDate(match.createdAt) }}</p>
         </div>
       </div>
     </div>
@@ -26,6 +27,7 @@
         <div *ngFor="let quiz of quizzes" [routerLink]="'/quizzes/'+ quiz.id" class="info-row">
           <p>{{ quiz.title }}</p>
           <p>{{ quiz.theme }}</p>
+          <p>{{ quiz.difficulty }}</p>
         </div>
       </div>
     </div>

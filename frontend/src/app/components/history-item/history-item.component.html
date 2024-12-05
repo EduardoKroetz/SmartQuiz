@@ -1,9 +1,10 @@
-<div class="history-item">
-  <p>Quiz Teste</p>
-  <p>Score</p>
-  <p>Time</p>
+<div *ngIf="match" [routerLink]="'/matches/'+match.id" class="history-item">
+  <p>{{ match.quiz?.title }}</p>
+  <p>{{ match.score }} pontos</p>
+  <p>{{ match.status }}</p>
+  <p>Criado em {{ formatDate(match.createdAt) }}</p>
   <div class="actions">
-    <i class="bi bi-arrow-clockwise"></i>
-    <i class="bi bi-trash"></i>
+    <i [routerLink]="'/matches/play/' + match.id" class="bi bi-arrow-clockwise"></i>
+    <i [routerLink]="'/matches/delete/' + match.id" class="bi bi-trash"></i>
   </div>
 </div>

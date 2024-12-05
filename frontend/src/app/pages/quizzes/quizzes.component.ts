@@ -18,6 +18,7 @@ export class QuizzesComponent implements OnInit {
   constructor (private accountService: AccountService) {}
 
   ngOnInit(): void {
+    this.accountService.getAccountQuizzes();
     this.getQuizzes();
   }
 

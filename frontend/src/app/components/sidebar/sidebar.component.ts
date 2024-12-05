@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AccountService } from '../../services/account/account.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,4 +15,5 @@ export class SidebarComponent {
   setSection(section: string): void {
     this.currentSection = section;
   }
+
 }
