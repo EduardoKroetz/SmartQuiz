@@ -24,3 +24,32 @@
   flex: 1;
   background-color: aqua;
 }
+
+
+/* List */
+
+.data {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 20px;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  color: var(--text-white-color);
+  flex: 1;
+  cursor: pointer;
+}
+
+.histories, .quizzes {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: .8rem;
+}
+
+.info-row {
+  display: flex;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  padding: 10px;
+  color: var(--text-black-color);
+}

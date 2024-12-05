@@ -1,20 +1,17 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService implements OnInit {
+export class ApiService {
   private baseUrl = 'https://localhost:7077/api'
   private httpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient) { }
-
-  ngOnInit(): void {
-    const storedToken = localStorage.getItem("auth-token");
-    const token = JSON.stringify(storedToken);
-    this.httpHeaders = this.httpHeaders.set('Authorization', token);
+  constructor(private http: HttpClient) { 
+    const token = localStorage.getItem("auth-token");
+    this.httpHeaders = this.httpHeaders.set('Authorization', 'Bearer '+ token);
   }
 
   get<T>(endpoint: string, params?: any): Observable<T> {

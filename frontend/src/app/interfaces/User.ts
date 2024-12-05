@@ -1,7 +1,7 @@
 
 export default interface User {
-  Id: string,
-  Username: string,
-  Email: string,
-  IsEmailVerified: boolean
+  id: string,
+  username: string,
+  email: string,
+  EmailIsVerified: boolean
 }

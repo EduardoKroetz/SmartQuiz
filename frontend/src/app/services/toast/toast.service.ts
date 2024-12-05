@@ -8,11 +8,14 @@ export class ToastService {
   private toastSubject = new Subject<{message: string, color: string, isOpen: boolean }>();
   toast$ = this.toastSubject.asObservable();
 
-  showToast(message: string, color: string = '#4CAF50') {
-    this.toastSubject.next({ message, color, isOpen: true });
+  showToast(message: string, isSucess = false) {
+    this.toastSubject.next({ message, color: isSucess ? '#4CAF50' : '#F44336', isOpen: true });
+    setTimeout(() => {
+      this.toastSubject.next({ message, color: isSucess ? '#4CAF50' : '#F44336', isOpen: false });
+    }, 2.5 * 1000)
   }
 
   closeToast() {
-    this.toastSubject.next({ message: "", color: '#4CAF50', isOpen: false });
+    this.toastSubject.next({ message: "", color: 'gray', isOpen: false });
   }
 }

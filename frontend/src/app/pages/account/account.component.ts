@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../../services/account/account.service';
+import User from '../../interfaces/User';
 
 @Component({
   selector: 'app-account',
@@ -7,6 +9,15 @@ import { Component } from '@angular/core';
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
+  account: User | null = null;
 
+  constructor (private accountService: AccountService) {}
+
+  ngOnInit(): void {
+    this.accountService.$user.subscribe({
+      next: (data) => 
+        this.account = data
+    })
+  }
 }

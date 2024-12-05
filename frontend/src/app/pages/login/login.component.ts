@@ -29,8 +29,10 @@ export class LoginComponent {
     this.passwordError = null;
     this.accountService.loginAsync(this.email, this.password).subscribe({
       next: (response: any) => {
+        console.log("setando token")
         this.accountService.setToken(response.data.token);
         this.isLoading = false;
+        this.toastService.showToast("Login efetuado com sucesso!");
         this.router.navigate(["/"])
       },
       error: (response: any) => {
@@ -39,7 +41,7 @@ export class LoginComponent {
         this.passwordError =  ErrorUtils.getErrorMessage(errors, ['senha'])
         if (!this.passwordError && !this.emailError)
         {
-          this.toastService.showToast(errors[0], "#F44336");
+          this.toastService.showToast(errors[0], false);
         }
         this.isLoading = false;
       }

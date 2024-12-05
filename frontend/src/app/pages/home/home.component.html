@@ -10,7 +10,24 @@
     <app-presentation-box title="Partidas Concluídas" [data]="[minTime + ' segundos']"></app-presentation-box>
   </div>
   <div class="list-container">
-    <app-data-list-box class="data-list" redirect="history" title="Histórico"></app-data-list-box>
-    <app-data-list-box class="data-list" redirect="quizzes" title="Meus Quizzes"></app-data-list-box>
+
+    <div class="data">
+      <h2 routerLink="/history">Histórico</h2>
+      <div class="histories">
+        <div *ngIf="let item of list" class="info-row">
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="data">
+      <h2 routerLink="/quizzes">Meus Quizzes</h2>
+      <div class="quizzes">
+        <div *ngFor="let quiz of quizzes" [routerLink]="'/quizzes/'+ quiz.id" class="info-row">
+          <p>{{ quiz.title }}</p>
+          <p>{{ quiz.theme }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
