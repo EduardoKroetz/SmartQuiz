@@ -12,7 +12,7 @@
   <div class="quiz-list-section">
     <h2>Seus Quizzes</h2>
     <div class="quiz-list">
-      <app-quiz-card class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
+      <app-quiz-card [routerLink]="'/quizzes/'+ quiz.id" class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
     </div>
   </div>
 </div>

@@ -5,7 +5,7 @@ export interface Quiz {
   expires: boolean,
   expiresInSeconds: number,
   theme: string,
-  numberOfQuestions: number,
+  numberOfQuestion: number,
   difficulty: string,
   userId: string,
   isActive: boolean
@@ -18,7 +18,7 @@ export const defaultQuiz: Quiz = {
   expires: true,
   expiresInSeconds: 0,
   isActive: true,
-  numberOfQuestions: 0,
+  numberOfQuestion: 0,
   difficulty: "easy",
   theme: "",
   userId: "",

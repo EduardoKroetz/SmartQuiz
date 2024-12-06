@@ -20,16 +20,10 @@
   color: var(--text-black-color);
   cursor: pointer;
   transition: all 300ms;
-  border: 1px solid var(--secondary-color);
 }
 
 .action-btn > i {
   font-size: large;
-}
-
-.action-btn:hover {
-  color: var(--text-white-color);
-  background-color: var(--primary-color);
 }
 
 .quiz-list-section {
@@ -49,4 +43,5 @@
   display: flex;
   flex: 1 1 auto;
   max-width: 32%;
+  cursor: pointer;
 }

@@ -1,0 +1,36 @@
+<div class="quiz">
+  <h1>{{ quiz?.title }}</h1>
+  <p>{{ quiz?.description }}</p>
+  <div class="container-info">
+    <div class="sections-container">
+      <p>Id</p>
+      <p>Tema</p>
+      <p>Expiração</p>
+      <p>Expiração em segundos</p>
+      <p>Questões</p>
+      <p>Dificuldade</p>
+      <p>Ativo</p>
+    </div>
+    <div class="data-container">
+      <p>{{ quiz?.id }}</p>
+      <p>{{ quiz?.theme }}</p>
+      <p>{{ quiz?.expires ? 'Sim' : 'Não'}}</p>
+      <p>{{ quiz?.expiresInSeconds }}</p>
+      <p>{{ quiz?.numberOfQuestion }}</p>
+      <p>{{ quiz?.difficulty }}</p>
+      <p>{{ quiz?.isActive ? 'Sim' : 'Não' }}</p>
+    </div>
+  </div>
+  <div class="actions-container">
+    <button class="play-btn">
+      Jogar
+      <i class="bi bi-play"></i>
+    </button>
+  </div>
+  <div class="questions-container">
+    <h2>Questões</h2>
+    <div *ngFor="let question of questions">
+      <p><span class="question-order">{{ question.order + 1 }}</span>  - {{ question.text }}</p>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { BaseLayoutMainComponent } from './layouts/base-layout-main/base-layout-
 import { BaseLayoutMainTransparentComponent } from './layouts/base-layout-main-transparent/base-layout-main-transparent.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
+import { QuizComponent } from './pages/quiz/quiz.component';
 
 export const routes: Routes = [
   {
@@ -28,7 +29,8 @@ export const routes: Routes = [
             path: "quizzes", children:
             [
               { path: "", component: QuizzesComponent },
-              { path: "generate-quiz", component: GenerateQuizComponent }
+              { path: "generate-quiz", component: GenerateQuizComponent },
+              { path: ":id", component: QuizComponent }
             ]
           },
           { path: "history", component: HistoryComponent },
