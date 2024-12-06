@@ -1,4 +1,4 @@
-<div class="match" *ngIf="match">
+<div class="match-details" *ngIf="match">
   <h1>Partida - {{ match.id }}</h1>
   <p>{{ match.quiz?.title }}</p>
   <div class="container-info">
@@ -21,4 +21,5 @@
     <i [routerLink]="'/quizzes/' + match.quiz?.id" class="bi bi-arrow-clockwise"></i>
     <i [routerLink]="'/matches/delete/' + match.id" class="bi bi-trash"></i>
   </div>
+  <p>Respostas aqui...</p>
 </div>

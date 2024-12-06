@@ -7,11 +7,12 @@ import { Question } from '../../interfaces/Question';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import Account from '../../interfaces/Account';
+import { PlayQuizButtonComponent } from "../../components/play-quiz-button/play-quiz-button.component";
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlayQuizButtonComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })

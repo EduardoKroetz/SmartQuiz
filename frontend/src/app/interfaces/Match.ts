@@ -10,5 +10,6 @@ export interface Match {
   reviewed: boolean,
   reviewId: string ,
   quiz: Quiz | null,
-  expiresIn: Date
+  expiresIn: Date,
+  remainingTimeInSeconds: number
 }

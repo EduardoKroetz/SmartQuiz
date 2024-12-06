@@ -1,0 +1,22 @@
+<div class="play-match" *ngIf="currentQuestion && match">
+  <div class="question-container">
+    <h1>{{ match.quiz?.title }} | Questão {{ currentQuestion.order + 1 }}</h1>
+    <p class="question-text">{{ currentQuestion.text }}</p>
+    <div class="question-options">
+      <div *ngFor="let option of currentQuestion.options">
+        <label [ngClass]="optionId === option.id ? 'option-selected' : ''" class="option-label">
+          <input [value]="option.id" [(ngModel)]="optionId" id="response" name="response" type="radio" />
+          <span>{{ option.response }}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="next-container">
+    <p>Tempo restante: {{ match.remainingTimeInSeconds }} segundos</p>
+    <button (click)="submitResponse()" class="next-question-btn">
+      {{ isLastQuestion ? "Finalizar" : "Próxima Questão" }}
+      <i class="bi bi-arrow-right"></i>
+    </button>
+  </div>
+
+</div>

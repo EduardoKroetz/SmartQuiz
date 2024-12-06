@@ -11,4 +11,16 @@ export class MatchService {
   getMatchById(id: string) {
     return this.apiService.get(`matches/${id}`);
   }
+
+  getNextQuestion(matchId: string) {
+    return this.apiService.get(`matches/${matchId}/next-question`);
+  }
+
+  submitResponse(matchId: string, questionOptionId: string) {
+    return this.apiService.post(`matches/${matchId}/submit/${questionOptionId}`, {});
+  }
+
+  createMatch(quizId: string) {
+    return this.apiService.post(`matches/play/quiz/${quizId}`, {});
+  }
 }

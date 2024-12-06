@@ -15,7 +15,7 @@ import { DateUtils } from '../../utils/date-utils';
   templateUrl: './match.component.html',
   styleUrl: './match.component.css'
 })
-export class MatchComponent {
+export class MatchDetailsComponent {
   id!: string;
   match: Match | null = null; 
   account: Account | null = null;

@@ -1,7 +1,8 @@
-.match {
+.match-details {
   display: flex;
   flex-direction: column;
   gap: .6rem;
+  width: 81vw;
 }
 
 .container-info, .actions {

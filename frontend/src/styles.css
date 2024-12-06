@@ -22,7 +22,7 @@ input, select, button {
   border: 0;
   border-radius: 5px;
   margin: 0;
-  transform: all 300ms;
+  transition: all 150ms;
 }
 
 button:hover, input:hover {

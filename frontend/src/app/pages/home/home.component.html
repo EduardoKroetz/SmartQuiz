@@ -9,7 +9,7 @@
     <div class="data">
       <h2 routerLink="/history">Histórico</h2>
       <div class="histories">
-        <div *ngFor="let match of matches" class="info-row">
+        <div [routerLink]="'/matches/'+ match.id" *ngFor="let match of matches" class="info-row">
           <p>{{ match.quiz?.title }}</p>
           <p>{{ formatDate(match.createdAt) }}</p>
         </div>

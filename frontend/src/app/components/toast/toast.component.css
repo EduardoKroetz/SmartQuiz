@@ -19,13 +19,17 @@
   border-radius: 5px;
   color: white;
   font-size: 16px;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
   opacity: 0;
   width: 300px;
 }
 
 .toast.is-open {
   opacity: 1;
+}
+
+.toast-container.is-open {
+  z-index: 2;
 }
 
 .toast-close {

@@ -1,4 +1,4 @@
-<div class="toast-container">
+<div class="toast-container" [ngClass]="isOpen ? 'is-open' : ''">
   <div class="toast" [ngClass]="isOpen ? 'is-open' : ''" [ngStyle]="{'background-color': color}">
     <div class="toast-close" (click)="close()">
       <i class="bi bi-x-lg"></i>

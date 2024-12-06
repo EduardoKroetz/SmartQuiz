@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './toast.component.css'
 })
 export class ToastComponent implements OnInit {
-  message = "adadadadas";
+  message = "";
   color: string = '#4CAF50';
   isOpen = false;
 
