@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { BehaviorSubject } from 'rxjs';
-import User from '../../interfaces/User';
 import { ToastService } from '../toast/toast.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { Match } from '../../interfaces/Match';
+import Account from '../../interfaces/Account';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {  
-  private userSubject = new BehaviorSubject<User | null>(null);
-  private userQuizzesSubject = new BehaviorSubject<Quiz[]>([]);
-  private userMatchesSubject = new BehaviorSubject<Match[]>([]);
+  private accountSubject = new BehaviorSubject<Account | null>(null);
+  private accountQuizzesSubject = new BehaviorSubject<Quiz[]>([]);
+  private accountMatchesSubject = new BehaviorSubject<Match[]>([]);
 
-  $user = this.userSubject.asObservable();
-  $quizzes = this.userQuizzesSubject.asObservable();
-  $matches = this.userMatchesSubject.asObservable();
+  $user = this.accountSubject.asObservable();
+  $quizzes = this.accountQuizzesSubject.asObservable();
+  $matches = this.accountMatchesSubject.asObservable();
 
   private firstQuizzesLoad = true;
   private firstMatchesLoad = true;
@@ -28,7 +28,7 @@ export class AccountService {
   setUser() {
     this.apiService.get("accounts").subscribe({
       next: (response: any) => {
-        this.userSubject.next(response.data);
+        this.accountSubject.next(response.data);
       },
       error: () => {
         this.toastService.showToast("Occoreu um erro ao tentar buscar as informações da conta", );
@@ -55,7 +55,7 @@ export class AccountService {
           return
         this.apiService.get(`accounts/${user.id}/quizzes`).subscribe({
           next: (response: any) => {
-            this.userQuizzesSubject.next(response.data)
+            this.accountQuizzesSubject.next(response.data)
             this.firstQuizzesLoad = false;
           },
           error: () => {
@@ -77,7 +77,7 @@ export class AccountService {
 
         this.apiService.get(`matches`).subscribe({
           next: (response: any) => {
-            this.userMatchesSubject.next(response.data)
+            this.accountMatchesSubject.next(response.data)
             this.firstMatchesLoad = false;
           },
           error: () => {

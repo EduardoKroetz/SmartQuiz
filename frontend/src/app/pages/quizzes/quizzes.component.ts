@@ -25,9 +25,8 @@ export class QuizzesComponent implements OnInit {
   private getQuizzes() {
     this.accountService.$quizzes.subscribe({
       next: (data) => {
-        console.log(data)
         this.quizzes = data;
-      },
+      }
     })
   }
 }

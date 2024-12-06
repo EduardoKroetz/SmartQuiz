@@ -3,11 +3,12 @@ import { HistoryItemComponent } from "../../components/history-item/history-item
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import { Match } from '../../interfaces/Match';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, HistoryItemComponent],
+  imports: [CommonModule, HistoryItemComponent, RouterLink],
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })

@@ -10,6 +10,7 @@ import { BaseLayoutMainTransparentComponent } from './layouts/base-layout-main-t
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { QuizComponent } from './pages/quiz/quiz.component';
+import { MatchComponent } from './pages/match/match.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,7 @@ export const routes: Routes = [
               { path: ":id", component: QuizComponent }
             ]
           },
+          { path: "matches/:id", component: MatchComponent },
           { path: "history", component: HistoryComponent },
           { path: "account", component: AccountComponent }
         ]

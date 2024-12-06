@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from '../../services/quiz/quiz.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { ToastService } from '../../services/toast/toast.service';
 import { Question } from '../../interfaces/Question';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
-import User from '../../interfaces/User';
+import Account from '../../interfaces/Account';
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
@@ -19,7 +19,7 @@ export class QuizComponent implements OnInit {
   id!: string;
   quiz: Quiz | null = null; 
   questions: Question[] = [];
-  account: User | null = null;
+  account: Account | null = null;
 
   constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private router: Router, private accountService: AccountService) {}
 

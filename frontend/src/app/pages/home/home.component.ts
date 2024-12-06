@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Match } from '../../interfaces/Match';
 import { DateUtils } from '../../utils/date-utils';
+import Account from '../../interfaces/Account';
 
 @Component({
   selector: 'app-home',
@@ -15,21 +16,16 @@ import { DateUtils } from '../../utils/date-utils';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  maxScore = 0;
-  minTime = 0;
-  matchesPlayed = 0;
-  totalScore = 0;
-  correctAnswers = 0;
-  createdQuizzes = 0;
-
   quizzes: Quiz[] = []
   matches: Match[] = [];
+  account: Account | null = null;
 
   constructor (private accountService: AccountService) {}
 
   ngOnInit(): void {
     this.accountService.getAccountMatches();
     this.accountService.getAccountQuizzes();
+    this.setAccount();
 
     this.accountService.$quizzes.subscribe({
       next: (data) => {
@@ -48,5 +44,12 @@ export class HomeComponent implements OnInit {
     return DateUtils.FormatDate(date);
   }
 
+  setAccount() {
+    this.accountService.$user.subscribe({
+      next: (data) => {
+        this.account = data;
+      }
+    })
+  }
   
 }

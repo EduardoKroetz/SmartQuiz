@@ -1,0 +1,24 @@
+<div class="match" *ngIf="match">
+  <h1>Partida - {{ match.id }}</h1>
+  <p>{{ match.quiz?.title }}</p>
+  <div class="container-info">
+    <div class="sections-container">
+      <p>Pontuação</p>
+      <p>Criado em</p>
+      <p>Expiração</p>
+      <p>Status</p>
+      <p [routerLink]="'/quizzes/'+match.quizId" class="quiz-details">Quiz</p>
+    </div>
+    <div class="data-container">
+      <p>{{ match.score }}</p>
+      <p>{{ format(match.createdAt) }}</p>
+      <p>{{ format(match.expiresIn) }}</p>
+      <p>{{ match.status }}</p>
+      <p [routerLink]="'/quizzes/'+match.quizId" class="quiz-details">{{ match.quizId }}</p>
+    </div>
+  </div>
+  <div class="actions">
+    <i [routerLink]="'/quizzes/' + match.quiz?.id" class="bi bi-arrow-clockwise"></i>
+    <i [routerLink]="'/matches/delete/' + match.id" class="bi bi-trash"></i>
+  </div>
+</div>

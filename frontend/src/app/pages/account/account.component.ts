@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../services/account/account.service';
-import User from '../../interfaces/User';
+import Account from '../../interfaces/Account';
 
 @Component({
   selector: 'app-account',
@@ -10,14 +10,15 @@ import User from '../../interfaces/User';
   styleUrl: './account.component.css'
 })
 export class AccountComponent implements OnInit {
-  account: User | null = null;
+  account: Account | null = null;
 
   constructor (private accountService: AccountService) {}
 
   ngOnInit(): void {
     this.accountService.$user.subscribe({
-      next: (data) => 
+      next: (data) => {
         this.account = data
+      }
     })
   }
 }
