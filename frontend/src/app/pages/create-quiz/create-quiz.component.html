@@ -1,0 +1,52 @@
+<div class="create-quiz">
+  <h1>Criar Novo Quiz</h1>
+  <form (submit)="createQuiz()">
+    <div class="input-section">
+      <label id="title">Título</label>
+      <input [ngClass]="createQuizError.titleError ? 'border-error' : ''" id="title" name="title" [(ngModel)]="createQuizProps.title" />
+      <p class="error" *ngIf="createQuizError.titleError">{{ createQuizError.titleError }}</p>
+    </div>
+    <div class="input-section">
+      <label id="desc">Descrição</label>
+      <textarea [ngClass]="createQuizError.descriptionError ? 'border-error' : ''" id="desc" name="desc" [(ngModel)]="createQuizProps.description"></textarea>
+      <p class="error" *ngIf="createQuizError.descriptionError">{{ createQuizError.descriptionError }}</p>
+    </div>
+    <div class="input-section">
+      <label for="theme">Tema</label>
+      <input [ngClass]="createQuizError.themeError ? 'border-error' : ''" [(ngModel)]="createQuizProps.theme" type="text" id="theme" name="theme">
+      <p class="error" *ngIf="createQuizError.themeError">{{ createQuizError.themeError }}</p>
+    </div>
+    <div class="form-container">
+      <div class="form-rigth-container">
+        <div class="input-section">
+          <label for="difficulty">Dificuldade</label>
+          <select [(ngModel)]="createQuizProps.difficulty" [ngClass]="createQuizError.difficultyError ? 'border-error' : ''" name="difficulty" id="difficulty">
+            <option value="easy">Fácil</option>
+            <option value="medium" selected>Médio</option>
+            <option value="hard">Difícil</option>
+          </select>
+          <p class="error" *ngIf="createQuizError.difficultyError">{{ createQuizError.difficultyError }}</p>
+        </div>
+      </div>
+
+
+      <div class="form-left-container">
+        <div class="input-section expires-container">
+          <label for="expires">Expiração</label>
+          <input [(ngModel)]="createQuizProps.expires" type="checkbox" id="expires" name="expires">
+          <div *ngIf="createQuizProps.expires">
+            <label for="expiresInSeconds">Tempo de Expiração em Segundos</label>
+            <input type="number" [(ngModel)]="createQuizProps.expiresInSeconds" [ngClass]="createQuizError.expiresInSecondsError ? 'border-error' : ''" id="expiresInSeconds" name="expiresInSeconds">
+            <p class="error" *ngIf="createQuizError.expiresInSecondsError">{{ createQuizError.expiresInSecondsError }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <button type="submit" class="create-btn">
+      Criar Quiz
+      <i class="bi bi-plus-lg"></i>
+    </button>
+  </form>
+</div>

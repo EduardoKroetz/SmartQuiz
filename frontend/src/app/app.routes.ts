@@ -12,6 +12,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { QuizComponent } from './pages/quiz/quiz.component';
 import { MatchDetailsComponent } from './pages/match-details/match.component';
 import { PlayMatchComponent } from './pages/play-match/play-match.component';
+import { CreateQuizComponent } from './pages/create-quiz/create-quiz.component';
+import { CreateQuizQuestionsComponent } from './pages/create-quiz-questions/create-quiz-questions.component';
 
 export const routes: Routes = [
   {
@@ -32,7 +34,9 @@ export const routes: Routes = [
             [
               { path: "", component: QuizzesComponent },
               { path: "generate-quiz", component: GenerateQuizComponent },
-              { path: ":id", component: QuizComponent }
+              { path: "create-quiz", component: CreateQuizComponent },
+              { path: "create-quiz/:id/questions/:order", component: CreateQuizQuestionsComponent },
+              { path: ":id", component: QuizComponent },
             ]
           },
           { path: "matches", children: [

@@ -10,5 +10,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './generate-quiz.component.css'
 })
 export class GenerateQuizComponent {
-  expires = true
+  theme = "";
+  difficulty = "";
+  numberOfQuestions = 0;
+  expires = true;
+  expiresInSeconds = 0;
 }

@@ -23,6 +23,7 @@ export class PlayMatchComponent implements OnInit {
   account: Account | null = null;
   optionId: string | null = null;
   isLastQuestion = false;
+  finished = false;
 
   constructor (private activatedRoute: ActivatedRoute, private accountService: AccountService, private matchService: MatchService, private toastService: ToastService, private location: Location, private route: Router) {}
 
@@ -33,7 +34,7 @@ export class PlayMatchComponent implements OnInit {
     const intervalId = setInterval(() => {
       if (this.match)
       {
-        if (this.match.remainingTimeInSeconds > 0)
+        if (this.match.remainingTimeInSeconds > 0 && !this.finished)
         {
           this.match.remainingTimeInSeconds--
         }
@@ -89,6 +90,7 @@ export class PlayMatchComponent implements OnInit {
       next: () => {
         if (this.isLastQuestion) {
           this.toastService.showToast("Partida finalizada com sucesso!", true)
+          this.finished = true;
           this.route.navigate(['matches/'+ this.matchId])
         }else {
           this.setCurrentQuestion();

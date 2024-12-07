@@ -1,0 +1,37 @@
+<div class="create-question">
+  <h1>Criar Quiz - Questão {{ createQuestion.order + 1 }}</h1>
+  <form (submit)="createNewQuestion()">
+    <div class="input-section">
+      <label for="text">Questão</label>
+      <input type="text" name="text" [(ngModel)]="createQuestion.text" id="text">
+    </div>
+    <div class="answer-options">
+      <label>Opções de Resposta</label>
+      <div class="options-container">
+        <div *ngFor="let option of createQuestion.options; let i = index" class="input-section">
+          <label [for]="'response'+ i">Resposta {{ i + 1}}</label>
+          <div class="response-row">
+            <input 
+              type="radio" 
+              [(ngModel)]="selectedCorrectOption" 
+              [value]="i" 
+              [name]="'correctOption'" 
+              [id]="'response'+ i" 
+              class="input-radio"
+            />
+            <input type="text"  class="response-input" name="response" [(ngModel)]="option.response"
+            [ngClass]="i === selectedCorrectOption ? 'selected-option' : ''">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-container">
+      <button type="submit" class="create-btn">Criar Questão {{ createQuestion.order + 1 }}
+        <i class="bi bi-plus-lg"></i>
+      </button>
+      <button *ngIf="createQuestion.order > 0" (click)="toggleQuiz()" type="button">Ativar Quiz
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  </form>
+</div>

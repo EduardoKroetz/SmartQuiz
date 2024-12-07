@@ -3,13 +3,13 @@
   <form class="form">
     <div class="input-section">
       <label for="theme">Tema</label>
-      <input type="text" id="theme" name="theme">
+      <input [(ngModel)]="theme" type="text" id="theme" name="theme">
     </div>
     <div class="form-container">
       <div class="form-rigth-container">
         <div class="input-section">
           <label for="difficulty">Dificuldade</label>
-          <select id="difficulty">
+          <select [(ngModel)]="difficulty" id="difficulty">
             <option value="easy">Fácil</option>
             <option value="medium" selected>Médio</option>
             <option value="hard">Difícil</option>
@@ -17,7 +17,7 @@
         </div>
         <div class="input-section">
           <label for="numberOfQuestions">Número de Questões</label>
-          <input type="number" id="numberOfQuestions" name="numberOfQuestions">
+          <input [(ngModel)]="numberOfQuestions" type="number" id="numberOfQuestions" name="numberOfQuestions">
         </div>
       </div>
 
@@ -28,7 +28,7 @@
           <input [(ngModel)]="expires" type="checkbox" id="expires" name="expires">
           <div *ngIf="expires">
             <label for="expiresInSeconds">Tempo de Expiração em Segundos</label>
-            <input type="number" id="expiresInSeconds" name="expiresInSeconds">
+            <input type="number" [(ngModel)]="expiresInSeconds" id="expiresInSeconds" name="expiresInSeconds">
           </div>
         </div>
       </div>

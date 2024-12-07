@@ -1,0 +1,41 @@
+<div class="input-section">
+  <label for="theme">Tema</label>
+  <input type="text" id="theme" name="theme">
+</div>
+<div class="form-container">
+  <div class="form-rigth-container">
+    <div class="input-section">
+      <label for="difficulty">Dificuldade</label>
+      <select id="difficulty">
+        <option value="easy">Fácil</option>
+        <option value="medium" selected>Médio</option>
+        <option value="hard">Difícil</option>
+      </select>
+    </div>
+    <div class="input-section">
+      <label for="numberOfQuestions">Número de Questões</label>
+      <input type="number" id="numberOfQuestions" name="numberOfQuestions">
+    </div>
+  </div>
+
+  <div class="form-left-container">
+    <div class="input-section expires-container">
+      <label for="expires">Expiração</label>
+      <input 
+        type="checkbox" 
+        id="expires" 
+        name="expires" 
+        [(ngModel)]="expires" 
+        (change)="onExpiresChanged($event)">
+      <div *ngIf="expires">
+        <label for="expiresInSeconds">Tempo de Expiração em Segundos</label>
+        <input 
+          type="number" 
+          id="expiresInSeconds" 
+          name="expiresInSeconds" 
+          [(ngModel)]="expiresInSeconds" 
+          (input)="onExpiresInSecondsChanged(expiresInSeconds)">
+      </div>
+    </div>
+  </div>
+</div>

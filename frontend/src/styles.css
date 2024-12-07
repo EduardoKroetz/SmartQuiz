@@ -17,7 +17,7 @@ body {
   font-family: sans-serif;
 }
 
-input, select, button {
+input, select, button, textarea {
   padding: 5px;
   border: 0;
   border-radius: 5px;
@@ -25,7 +25,7 @@ input, select, button {
   transition: all 150ms;
 }
 
-button:hover, input:hover {
+button:hover, input:hover, textarea:hover, select:hover {
   background-color: #bcbbbb;
   cursor: pointer;
   color: white;
@@ -48,4 +48,15 @@ a:hover {
 
 .border-error {
   border: 1px solid #F44336;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  flex: 1;
+}
+
+.input-section > input, select {
+  padding: 8px;
 }

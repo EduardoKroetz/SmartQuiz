@@ -4,7 +4,7 @@ import { QuizService } from '../../services/quiz/quiz.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { ToastService } from '../../services/toast/toast.service';
 import { Question } from '../../interfaces/Question';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import Account from '../../interfaces/Account';
 import { PlayQuizButtonComponent } from "../../components/play-quiz-button/play-quiz-button.component";
@@ -22,7 +22,7 @@ export class QuizComponent implements OnInit {
   questions: Question[] = [];
   account: Account | null = null;
 
-  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private router: Router, private accountService: AccountService) {}
+  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private router: Router, private accountService: AccountService, private location: Location) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
@@ -38,7 +38,7 @@ export class QuizComponent implements OnInit {
       },
       error: () => {
         this.toastService.showToast("Não foi possível obter o quiz", false);
-        this.router.navigate(['/']);
+        this.location.back();
       }
     })
   }

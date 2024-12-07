@@ -1,7 +1,8 @@
 <div class="quizzes">
   <h1>Quizzes</h1>
   <div class="actions">
-    <button routerLink="/quizzes/new" class="action-btn">Criar Quiz
+    <button routerLink="/quizzes/create-quiz" class="action-btn">
+      Criar Quiz
       <i class="bi bi-plus-lg"></i>
     </button>
     <button class="action-btn">
@@ -12,7 +13,7 @@
   <div class="quiz-list-section">
     <h2>Seus Quizzes</h2>
     <div class="quiz-list">
-      <app-quiz-card [routerLink]="'/quizzes/'+ quiz.id" class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
+      <app-quiz-card class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
     </div>
   </div>
 </div>

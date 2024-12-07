@@ -19,7 +19,7 @@ export class PlayQuizButtonComponent {
     this.matchService.createMatch(this.quizId).subscribe({
       next: (response: any) => {
         const matchId = response.data.matchId;
-        this.toastService.showToast("Partida criada com sucesso!", true);
+        this.toastService.showToast("Partida iniciada!", true);
         this.router.navigate(['/matches/play/'+ matchId])
       },
       error: (error) => {

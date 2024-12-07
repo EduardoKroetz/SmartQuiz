@@ -19,6 +19,7 @@
 .title-container {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .title-container > i {
@@ -45,6 +46,7 @@
   cursor: pointer;
   border: 1px solid var(--primary-color);
   transition: all .2s;
+  z-index: 2;
 }
 
 .play-btn:hover {
