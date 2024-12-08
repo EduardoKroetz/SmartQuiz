@@ -7,6 +7,7 @@
   --text-black-color: black;
   --red-color: #F44336;
   --green-color: #4CAF50;
+  --blue-color: #0d6efd;
 }
 
 body {
@@ -30,8 +31,10 @@ input, select, button, textarea {
 button {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 10px;
   gap: .5rem;
+  max-width: max-content;
 }
 
 button:hover {

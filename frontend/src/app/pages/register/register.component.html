@@ -1,22 +1,27 @@
 <div class="register">
   <div class="column-1">
     <h1>Registre-se</h1>
-    <form class="register-form">
+    <form (submit)="handleSubmit()" class="register-form">
       <div class="form-section">
         <label id="username">Nome de usuário</label>
-        <input type="text" id="username">
+        <input [(ngModel)]="username" type="text" id="username" name="username">
       </div>
       <div class="form-section">
         <label id="email">E-mail</label>
-        <input type="text" id="email">
+        <input [(ngModel)]="email" type="text" id="email" name="email">
       </div>
       <div class="form-section">
         <label id="password">Senha</label>
-        <input type="text" id="password">
+        <input [(ngModel)]="password" type="text" id="password" name="password">
       </div>
-      <button class="register-btn">Registrar</button>
+      <button class="register-btn">
+        <p *ngIf="!loading; else loadingTemplate">Registrar</p></button>
     </form>
     <div routerLink="/login" class="already-registered">Já possui uma conta? <span>Entrar</span></div>
   </div>
   <app-smartquiz-desc class="column-2"></app-smartquiz-desc>
 </div>
+
+<ng-template class="loading-spinner" #loadingTemplate>
+  <app-spinner-loading></app-spinner-loading>
+</ng-template>

@@ -1,32 +1,55 @@
-<div class="account">
+<div class="account" *ngIf="account">
   <h1>
     <app-back-icon></app-back-icon>
     Conta
   </h1>
   <div class="content">
     <div class="info-container">
-      <div class="info-section">
-        <p>Id</p>
-        <p class="data">{{ account?.id }}</p>
+      <div class="input-section">
+        <label for="id">Id</label>
+        <input disabled class="data" name="id" [(ngModel)]="account.id" /> 
       </div>
-      <div class="info-section">
-        <p>Username</p>
-        <p class="data">{{ account?.username }}</p>
+      <div class="input-section">
+        <label for="username">Username</label>
+        <input class="data" name="username" id="username" [(ngModel)]="account.username" />
       </div>
-      <div class="info-section">
-        <p>E-mail</p>
-        <p class="data">{{ account?.email }}</p>
+      <div class="input-section">
+        <label for="email">E-mail</label>
+        <input class="data" id="email" name="email" [(ngModel)]="account.email" />
       </div>
+      <button class="update-btn">
+        <div (click)="handleUpdate()" *ngIf="!isUpdatingInfo; else loadingTemplate">
+          Atualizar Informações
+          <i class="bi bi-pencil-square"></i>
+        </div>
+      </button>
     </div>
-    <div class="verify-email-container">
-      <p>Verificar E-mail</p>
-      <button class="btn">Enviar código</button>
+    <div class="info-container">
+      <h3>Atualizar senha</h3>
+      <div class="input-section">
+        <label for="email">Senha Atual</label>
+        <input class="data" id="email" name="email" [(ngModel)]="currentPassword" />
+      </div>
+      <div class="input-section">
+        <label for="email">Nova senha</label>
+        <input class="data" id="email" name="email" [(ngModel)]="newPassword" />
+      </div>
+      <button class="update-btn">
+        <div (click)="handleUpdatePassword()" *ngIf="!isUpdatingPassword; else loadingTemplate">
+          Atualizar Senha
+          <i class="bi bi-pencil-square"></i>
+        </div>
+      </button>
     </div>
     <div class="actions">
-      <button class="btn">
+      <button (click)="logOut()" class="btn">
         Sair
         <i class="bi bi-box-arrow-left"></i>
       </button>
     </div>
   </div>
 </div>
+
+<ng-template #loadingTemplate>
+  <app-spinner-loading [isDark]="false"></app-spinner-loading>
+</ng-template>

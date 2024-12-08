@@ -36,15 +36,6 @@ export class AccountService {
     });
   }
 
-  setToken(token: string) {
-    console.log("token setado:" + token)
-    localStorage.setItem("auth-token", token)
-  }
-
-  loginAsync(email: string, password: string) {
-    return this.apiService.post("accounts/login", { email, password });
-  }
-
   getAccountQuizzes() {
     if (!this.firstQuizzesLoad)
       return
@@ -86,6 +77,14 @@ export class AccountService {
         })
       }
     })
+  }
+
+  update(username: string, email: string) {
+    return this.apiService.put("accounts", { username, email })
+  }
+
+  updatePassword(currentPassword: string, newPassword: string) {
+    return this.apiService.patch("accounts/password", { currentPassword, newPassword })
   }
 
   removeMatch(matchId: string) {

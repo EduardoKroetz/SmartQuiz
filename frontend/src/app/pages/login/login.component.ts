@@ -6,11 +6,13 @@ import { AccountService } from '../../services/account/account.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { CommonModule } from '@angular/common';
 import { ErrorUtils } from '../../utils/error-utils';
+import { AuthService } from '../../services/auth/auth.service';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SmartquizDescComponent,RouterLink, FormsModule, CommonModule],
+  imports: [SmartquizDescComponent, RouterLink, FormsModule, CommonModule, SpinnerLoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -21,18 +23,17 @@ export class LoginComponent {
   passwordError: string | null  = null;
   isLoading = false;
 
-  constructor (private accountService: AccountService, private toastService: ToastService, private router: Router) {}
+  constructor (private authService: AuthService, private toastService: ToastService, private router: Router) {}
 
   submit() {
     this.isLoading = true;
     this.emailError = null;
     this.passwordError = null;
-    this.accountService.loginAsync(this.email, this.password).subscribe({
+    this.authService.loginAsync(this.email, this.password).subscribe({
       next: (response: any) => {
-        console.log("setando token")
-        this.accountService.setToken(response.data.token);
+        this.authService.setToken(response.data.token);
         this.isLoading = false;
-        this.toastService.showToast("Login efetuado com sucesso!");
+        this.toastService.showToast("Login efetuado com sucesso!", true);
         this.router.navigate(["/"])
       },
       error: (response: any) => {

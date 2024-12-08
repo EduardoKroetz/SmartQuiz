@@ -10,6 +10,10 @@ export class ApiService {
   private httpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient) { 
+    this.setAuthorization();
+  }
+
+  setAuthorization() {
     const token = localStorage.getItem("auth-token");
     this.httpHeaders = this.httpHeaders.set('Authorization', 'Bearer '+ token);
   }
@@ -29,5 +33,10 @@ export class ApiService {
 
   delete<T>(endpoint: string): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, { headers: this.httpHeaders});
+  }
+
+  
+  patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.patch<T>(`${this.baseUrl}/${endpoint}`, body, { headers: this.httpHeaders });
   }
 }
