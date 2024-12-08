@@ -25,7 +25,6 @@ export class HistoryComponent implements OnInit {
   private setMatches() {
     this.accountService.$matches.subscribe({
       next: (data) => {
-        console.log(data)
         this.matches = data;
       }
     })

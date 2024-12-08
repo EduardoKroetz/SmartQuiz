@@ -27,4 +27,8 @@ export class MatchService {
   deleteMatch(matchId: string) {
     return this.apiService.delete(`matches/${matchId}`);
   }
+
+  failMatch(matchId: string) {
+    return this.apiService.patch(`matches/${matchId}/fail`, {});
+  }
 }

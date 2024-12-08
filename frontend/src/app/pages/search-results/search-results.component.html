@@ -1,0 +1,13 @@
+<div class="search-results">
+  <h2>Resultados para "{{ reference }}"</h2>
+  <div class="results-container">
+    <app-quiz-card class="quiz-card" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
+  </div>
+  <button (click)="loadMore()" *ngIf="!isMaximumResults" class="load-btn">
+    Carregar mais
+  </button>
+</div>
+
+<ng-template #loadTemplate> 
+  <app-spinner-loading></app-spinner-loading>
+</ng-template>

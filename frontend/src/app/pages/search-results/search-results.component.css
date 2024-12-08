@@ -1,0 +1,20 @@
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 81vw;
+}
+
+.results-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.quiz-card {
+  width: 32%;
+}
+
+.load-btn {
+  margin: 40px auto;
+}

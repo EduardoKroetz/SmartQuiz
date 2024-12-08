@@ -1,4 +1,4 @@
-<form class="search-bar">
-  <input type="text" placeholder="Procurar quizzes">
+<form (submit)="search()" class="search-bar">
+  <input autocomplete="off" (keyup)="onKeyup($event)" [(ngModel)]="reference" type="text" placeholder="Procurar quizzes" name="search-input">
   <i class="bi bi-search search-icon"></i>
 </form>

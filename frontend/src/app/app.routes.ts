@@ -14,6 +14,7 @@ import { MatchDetailsComponent } from './pages/match-details/match.component';
 import { PlayMatchComponent } from './pages/play-match/play-match.component';
 import { CreateQuizComponent } from './pages/create-quiz/create-quiz.component';
 import { CreateQuizQuestionsComponent } from './pages/create-quiz-questions/create-quiz-questions.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,7 @@ export const routes: Routes = [
               { path: "play/:id", component: PlayMatchComponent }
             ]
           },
+          { path: "search", component: SearchResultsComponent },
           { path: "history", component: HistoryComponent },
           { path: "account", component: AccountComponent }
         ]

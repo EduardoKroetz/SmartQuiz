@@ -58,10 +58,10 @@ export class PlayMatchComponent implements OnInit {
                 }
                 else if (this.finished) {
                   clearInterval(intervalId);
+                  
                 } else {
                   clearInterval(intervalId);
-                  this.toastService.showToast("Tempo expirado");
-                  this.route.navigate(['matches/'+ this.matchId])
+                  this.failMatch();
                 }
               }
             },1000);
@@ -108,5 +108,17 @@ export class PlayMatchComponent implements OnInit {
         this.toastService.showToast(error.error.errors[0]);
       }
     });
+  }
+
+  failMatch() {
+    this.matchService.failMatch(this.matchId).subscribe({
+      next: () => {
+        this.toastService.showToast("Tempo expirado");
+        this.route.navigate(['matches/'+ this.matchId])
+      },
+      error: () => {
+        this.toastService.showToast("Não foi possível atualizar o status da partida")
+      }
+    })
   }
 }

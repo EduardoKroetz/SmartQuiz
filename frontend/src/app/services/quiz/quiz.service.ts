@@ -37,4 +37,8 @@ export class QuizService {
   generateQuiz(theme: string, difficulty: string, numberOfQuestions: number, expires: boolean, expiresInSeconds: number) {
     return this.apiService.post('quizzes/generate', { theme, difficulty, numberOfQuestions, expires, expiresInSeconds })
   }
+
+  searchQuizzes(reference: string, pageSize: number, pageNumber: number) {
+    return this.apiService.get(`quizzes/search?reference=${reference}&pageSize=${pageSize}&pageNumber=${pageNumber}`)
+  }
 }
