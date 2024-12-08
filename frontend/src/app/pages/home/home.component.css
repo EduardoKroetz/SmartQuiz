@@ -48,7 +48,7 @@
   color: var(--secondary-color);
   flex: 1;
   cursor: pointer;
-  height: 300px;
+  height: 290px;
   overflow: auto;
 }
 

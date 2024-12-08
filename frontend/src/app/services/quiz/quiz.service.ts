@@ -33,4 +33,8 @@ export class QuizService {
   deleteQuiz(quizId: string) {
     return this.apiService.delete(`quizzes/${quizId}`);
   }
+
+  generateQuiz(theme: string, difficulty: string, numberOfQuestions: number, expires: boolean, expiresInSeconds: number) {
+    return this.apiService.post('quizzes/generate', { theme, difficulty, numberOfQuestions, expires, expiresInSeconds })
+  }
 }

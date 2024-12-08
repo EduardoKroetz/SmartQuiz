@@ -24,6 +24,7 @@ export class PlayMatchComponent implements OnInit {
   optionId: string | null = null;
   isLastQuestion = false;
   finished = false;
+  expires = true;
 
   constructor (private activatedRoute: ActivatedRoute, private accountService: AccountService, private matchService: MatchService, private toastService: ToastService, private location: Location, private route: Router) {}
 
@@ -31,22 +32,6 @@ export class PlayMatchComponent implements OnInit {
     this.matchId = this.activatedRoute.snapshot.paramMap.get('id') || '';
     this.setMatch();
     this.setCurrentQuestion()
-    const intervalId = setInterval(() => {
-      if (this.match)
-      {
-        if (this.match.remainingTimeInSeconds > 0)
-        {
-          this.match.remainingTimeInSeconds--
-        }
-        else if (this.finished) {
-          clearInterval(intervalId);
-        } else {
-          clearInterval(intervalId);
-          this.toastService.showToast("Tempo expirado");
-          this.route.navigate(['matches/'+ this.matchId])
-        }
-      }
-    },1000);
   }
 
   setAccount() {
@@ -61,6 +46,26 @@ export class PlayMatchComponent implements OnInit {
     this.matchService.getMatchById(this.matchId).subscribe({
       next: (response: any) => {
         this.match = response.data;
+        this.expires = this.match!.quiz!.expires;
+        if (this.expires)
+          {
+            const intervalId = setInterval(() => {
+              if (this.match)
+              {
+                if (this.match.remainingTimeInSeconds > 0)
+                {
+                  this.match.remainingTimeInSeconds--
+                }
+                else if (this.finished) {
+                  clearInterval(intervalId);
+                } else {
+                  clearInterval(intervalId);
+                  this.toastService.showToast("Tempo expirado");
+                  this.route.navigate(['matches/'+ this.matchId])
+                }
+              }
+            },1000);
+          }
       },
       error: () => {
         this.toastService.showToast("Não foi possível obter os dados da partida", false);
@@ -90,6 +95,7 @@ export class PlayMatchComponent implements OnInit {
     }
     this.matchService.submitResponse(this.matchId, this.optionId).subscribe({
       next: () => {
+        this.optionId = null;
         if (this.isLastQuestion) {
           this.toastService.showToast("Partida finalizada com sucesso!", true)
           this.finished = true;

@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="next-container">
-    <p>Tempo restante: {{ match.remainingTimeInSeconds }} segundos</p>
+    <p *ngIf="expires">Tempo restante: {{ match.remainingTimeInSeconds }} segundos</p>
     <button (click)="submitResponse()" class="next-question-btn">
       {{ isLastQuestion ? "Finalizar" : "Próxima Questão" }}
       <i class="bi bi-arrow-right"></i>

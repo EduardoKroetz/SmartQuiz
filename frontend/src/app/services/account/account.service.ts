@@ -99,4 +99,9 @@ export class AccountService {
     const newQuizzes = quizzes.filter(x => x.id !== quizId);
     this.accountQuizzesSubject.next(newQuizzes);
   }
+
+  addQuiz(quiz: Quiz) {
+    const quizzes = this.accountQuizzesSubject.getValue();
+    this.accountQuizzesSubject.next([...quizzes,quiz]);
+  }
 }

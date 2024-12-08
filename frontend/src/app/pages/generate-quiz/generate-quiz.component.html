@@ -3,7 +3,7 @@
     <app-back-icon></app-back-icon>
     Gerar Quiz
   </h1>
-  <form class="form">
+  <form (submit)="handleSubmit()" class="form">
     <div class="input-section">
       <label for="theme">Tema</label>
       <input [(ngModel)]="theme" type="text" id="theme" name="theme">
@@ -12,7 +12,7 @@
       <div class="form-rigth-container">
         <div class="input-section">
           <label for="difficulty">Dificuldade</label>
-          <select [(ngModel)]="difficulty" id="difficulty">
+          <select [(ngModel)]="difficulty" id="difficulty" name="difficulty">
             <option value="easy">Fácil</option>
             <option value="medium" selected>Médio</option>
             <option value="hard">Difícil</option>
@@ -37,9 +37,17 @@
       </div>
 
     </div>
-    <button type="submit" class="generate-btn">
-      <p>Gerar Quiz</p>
-      <i class="bi bi-arrow-clockwise"></i>
-    </button>
+    <div class="btn-container">
+      <button *ngIf="!isGenerating; else loadingTemplate" [disabled]="isGenerating" type="submit" class="generate-btn">
+        <p>Gerar Quiz</p>
+        <i  class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+
+    
   </form>
 </div>
+
+<ng-template #loadingTemplate>
+  <app-spinner-loading></app-spinner-loading>
+</ng-template>
