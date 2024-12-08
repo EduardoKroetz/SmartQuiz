@@ -1,6 +1,9 @@
-<div class="quiz">
-  <h1>{{ quiz?.title }}</h1>
-  <p>{{ quiz?.description }}</p>
+<div class="quiz" *ngIf="quiz && account">
+  <h1>
+    <app-back-icon></app-back-icon>
+    {{ quiz.title }}
+  </h1>
+  <p>{{ quiz.description }}</p>
   <div class="container-info">
     <div class="sections-container">
       <p>Id</p>
@@ -12,17 +15,18 @@
       <p>Ativo</p>
     </div>
     <div class="data-container">
-      <p>{{ quiz?.id }}</p>
-      <p>{{ quiz?.theme }}</p>
-      <p>{{ quiz?.expires ? 'Sim' : 'Não'}}</p>
-      <p>{{ quiz?.expiresInSeconds }}</p>
-      <p>{{ quiz?.numberOfQuestion }}</p>
-      <p>{{ quiz?.difficulty }}</p>
-      <p>{{ quiz?.isActive ? 'Sim' : 'Não' }}</p>
+      <p>{{ quiz.id }}</p>
+      <p>{{ quiz.theme }}</p>
+      <p>{{ quiz.expires ? 'Sim' : 'Não'}}</p>
+      <p>{{ quiz.expiresInSeconds }}</p>
+      <p>{{ quiz.numberOfQuestion }}</p>
+      <p>{{ quiz.difficulty }}</p>
+      <p>{{ quiz.isActive ? 'Sim' : 'Não' }}</p>
     </div>
   </div>
   <div class="actions-container">
     <app-play-quiz-button [quizId]="quiz!.id"></app-play-quiz-button>
+    <app-delete-quiz *ngIf="account.id === quiz.userId" [quizId]="quiz.id"></app-delete-quiz>
   </div>
   <div class="questions-container">
     <h2>Questões</h2>

@@ -4,11 +4,12 @@ import { Quiz } from '../../interfaces/Quiz';
 import { CommonModule } from '@angular/common';
 import { QuizCardComponent } from "../../components/quiz-card/quiz-card.component";
 import { AccountService } from '../../services/account/account.service';
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-quizzes',
   standalone: true,
-  imports: [RouterLink, CommonModule, QuizCardComponent],
+  imports: [RouterLink, CommonModule, QuizCardComponent, BackIconComponent],
   templateUrl: './quizzes.component.html',
   styleUrl: './quizzes.component.css'
 })

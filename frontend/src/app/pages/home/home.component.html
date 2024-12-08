@@ -5,6 +5,11 @@
     <app-presentation-box title="Partidas Jogadas" [data]="account?.matchesPlayed"></app-presentation-box>
     <app-presentation-box title="Quizzes Criados" [data]="account?.createdQuizzes"></app-presentation-box>
   </div>
+  <div class="quick-access">
+    <button routerLink="quizzes/create-quiz">Criar Quiz <i class="bi bi-plus-lg"></i></button>
+    <button routerLink="quizzes/generate-quiz">Gerar Quiz <i class="bi bi-arrow-clockwise"></i></button>
+    <button routerLink="quizzes/generate-quiz">Conta <i class="bi bi-person-circle"></i></button>
+  </div>
   <div class="list-container">
     <div class="data">
       <h2 routerLink="/history">Histórico</h2>
@@ -12,6 +17,9 @@
         <div [routerLink]="'/matches/'+ match.id" *ngFor="let match of matches" class="info-row">
           <p>{{ match.quiz?.title }}</p>
           <p>{{ formatDate(match.createdAt) }}</p>
+        </div>
+        <div class="empty-list" *ngIf="matches.length === 0">
+          Nenhum partida encontrada por aqui...
         </div>
       </div>
     </div>
@@ -23,6 +31,10 @@
           <p>{{ quiz.title }}</p>
           <p>{{ quiz.theme }}</p>
           <p>{{ quiz.difficulty }}</p>
+        </div>
+        <div class="empty-list" *ngIf="quizzes.length === 0">
+          Nenhum quiz encontrado
+          <button routerLink="quizzes/create-quiz">Criar Quiz <i class="bi bi-plus-lg"></i></button>
         </div>
       </div>
     </div>

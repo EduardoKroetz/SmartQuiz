@@ -5,6 +5,8 @@
   --secondary-color: #dadada;
   --text-white-color: white;
   --text-black-color: black;
+  --red-color: #F44336;
+  --green-color: #4CAF50;
 }
 
 body {
@@ -25,10 +27,29 @@ input, select, button, textarea {
   transition: all 150ms;
 }
 
+button {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  gap: .5rem;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
 button:hover, input:hover, textarea:hover, select:hover {
   background-color: #bcbbbb;
   cursor: pointer;
-  color: white;
+}
+
+i {
+  transition: all 150ms;
+  cursor: pointer;
+}
+
+i:hover {
+  transform: scale(1.2);
 }
 
 a {

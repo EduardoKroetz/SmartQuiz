@@ -39,3 +39,8 @@
 .actions-container > button {
   padding: 10px;
 }
+
+.actions-container {
+  display: flex;
+  gap: 1rem;
+}

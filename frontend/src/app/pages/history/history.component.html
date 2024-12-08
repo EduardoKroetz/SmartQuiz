@@ -1,7 +1,10 @@
 <div class="history">
-  <h1>Histórico</h1>
+  <h1>
+    <app-back-icon></app-back-icon>
+    Histórico
+  </h1>
   <div class="history-container">
-    <app-history-item *ngFor="let match of matches" [match]="match" [routerLink]="'/matches/'+ match.id"></app-history-item>
+    <app-history-item *ngFor="let match of matches" [match]="match"></app-history-item>
   </div>
   <button class="load-btn">Carregar mais</button>
 </div>

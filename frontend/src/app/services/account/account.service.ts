@@ -87,4 +87,16 @@ export class AccountService {
       }
     })
   }
+
+  removeMatch(matchId: string) {
+    const matches = this.accountMatchesSubject.getValue();
+    const newMatches = matches.filter(x => x.id !== matchId);
+    this.accountMatchesSubject.next(newMatches);
+  }
+
+  removeQuiz(quizId: string) {
+    const quizzes = this.accountQuizzesSubject.getValue();
+    const newQuizzes = quizzes.filter(x => x.id !== quizId);
+    this.accountQuizzesSubject.next(newQuizzes);
+  }
 }

@@ -8,11 +8,13 @@ import { CommonModule, Location } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import Account from '../../interfaces/Account';
 import { PlayQuizButtonComponent } from "../../components/play-quiz-button/play-quiz-button.component";
+import { DeleteQuizComponent } from "../../components/delete-quiz/delete-quiz.component";
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, PlayQuizButtonComponent],
+  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })

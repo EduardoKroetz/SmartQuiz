@@ -7,11 +7,13 @@ import Account from '../../interfaces/Account';
 import { MatchService } from '../../services/match/match.service';
 import { CommonModule, Location } from '@angular/common';
 import { DateUtils } from '../../utils/date-utils';
+import { DeleteMatchComponent } from "../../components/delete-match/delete-match.component";
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-match',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DeleteMatchComponent, BackIconComponent],
   templateUrl: './match.component.html',
   styleUrl: './match.component.css'
 })

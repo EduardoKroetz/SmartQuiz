@@ -23,4 +23,8 @@ export class MatchService {
   createMatch(quizId: string) {
     return this.apiService.post(`matches/play/quiz/${quizId}`, {});
   }
+
+  deleteMatch(matchId: string) {
+    return this.apiService.delete(`matches/${matchId}`);
+  }
 }

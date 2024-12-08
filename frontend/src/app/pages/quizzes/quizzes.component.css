@@ -9,23 +9,6 @@
   gap: 2rem;
 }
 
-.action-btn {
-  display: flex;
-  gap: 1rem;
-  padding: 6px 15px;
-  border-radius: 5px;
-  border: 0;
-  font-weight: bold;
-  align-items: center;
-  color: var(--text-black-color);
-  cursor: pointer;
-  transition: all 300ms;
-}
-
-.action-btn > i {
-  font-size: large;
-}
-
 .quiz-list-section {
   display: flex;
   flex-direction: column;

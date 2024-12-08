@@ -1,5 +1,8 @@
 <div class="quizzes">
-  <h1>Quizzes</h1>
+  <h1>
+    <app-back-icon></app-back-icon>
+    Quizzes
+  </h1>
   <div class="actions">
     <button routerLink="/quizzes/create-quiz" class="action-btn">
       Criar Quiz
@@ -11,9 +14,15 @@
     </button>
   </div>
   <div class="quiz-list-section">
-    <h2>Seus Quizzes</h2>
+    <div>
+      <h2>Seus Quizzes</h2>
+      <div *ngIf="quizzes.length === 0">
+        Nenhum quiz encontrado
+      </div>
+    </div>
     <div class="quiz-list">
       <app-quiz-card class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
     </div>
+
   </div>
 </div>

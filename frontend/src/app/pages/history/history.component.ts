@@ -3,12 +3,12 @@ import { HistoryItemComponent } from "../../components/history-item/history-item
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import { Match } from '../../interfaces/Match';
-import { RouterLink } from '@angular/router';
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, HistoryItemComponent, RouterLink],
+  imports: [CommonModule, HistoryItemComponent, BackIconComponent],
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })
@@ -30,7 +30,4 @@ export class HistoryComponent implements OnInit {
       }
     })
   }
-
-
-
 }

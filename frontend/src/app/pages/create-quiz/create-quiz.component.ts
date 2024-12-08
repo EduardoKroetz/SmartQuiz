@@ -6,11 +6,12 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CreateQuiz, createQuizErrorDefault, CreateQuizErrors } from '../../interfaces/Quiz';
 import { ErrorUtils } from '../../utils/error-utils';
 import { Router } from '@angular/router';
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-create-quiz',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, BackIconComponent],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css'
 })

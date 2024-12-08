@@ -32,13 +32,3 @@
 .sections-container > p {
   font-weight: bold;
 }
-
-.actions > i {
-  font-size: 20px;
-  transition: all 300ms;
-}
-
-.actions > i:hover {
-  transform: scale(1.15);
-  cursor: pointer;
-}

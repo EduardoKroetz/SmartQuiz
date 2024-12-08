@@ -6,7 +6,17 @@
   padding: 10px;
   border-radius: 6px;
   align-items: center;
+  gap: 3rem;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  align-items: center;
   cursor: pointer;
+  flex: 1;
 }
 
 .actions {
@@ -14,12 +24,4 @@
   gap: 1.6rem;
   font-size: 20px;
 
-}
-
-.actions > i {
-  transition: all 200ms;
-}
-
-.actions > i:hover {
-  transform: scale(1.2);
 }

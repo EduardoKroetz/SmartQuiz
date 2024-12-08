@@ -34,11 +34,13 @@ export class PlayMatchComponent implements OnInit {
     const intervalId = setInterval(() => {
       if (this.match)
       {
-        if (this.match.remainingTimeInSeconds > 0 && !this.finished)
+        if (this.match.remainingTimeInSeconds > 0)
         {
           this.match.remainingTimeInSeconds--
         }
-        else {
+        else if (this.finished) {
+          clearInterval(intervalId);
+        } else {
           clearInterval(intervalId);
           this.toastService.showToast("Tempo expirado");
           this.route.navigate(['matches/'+ this.matchId])

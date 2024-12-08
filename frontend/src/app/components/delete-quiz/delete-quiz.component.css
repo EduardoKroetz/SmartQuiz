@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+}
+
+button {
+  background-color: var(--red-color);
+}

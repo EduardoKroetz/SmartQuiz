@@ -1,6 +1,10 @@
-<div class="match-details" *ngIf="match">
-  <h1>Partida - {{ match.id }}</h1>
-  <p>{{ match.quiz?.title }}</p>
+<div class="match-details" *ngIf="match && match.quiz">
+  <h1> 
+    <app-back-icon></app-back-icon>
+    Partida - {{ match.id }}
+  </h1>
+  <p>{{ match.quiz.title }}</p>
+  <h2>Você acertou {{ (100 / match.quiz.numberOfQuestion) * match.score }}% das questões!</h2>
   <div class="container-info">
     <div class="sections-container">
       <p>Pontuação</p>
@@ -10,7 +14,7 @@
       <p [routerLink]="'/quizzes/'+match.quizId" class="quiz-details">Quiz</p>
     </div>
     <div class="data-container">
-      <p>{{ match.score }}</p>
+      <p>{{ match.score }} </p>
       <p>{{ format(match.createdAt) }}</p>
       <p>{{ format(match.expiresIn) }}</p>
       <p>{{ match.status }}</p>
@@ -18,8 +22,8 @@
     </div>
   </div>
   <div class="actions">
-    <i [routerLink]="'/quizzes/' + match.quiz?.id" class="bi bi-arrow-clockwise"></i>
-    <i [routerLink]="'/matches/delete/' + match.id" class="bi bi-trash"></i>
+    <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise"></i>
+    <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
   <p>Respostas aqui...</p>
 </div>

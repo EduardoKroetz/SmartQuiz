@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .info-container {
@@ -12,6 +12,16 @@
   align-items: center;
   gap: 1.5rem;
   grid-template-columns: repeat(3, 1fr);
+}
+
+.quick-access {
+  display: flex;
+  gap: 1rem;
+}
+
+.quick-access > button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color)
 }
 
 .list-container {
@@ -35,9 +45,11 @@
   padding: 20px;
   background-color: var(--primary-color);
   border-radius: 5px;
-  color: var(--text-white-color);
+  color: var(--secondary-color);
   flex: 1;
   cursor: pointer;
+  height: 300px;
+  overflow: auto;
 }
 
 .histories, .quizzes {
@@ -52,5 +64,15 @@
   background-color: var(--secondary-color);
   border-radius: 5px;
   padding: 10px;
-  color: var(--text-black-color);
+  color: var(--primary-color);
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.empty-list > button {
+  max-width: max-content;
 }

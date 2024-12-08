@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../services/account/account.service';
 import Account from '../../interfaces/Account';
+import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [],
+  imports: [BackIconComponent],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })

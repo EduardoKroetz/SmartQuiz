@@ -29,4 +29,8 @@ export class QuizService {
   toggleQuiz(quizId: string) {
     return this.apiService.post('quizzes/toggle/'+quizId, {})
   }
+
+  deleteQuiz(quizId: string) {
+    return this.apiService.delete(`quizzes/${quizId}`);
+  }
 }
