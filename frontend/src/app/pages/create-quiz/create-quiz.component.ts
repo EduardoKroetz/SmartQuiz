@@ -27,7 +27,7 @@ export class CreateQuizComponent {
       next: (response: any) => {
         const quizId = response.data.id;
         this.toastService.showToast("Quiz criado com sucesso!", true);
-        this.router.navigate([`/quizzes/create-quiz/${quizId}/questions/0`])
+        this.router.navigate([`/quizzes/${quizId}/questions/0`])
       },
       error: (error) => {
         const errors = error.error.errors;

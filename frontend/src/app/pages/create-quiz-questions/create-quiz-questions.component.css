@@ -41,15 +41,21 @@
 .btn-container {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  justify-content: space-between;
 }
 
 .btn-container > button {
   padding: 10px;
 }
 
+.create-btn {
+  margin: auto;
+  background-color: var(--blue-color);
+  color: white;
+}
+
 .selected-option {
-  background-color: #4CAF50;
+  background-color: var(--green-color);
   color: var(--primary-color);
   font-weight: bold;
 } 

@@ -36,7 +36,7 @@ export const routes: Routes = [
               { path: "", component: QuizzesComponent },
               { path: "generate-quiz", component: GenerateQuizComponent },
               { path: "create-quiz", component: CreateQuizComponent },
-              { path: "create-quiz/:id/questions/:order", component: CreateQuizQuestionsComponent },
+              { path: ":id/questions/:order", component: CreateQuizQuestionsComponent },
               { path: ":id", component: QuizComponent },
             ]
           },

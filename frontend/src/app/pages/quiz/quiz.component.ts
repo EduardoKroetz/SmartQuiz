@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { QuizService } from '../../services/quiz/quiz.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { ToastService } from '../../services/toast/toast.service';
@@ -12,11 +12,12 @@ import { DeleteQuizComponent } from "../../components/delete-quiz/delete-quiz.co
 import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 import { ConfirmationToastService } from '../../services/confirmation-toast/confirmation-toast.service';
 import { take } from 'rxjs';
+import { QuestionService } from '../../services/question/question.service';
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent],
+  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
@@ -26,7 +27,7 @@ export class QuizComponent implements OnInit {
   questions: Question[] = [];
   account: Account | null = null;
 
-  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private accountService: AccountService, private location: Location, private confirmationToastService: ConfirmationToastService) {}
+  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private accountService: AccountService, private location: Location, private confirmationToastService: ConfirmationToastService, private questionService: QuestionService) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
@@ -81,6 +82,25 @@ export class QuizComponent implements OnInit {
               this.toastService.showToast(error.error.errors[0], false)
             }
           });
+        }
+      }
+    })
+  }
+  
+  deleteQuestion(questionId: string, order: number) {
+    this.confirmationToastService.showToast(`Deseja excluir a questão ${order + 1}?`);
+    this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
+      next: (confirm) => {
+        if (confirm) {
+          this.questionService.deleteQuestion(questionId).subscribe({
+            next: () => {
+              this.toastService.showToast("Questão deletada com sucesso!", true);
+              this.questions = this.questions.filter(x => x.id !== questionId);
+            },
+            error: (error) => {
+              this.toastService.showToast(error.error.errors[0]);
+            }
+          })
         }
       }
     })

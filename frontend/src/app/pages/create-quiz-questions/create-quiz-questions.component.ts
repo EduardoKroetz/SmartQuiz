@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { QuizService } from '../../services/quiz/quiz.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { CreateQuestion, createQuestionDefault } from '../../interfaces/Question';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Quiz } from '../../interfaces/Quiz';
+import { QuestionService } from '../../services/question/question.service';
 
 @Component({
   selector: 'app-create-quiz-questions',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './create-quiz-questions.component.html',
   styleUrl: './create-quiz-questions.component.css'
 })
@@ -17,8 +19,9 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
   createQuestion: CreateQuestion = { ...createQuestionDefault };
   selectedCorrectOption: number = -1; 
   private sub: any;
+  quiz: Quiz | null = null;
 
-  constructor (private activatedRoute: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private route:Router) {}
+  constructor (private activatedRoute: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private route:Router, private questionService: QuestionService) {}
 
   ngOnInit(): void {
     const quizId = this.activatedRoute.snapshot.paramMap.get('id') ?? '';
@@ -28,6 +31,7 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
       this.createQuestion.quizId = quizId;
       this.selectedCorrectOption = -1;
     })
+    this.setQuiz(quizId);
   }
 
   ngOnDestroy() {
@@ -44,10 +48,10 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
     }
 
     this.createQuestion.options[this.selectedCorrectOption].isCorrectOption = true;
-    this.quizService.createQuizQuestion(this.createQuestion).subscribe({
+    this.questionService.createQuestion(this.createQuestion).subscribe({
       next: () => {
         this.toastService.showToast("Questão criada com sucesso!", true);
-        this.route.navigate([`/quizzes/create-quiz/${this.createQuestion.quizId}/questions/${this.createQuestion.order + 1}`])
+        this.route.navigate([`/quizzes/${this.createQuestion.quizId}/questions/${this.createQuestion.order + 1}`])
       },
       error: (error: any) => {
         this.createQuestion.options[this.selectedCorrectOption].isCorrectOption = false;
@@ -57,6 +61,11 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
   }
 
   toggleQuiz() {
+    if (this.quiz?.isActive == true) {
+      this.route.navigate([`/quizzes/${this.createQuestion.quizId}`])
+      return
+    }
+
     this.quizService.toggleQuiz(this.createQuestion.quizId).subscribe({
       next: () => {
         this.toastService.showToast("Quiz ativado com sucesso!", true);
@@ -67,4 +76,12 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
       }
     });
   }  
+
+  setQuiz(quizId: string) {
+    this.quizService.getQuizById(quizId).subscribe({
+      next: (response: any) => {
+        this.quiz = response.data;
+      }
+    })
+  }
 }

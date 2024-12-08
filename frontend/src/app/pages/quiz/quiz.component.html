@@ -10,29 +10,37 @@
   <div class="container-info">
     <div class="sections-container">
       <p>Tema</p>
-      <p>Expiração</p>
-      <p>Expiração em segundos</p>
+      <p *ngIf="quiz.expires">Tempo</p>
       <p>Questões</p>
       <p>Dificuldade</p>
-      <p>Ativo</p>
     </div>
     <div class="data-container">
       <p>{{ quiz.theme }}</p>
-      <p>{{ quiz.expires ? 'Sim' : 'Não'}}</p>
-      <p>{{ quiz.expiresInSeconds }}</p>
+      <p *ngIf="quiz.expires">{{ quiz.expiresInSeconds }} segundos</p>
       <p>{{ quiz.numberOfQuestion }}</p>
       <p>{{ quiz.difficulty }}</p>
-      <p>{{ quiz.isActive ? 'Sim' : 'Não' }}</p>
     </div>
   </div>
   <div class="actions-container">
-    <app-play-quiz-button [quizId]="quiz!.id"></app-play-quiz-button>
+    <app-play-quiz-button *ngIf="quiz.isActive" [quizId]="quiz!.id"></app-play-quiz-button>
     <app-delete-quiz *ngIf="account.id === quiz.userId" [quizId]="quiz.id"></app-delete-quiz>
   </div>
   <div class="questions-container">
-    <h2>Questões</h2>
-    <div *ngFor="let question of questions">
-      <p><span class="question-order">{{ question.order + 1 }}</span>  - {{ question.text }}</p>
+    <div class="title-container">
+      <h2>Questões</h2>
+      <i [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn"></i>
     </div>
+    <div class="question-list">
+      <div class="question" *ngFor="let question of questions">
+        <p>
+          <span class="question-order">{{ question.order + 1 }}</span>  - 
+          {{ question.text }}
+        </p>
+        <div *ngIf="quiz.userId === account.id" class="question-actions">
+          <i (click)="deleteQuestion(question.id, question.order)" class="bi bi-trash delete-question"></i>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

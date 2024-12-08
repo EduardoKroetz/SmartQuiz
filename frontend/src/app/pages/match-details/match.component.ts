@@ -8,12 +8,11 @@ import { MatchService } from '../../services/match/match.service';
 import { CommonModule, Location } from '@angular/common';
 import { DateUtils } from '../../utils/date-utils';
 import { DeleteMatchComponent } from "../../components/delete-match/delete-match.component";
-import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 
 @Component({
   selector: 'app-match',
   standalone: true,
-  imports: [CommonModule, RouterLink, DeleteMatchComponent, BackIconComponent],
+  imports: [CommonModule, RouterLink, DeleteMatchComponent],
   templateUrl: './match.component.html',
   styleUrl: './match.component.css'
 })
@@ -21,6 +20,7 @@ export class MatchDetailsComponent {
   id!: string;
   match: Match | null = null; 
   account: Account | null = null;
+  percentageOfHits = "";
 
   constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private location: Location) {}
 
@@ -34,6 +34,7 @@ export class MatchDetailsComponent {
     this.matchService.getMatchById(this.id).subscribe({
       next: (response: any) => {
         this.match = response.data;
+        this.percentageOfHits = ((100 / this.match!.quiz!.numberOfQuestion) * this.match!.score).toFixed(2);
       },
       error: () => {
         this.toastService.showToast("Não foi possível obter a partida", false);
