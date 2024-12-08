@@ -10,6 +10,8 @@ import Account from '../../interfaces/Account';
 import { PlayQuizButtonComponent } from "../../components/play-quiz-button/play-quiz-button.component";
 import { DeleteQuizComponent } from "../../components/delete-quiz/delete-quiz.component";
 import { BackIconComponent } from "../../components/back-icon/back-icon.component";
+import { ConfirmationToastService } from '../../services/confirmation-toast/confirmation-toast.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-quiz',
@@ -24,7 +26,7 @@ export class QuizComponent implements OnInit {
   questions: Question[] = [];
   account: Account | null = null;
 
-  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private router: Router, private accountService: AccountService, private location: Location) {}
+  constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private accountService: AccountService, private location: Location, private confirmationToastService: ConfirmationToastService) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
@@ -60,6 +62,26 @@ export class QuizComponent implements OnInit {
     this.accountService.$user.subscribe({
       next: (data) => {
         this.account = data;
+      }
+    })
+  }
+
+  toggle() {
+    this.confirmationToastService.showToast(`Quer ${this.quiz!.isActive ? 'desativar' : 'ativar'} o quiz?`);
+    this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
+      next: (confirm) => {
+        console.log(confirm);
+        if (confirm){
+          this.quizService.toggleQuiz(this.quiz!.id).subscribe({
+            next: () => {
+              this.quiz!.isActive = !this.quiz!.isActive;
+              this.toastService.showToast(`Quiz ${this.quiz!.isActive ? 'ativado' : 'desativado'} com sucesso!`, true)
+            },
+            error: (error) => {
+              this.toastService.showToast(error.error.errors[0], false)
+            }
+          });
+        }
       }
     })
   }

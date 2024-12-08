@@ -1,12 +1,14 @@
 <div class="quiz" *ngIf="quiz && account">
-  <h1>
-    <app-back-icon></app-back-icon>
-    {{ quiz.title }}
+  <h1 class="title">
+    <div>
+      <app-back-icon></app-back-icon>
+      {{ quiz.title }}
+    </div>
+    <i (click)="toggle()" [class]="quiz.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
   </h1>
   <p>{{ quiz.description }}</p>
   <div class="container-info">
     <div class="sections-container">
-      <p>Id</p>
       <p>Tema</p>
       <p>Expiração</p>
       <p>Expiração em segundos</p>
@@ -15,7 +17,6 @@
       <p>Ativo</p>
     </div>
     <div class="data-container">
-      <p>{{ quiz.id }}</p>
       <p>{{ quiz.theme }}</p>
       <p>{{ quiz.expires ? 'Sim' : 'Não'}}</p>
       <p>{{ quiz.expiresInSeconds }}</p>

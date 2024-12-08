@@ -5,6 +5,23 @@
   width: 81vw;
 }
 
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title > i:hover {
+  transform: scale(1.1);
+}
+
+.title > i.bi-toggle-on {
+  color: var(--green-color);
+}
+
+.title > i.bi-toggle-off {
+  color: var(--red-color);
+}
+
 .container-info, .questions-container{
   display: flex;
   background-color: var(--secondary-color);

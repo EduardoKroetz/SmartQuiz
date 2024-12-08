@@ -6,7 +6,7 @@
         Cancelar
         <i class="bi bi-x-lg"></i>
       </button>
-      <button class="confirm-btn" (click)="ok()">
+      <button [disabled]="!isOpen" class="confirm-btn" (click)="ok()">
         Confirmar
         <i class="bi bi-arrow-right"></i>
       </button>
