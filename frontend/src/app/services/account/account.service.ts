@@ -18,8 +18,11 @@ export class AccountService {
   $quizzes = this.accountQuizzesSubject.asObservable();
   $matches = this.accountMatchesSubject.asObservable();
 
-  private firstQuizzesLoad = true;
-  private firstMatchesLoad = true;
+  firstQuizzesLoad = true;
+  firstMatchesLoad = true;
+  matchesPageSize = 10;
+  matchesPageNumber = 1;
+  isMaxMatches = false;
 
   constructor (private apiService: ApiService, private toastService: ToastService) {
     this.setUser();
@@ -58,17 +61,18 @@ export class AccountService {
   }
 
   getAccountMatches() {
-    if (!this.firstMatchesLoad)
-      return
-
     this.$user.subscribe({
       next: (user) => {
         if (!user)
           return
 
-        this.apiService.get(`matches`).subscribe({
+        this.apiService.get(`matches?pageNumber=${this.matchesPageNumber}&pageSize=${this.matchesPageSize}`).subscribe({
           next: (response: any) => {
-            this.accountMatchesSubject.next(response.data)
+            console.log(response.data);
+            if (response.data.length < this.matchesPageSize)
+              this.isMaxMatches = true;
+            const matches = this.accountMatchesSubject.getValue();
+            this.accountMatchesSubject.next([...matches ,...response.data]);
             this.firstMatchesLoad = false;
           },
           error: () => {
@@ -77,6 +81,11 @@ export class AccountService {
         })
       }
     })
+  }
+
+  loadMoreMatches() {
+    this.matchesPageNumber++;
+    this.getAccountMatches();
   }
 
   update(username: string, email: string) {

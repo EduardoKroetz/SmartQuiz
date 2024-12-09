@@ -10,6 +10,7 @@ import { DateUtils } from '../../utils/date-utils';
 import { DeleteMatchComponent } from "../../components/delete-match/delete-match.component";
 import { Response } from '../../interfaces/Response';
 import { ResponseItemComponent } from "../../components/response-item/response-item.component";
+import { MatchUtils } from '../../utils/match-utils';
 
 @Component({
   selector: 'app-match',
@@ -71,16 +72,6 @@ export class MatchDetailsComponent {
   }
 
   formatStatus(status: string) {
-    switch(status) 
-    {
-      case "Created":
-        return "Não finalizado"
-      case "Finished":
-        return "Concluído"
-      case "Failed":
-        return "Falhou"
-      default:
-        return status;
-    }
+    return MatchUtils.FormatStatus(status);
   }
 }

@@ -1,12 +1,17 @@
 <div *ngIf="match" class="history-item">
   <div class="info" [routerLink]="'/matches/'+match.id">
-    <p>{{ match.quiz?.title }}</p>
-    <p>{{ match.score }} pontos</p>
-    <p>{{ match.status }}</p>
-    <p>Criado em {{ formatDate(match.createdAt) }}</p>
+    <p class="match-quiz-title">{{ match.quiz?.title }}</p>
+    <p 
+    [class]="match.status === 'Finished' ? 'status-green' :
+      match.status === 'Failed' ? 
+      'status-red' : 
+      'status-yellow'" class="match-status">
+      {{ formatStatus(match.status) }}
+    </p>
+    <p>{{ formatDate(match.createdAt) }}</p>
   </div>
   <div class="actions">
-    <i [routerLink]="'/matches/play/' + match.id" class="bi bi-arrow-clockwise"></i>
+    <i [routerLink]="'/quizzes/' + match.quizId" class="bi bi-arrow-clockwise"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
 </div>

@@ -23,7 +23,8 @@ export class HomeComponent implements OnInit {
   constructor (private accountService: AccountService) {}
 
   ngOnInit(): void {
-    this.accountService.getAccountMatches();
+    if (this.accountService.firstMatchesLoad)
+      this.accountService.getAccountMatches();
     this.accountService.getAccountQuizzes();
     this.setAccount();
 

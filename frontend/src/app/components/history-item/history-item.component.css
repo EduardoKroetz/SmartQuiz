@@ -7,6 +7,13 @@
   border-radius: 6px;
   align-items: center;
   gap: 3rem;
+  transition: .2s;
+  border-bottom: 3px solid transparent;
+}
+
+.history-item:hover {
+  transform: scale(1.008);
+  cursor: pointer;
 }
 
 .info {
@@ -17,6 +24,30 @@
   align-items: center;
   cursor: pointer;
   flex: 1;
+}
+
+.match-quiz-title {
+  width: 40%;
+}
+
+.match-status {
+  width: 105px;
+  color: white;
+  padding: 5px;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.status-green {
+  background-color: var(--green-color);
+}
+
+.status-yellow {
+  background-color: var(--yellow-color);
+}
+
+.status-red {
+  background-color: var(--red-color);
 }
 
 .actions {

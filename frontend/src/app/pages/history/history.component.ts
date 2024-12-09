@@ -15,10 +15,12 @@ import { BackIconComponent } from "../../components/back-icon/back-icon.componen
 export class HistoryComponent implements OnInit {
   matches: Match[] = [];
 
+
   constructor (public accountService: AccountService) {}
 
   ngOnInit(): void {
-    this.accountService.getAccountMatches();
+    if (this.accountService.firstMatchesLoad)
+      this.accountService.getAccountMatches();
     this.setMatches();
   }
 
@@ -28,5 +30,9 @@ export class HistoryComponent implements OnInit {
         this.matches = data;
       }
     })
+  }
+
+  loadMore() {
+    this.accountService.loadMoreMatches();
   }
 }
