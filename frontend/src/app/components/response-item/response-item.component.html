@@ -1,0 +1,17 @@
+<div (click)="toggle()" class="response-item" [class]="response.isCorrect ? 'correct' : 'incorrect'">
+  <div class="response-data">
+    <p>
+      <span class="question-number">{{ questionNumber }} </span> - {{ response.answerOption.response }}</p>
+    <i *ngIf="!response.isCorrect; else incorrectResponse" class="caret" [class]="detailsOpen ? 'bi-caret-down-fill' : 'bi-caret-up-fill'"></i>
+  </div>
+  <div *ngIf="!response.isCorrect" class="details" [class]="detailsOpen ? 'open' : ''">
+    <p>
+      <span class="correct-response">Resposta Correta:</span>
+      {{ response.correctOption.response }}
+    </p>
+  </div>
+</div>
+
+<ng-template #incorrectResponse>
+  <i class="bi-check-lg correct-icon"></i>
+</ng-template>

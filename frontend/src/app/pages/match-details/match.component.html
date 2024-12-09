@@ -1,28 +1,39 @@
 <div class="match-details" *ngIf="match && match.quiz">
-  <h1> 
-    Partida - {{ match.id }}
+  <h1 class="title"> 
+    <p>Partida</p>
+    <p>|</p>
+    <p class="quiz-title" [routerLink]="'/quizzes/'+ match.quizId">
+      {{ match.quiz.title }}
+      <i class="bi bi-arrow-right"></i>
+    </p>
   </h1>
-  <p>{{ match.quiz.title }}</p>
-  <h2>Você acertou {{ percentageOfHits }}% das questões!</h2>
+  <h2>Você acertou 
+    <span 
+      [class]="
+      percentageOfHits < 50 ? 'percentage-red' : percentageOfHits < 75 ? 'percentage-yellow' : 'percentage-green'">
+      {{ percentageOfHits }}%
+    </span> das questões!
+  </h2>
   <div class="container-info">
     <div class="sections-container">
       <p>Pontuação</p>
       <p>Criado em</p>
-      <p>Expiração</p>
+      <p *ngIf="match.quiz.expires">Expiração</p>
       <p>Status</p>
-      <p [routerLink]="'/quizzes/'+match.quizId" class="quiz-details">Quiz</p>
     </div>
     <div class="data-container">
       <p>{{ match.score }} </p>
       <p>{{ format(match.createdAt) }}</p>
-      <p>{{ format(match.expiresIn) }}</p>
-      <p>{{ match.status }}</p>
-      <p [routerLink]="'/quizzes/'+match.quizId" class="quiz-details">{{ match.quizId }}</p>
+      <p *ngIf="match.quiz.expires">{{ format(match.expiresIn) }}</p>
+      <p>{{ formatStatus(match.status) }}</p>
     </div>
   </div>
   <div class="actions">
     <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
-  <p>Respostas aqui...</p>
+  <div class="responses-container">
+    <h2>Respostas</h2>
+    <app-response-item *ngFor="let response of responses; let i = index" [response]="response" [questionNumber]="i + 1"></app-response-item>
+  </div>
 </div>

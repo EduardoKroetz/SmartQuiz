@@ -1,3 +1,7 @@
 :host {
   display: flex;
 }
+
+i {
+  color: var(--red-color);
+}

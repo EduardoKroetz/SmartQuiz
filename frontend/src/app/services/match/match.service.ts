@@ -31,4 +31,8 @@ export class MatchService {
   failMatch(matchId: string) {
     return this.apiService.patch(`matches/${matchId}/fail`, {});
   }
+
+  getResponses(matchId: string) {
+    return this.apiService.get(`matches/${matchId}/responses`, {});
+  }
 }

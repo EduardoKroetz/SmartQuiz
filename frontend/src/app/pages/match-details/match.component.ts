@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastService } from '../../services/toast/toast.service';
 import { AccountService } from '../../services/account/account.service';
 import { Match } from '../../interfaces/Match';
@@ -8,11 +8,13 @@ import { MatchService } from '../../services/match/match.service';
 import { CommonModule, Location } from '@angular/common';
 import { DateUtils } from '../../utils/date-utils';
 import { DeleteMatchComponent } from "../../components/delete-match/delete-match.component";
+import { Response } from '../../interfaces/Response';
+import { ResponseItemComponent } from "../../components/response-item/response-item.component";
 
 @Component({
   selector: 'app-match',
   standalone: true,
-  imports: [CommonModule, RouterLink, DeleteMatchComponent],
+  imports: [CommonModule, RouterLink, DeleteMatchComponent, ResponseItemComponent],
   templateUrl: './match.component.html',
   styleUrl: './match.component.css'
 })
@@ -20,7 +22,8 @@ export class MatchDetailsComponent {
   id!: string;
   match: Match | null = null; 
   account: Account | null = null;
-  percentageOfHits = "";
+  responses: Response[] = []; 
+  percentageOfHits = 0;
 
   constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private location: Location) {}
 
@@ -28,13 +31,14 @@ export class MatchDetailsComponent {
     this.id = this.route.snapshot.paramMap.get('id') || '';
     this.setAccount();
     this.setMatch();
+    this.setResponses();
   }
 
   private setMatch() {
     this.matchService.getMatchById(this.id).subscribe({
       next: (response: any) => {
         this.match = response.data;
-        this.percentageOfHits = ((100 / this.match!.quiz!.numberOfQuestion) * this.match!.score).toFixed(2);
+        this.percentageOfHits = parseFloat(((100 / this.match!.quiz!.numberOfQuestion) * this.match!.score).toFixed(2));
       },
       error: () => {
         this.toastService.showToast("Não foi possível obter a partida", false);
@@ -51,7 +55,32 @@ export class MatchDetailsComponent {
     })
   }
 
+  private setResponses() {
+    this.matchService.getResponses(this.id).subscribe({
+      next: (response: any) => {
+        this.responses = response.data;
+      },
+      error: (error) => {
+        this.toastService.showToast(error.error.errors[0])
+      }
+    })
+  }
+
   format(date: Date) {
     return DateUtils.FormatDate(date);
+  }
+
+  formatStatus(status: string) {
+    switch(status) 
+    {
+      case "Created":
+        return "Não finalizado"
+      case "Finished":
+        return "Concluído"
+      case "Failed":
+        return "Falhou"
+      default:
+        return status;
+    }
   }
 }

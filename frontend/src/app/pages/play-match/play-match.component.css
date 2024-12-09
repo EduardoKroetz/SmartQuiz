@@ -44,6 +44,7 @@
 }
 
 .next-question-btn {
+  margin-left: auto;
   margin-bottom: 0.5rem;
   display: flex;
   width: max-content;
