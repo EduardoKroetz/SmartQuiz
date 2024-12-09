@@ -3,11 +3,12 @@ import { defaultQuiz, Quiz } from '../../interfaces/Quiz';
 import { MatchService } from '../../services/match/match.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-quiz-card',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './quiz-card.component.html',
   styleUrl: './quiz-card.component.css'
 })

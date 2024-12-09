@@ -7,6 +7,7 @@ import { CreateQuiz, createQuizErrorDefault, CreateQuizErrors } from '../../inte
 import { ErrorUtils } from '../../utils/error-utils';
 import { Router } from '@angular/router';
 import { BackIconComponent } from "../../components/back-icon/back-icon.component";
+import { AccountService } from '../../services/account/account.service';
 
 @Component({
   selector: 'app-create-quiz',
@@ -19,7 +20,7 @@ export class CreateQuizComponent {
   createQuizProps : CreateQuiz = { title: "", theme: "", description: "", difficulty: "", expires: true, expiresInSeconds: 0, numberOfQuestions: 0 };
   createQuizError : CreateQuizErrors = createQuizErrorDefault;
 
-  constructor (private quizService: QuizService, private toastService: ToastService, private router: Router) {}
+  constructor (private quizService: QuizService, private accountService: AccountService, private toastService: ToastService, private router: Router) {}
 
   createQuiz() {
     this.createQuizError = createQuizErrorDefault;
@@ -27,6 +28,11 @@ export class CreateQuizComponent {
       next: (response: any) => {
         const quizId = response.data.id;
         this.toastService.showToast("Quiz criado com sucesso!", true);
+        this.quizService.getQuizById(quizId).subscribe({
+          next: (quizResponse: any) => {
+            this.accountService.addQuiz(quizResponse.data);
+          }
+        })
         this.router.navigate([`/quizzes/${quizId}/questions/0`])
       },
       error: (error) => {

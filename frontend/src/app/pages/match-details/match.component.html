@@ -25,14 +25,24 @@
       <p>{{ match.score }} </p>
       <p>{{ format(match.createdAt) }}</p>
       <p *ngIf="match.quiz.expires">{{ format(match.expiresIn) }}</p>
-      <p>{{ formatStatus(match.status) }}</p>
+      <p 
+        class="match-status" 
+        [routerLink]="'/matches/play/'+ match.id"
+        [class]="match.status === 'Finished' ? 'status-green' :
+        match.status === 'Failed' ? 
+        'status-red' : 
+        'status-yellow'" class="match-status"
+      >
+        {{ formatStatus(match.status) }}
+        <i class="bi-play-fill" *ngIf="match.status === 'Created'"></i>
+      </p>
     </div>
   </div>
   <div class="actions">
     <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
-  <div class="responses-container">
+  <div *ngIf="responses.length > 0" class="responses-container">
     <h2>Respostas</h2>
     <app-response-item *ngFor="let response of responses; let i = index" [response]="response" [questionNumber]="i + 1"></app-response-item>
   </div>

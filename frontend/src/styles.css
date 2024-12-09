@@ -5,14 +5,15 @@
   --secondary-color: #dadada;
   --text-white-color: white;
   --text-black-color: black;
-  --red-color: #F44336;
+  --red-color: #E74C3C;
   --green-color: #4CAF50;
-  --blue-color: #0d6efd;
-  --yellow-color: #ffc107;
+  --blue-color: #3498DB;
+  --yellow-color: #F1C40F ;
 }
 
 body {
   background-color: var(--secondary-color);
+  overflow: hidden;
 }
 
 * {
@@ -84,4 +85,8 @@ a:hover {
 
 .input-section > input, select {
   padding: 8px;
+}
+
+.margin-bottom {
+  margin-bottom: 1.5rem;
 }

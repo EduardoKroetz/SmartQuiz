@@ -6,30 +6,63 @@
   color: var(--primary-color);
   padding: 10px;
   border-radius: 7px;
-  height: 160px;
+  height: 130px;
   flex: 1 1 auto;
+  gap: .3rem;
 }
 
 .quiz-card-content {
   display: flex;
   flex-direction: column;
   gap: .4rem;
+  flex: 1;
 }
 
 .title-container {
   display: flex;
-  justify-content: space-between;
-  cursor: pointer;
+  flex-direction: column;
+  gap: .3rem;
 }
 
-.title-container > i {
+.title-container > h4 {
   cursor: pointer;
-  padding: 0 5px;
+  color: var(--primary-color);
 }
 
-.quiz-info {
+.quiz-description {
+  font-size: 14px;
+}
+
+.quiz-flags {
   display: flex;
-  justify-content: space-between;
+  gap: .3rem;
+}
+
+.quiz-flags p {
+  display: flex;
+  padding: 4px;
+  color: var(--primary-color);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.theme-flag {
+  background-color: var(--red-color);
+}
+
+.small-flags {
+  display: flex;
+  gap: .3rem;
+}
+
+.clock-flag {
+  background-color: var(--blue-color);
+  display: flex;
+  gap: .4rem;
+}
+
+.question-flag {
+  background-color: var(--yellow-color);
 }
 
 .play-btn {
@@ -47,6 +80,7 @@
   border: 1px solid var(--primary-color);
   transition: all .2s;
   z-index: 2;
+  max-width: none;
 }
 
 .play-btn:hover {

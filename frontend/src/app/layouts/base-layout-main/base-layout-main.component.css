@@ -1,11 +1,13 @@
 .main {
   display: flex;
   flex: 1;
-  margin: 5px;
+  margin: 5px 0 0 5px;
   border-radius: 5px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   padding: 1.5rem;
+  max-height: 82.8vh;
+  overflow: auto;
 }
 
 :host {

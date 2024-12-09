@@ -2,12 +2,17 @@
   <div class="quiz-card-content">
     <div class="title-container">
       <h4 [routerLink]="'/quizzes/'+ quiz.id">{{ quiz.title }}</h4>
+      <p class="quiz-description">{{ quiz.description }}</p>
     </div>
-    <p>{{ quiz.description }}</p>
-    <p>{{ quiz.theme }}</p>
-    <div class="quiz-info">
-      <p>{{ quiz.numberOfQuestion}} questões</p>
-      <p>{{ quiz.expiresInSeconds / 60 }} min ( {{ quiz.expiresInSeconds}} seg )</p>
+    <div class="quiz-flags">
+      <p class="theme-flag">{{ quiz.theme }}</p>
+      <div class="small-flags">
+        <p class="question-flag">{{ quiz.numberOfQuestion}} questões</p>
+        <p *ngIf="quiz.expires" class="clock-flag"> 
+          {{ quiz.expiresInSeconds}} seg
+          <i class="bi-clock"></i>
+        </p>
+      </div>
     </div>
   </div>
   <button (click)="handleButtonClick()" class="play-btn">

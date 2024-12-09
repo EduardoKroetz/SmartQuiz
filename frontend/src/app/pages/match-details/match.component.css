@@ -50,6 +50,25 @@ h2 > span.percentage-green {
   gap: 0.7rem;
 }
 
+.match-status {
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.status-green {
+  background-color: var(--green-color);
+}
+
+.status-yellow {
+  background-color: var(--yellow-color);
+}
+
+.status-red {
+  background-color: var(--red-color);
+}
 
 .quiz-details {
   cursor: pointer;
