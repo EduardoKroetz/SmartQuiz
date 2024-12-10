@@ -11,6 +11,7 @@
   border-radius: 5px;
   color: var(--text-black-color);
 }
+
 .search-bar .search-icon {
   position: absolute;
   right: 10px;

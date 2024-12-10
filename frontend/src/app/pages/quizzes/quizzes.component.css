@@ -34,3 +34,10 @@
   }
 
 }
+
+@media screen and (min-width: 1920px) {
+  .quiz-item {
+    flex: 1 1 450px;
+  }
+
+}

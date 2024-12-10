@@ -30,3 +30,9 @@
     flex: 1 1 350px;
   }
 }
+
+@media screen and (min-width: 1920px) {
+  .quiz-card {
+    flex: 1 1 450px;
+  }
+}

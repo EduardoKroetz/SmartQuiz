@@ -55,3 +55,12 @@
 .confirm-btn {
   background-color: var(--green-color);
 }
+
+
+@media screen and (min-width: 1920px) {
+  .toast {
+    width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+}

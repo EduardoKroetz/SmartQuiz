@@ -90,3 +90,9 @@
     padding: 20px;
   }
 }
+
+@media screen and (min-width: 1920px) {
+  .data {
+    padding: 25px;
+  }
+}

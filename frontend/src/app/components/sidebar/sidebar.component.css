@@ -82,3 +82,9 @@
     font-size: 30px;
   }
 }
+
+@media screen and (min-width: 1920px) {
+  .sidebar-title h1 {
+    font-size: 40px;
+  }
+}

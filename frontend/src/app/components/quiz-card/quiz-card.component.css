@@ -38,6 +38,8 @@
   padding: 4px;
   color: var(--primary-color);
   border-radius: 4px;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-flag {
@@ -87,3 +89,8 @@
   }
 }
 
+@media screen and (min-width: 1920px) {
+  .quiz-flags p {
+    padding: 7px;
+  }
+}

@@ -28,5 +28,8 @@
   max-width: 600px;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1920px) {
+  .header-container > * {
+    padding: 20px 35px;
+  }
 }

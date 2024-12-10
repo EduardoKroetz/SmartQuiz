@@ -25,3 +25,23 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+@media screen and (min-width: 1920px) {
+  .spinner {
+    width: 30px;
+    height: 30px;
+  }
+
+  
+.dark {
+  border: 8px solid var(--primary-color);
+  border-top: 8px solid transparent; 
+}
+
+.light {
+  border: 8px solid var(--secondary-color);
+  border-top: 8px solid transparent; 
+}
+}

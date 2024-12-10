@@ -6,9 +6,20 @@
   margin-top: 50px;
 }
 
+:host {
+  display: flex;
+  flex: 1;
+}
+
 @media screen and (min-width: 1366px) {
   .main {
-    margin-left: 250px;
+    margin: 65px 5px 5px 275px;
   }
 
+}
+
+@media screen and (min-width: 1920px) {
+  .main {
+    margin: 92px 5px 5px 275px;
+  }
 }

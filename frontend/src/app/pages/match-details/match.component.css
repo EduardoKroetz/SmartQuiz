@@ -98,3 +98,27 @@ h2 > span.percentage-green {
   border-radius: 10px;
   gap: .3rem;
 }
+
+@media screen and (min-width: 1366px) {
+  .actions > i {
+    font-size: 30px;
+  }
+}
+
+
+
+@media screen and (min-width: 1920px) {
+  .container-info, .actions {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .sections-container, .data-container {
+    gap: 1rem;
+  }
+
+  .actions > i {
+    font-size: 40px;
+  }
+}
+

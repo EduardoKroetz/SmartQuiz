@@ -61,3 +61,10 @@
   }
   
 }
+
+@media screen and (min-width: 1920px) {
+  .register-form {
+    max-width: 850px;
+  }
+}
+

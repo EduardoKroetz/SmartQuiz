@@ -19,3 +19,9 @@
   }
 
 }
+
+@media screen and (min-width: 1920px) {
+  .main {
+    margin: 95px 5px 5px 275px;
+  }
+}

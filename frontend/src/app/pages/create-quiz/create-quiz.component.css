@@ -69,3 +69,13 @@
     margin: 0px auto;
   }
 }
+
+@media screen and (min-width: 1920px) {
+  .expires-container > input {
+    transform: scale(2);
+  }
+
+  .create-btn {
+    margin: 100px auto;
+  }
+}
