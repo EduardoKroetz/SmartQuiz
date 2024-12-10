@@ -3,12 +3,12 @@
   justify-content: space-between;
   background-color: var(--secondary-color);
   color: var(--primary-color);
-  padding: 10px;
   border-radius: 6px;
   align-items: center;
   gap: 3rem;
   transition: .2s;
   border-bottom: 3px solid transparent;
+  flex: 1;
 }
 
 .history-item:hover {
@@ -23,7 +23,10 @@
   color: var(--primary-color);
   align-items: center;
   cursor: pointer;
+  gap: 1rem;
   flex: 1;
+  padding: 5px;
+  border-radius: 6px;
 }
 
 .match-quiz-title {
@@ -51,8 +54,8 @@
 }
 
 .actions {
-  display: flex;
+  display: none;
   gap: 1.6rem;
   font-size: 20px;
-
+  padding: 10px;
 }

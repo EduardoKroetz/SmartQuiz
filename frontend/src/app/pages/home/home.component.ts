@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Match } from '../../interfaces/Match';
 import { DateUtils } from '../../utils/date-utils';
 import Account from '../../interfaces/Account';
+import { QuizUtils } from '../../utils/quiz-utils';
 
 @Component({
   selector: 'app-home',
@@ -52,5 +53,8 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-  
+
+  formatDifficulty(difficulty: string) {
+    return QuizUtils.FormatDifficulty(difficulty);
+  }
 }

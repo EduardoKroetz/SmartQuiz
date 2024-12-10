@@ -1,5 +1,5 @@
-<div [routerLink]="'/matches/'+match.id" *ngIf="match" class="history-item">
-  <div class="info" >
+<div *ngIf="match" class="history-item">
+  <div class="info" [routerLink]="'/matches/'+match.id">
     <p class="match-quiz-title">{{ match.quiz?.title }}</p>
     <p 
     [class]="match.status === 'Finished' ? 'status-green' :

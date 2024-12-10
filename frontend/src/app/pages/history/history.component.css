@@ -1,14 +1,19 @@
 .history {
   display: flex;
   flex-direction: column;
-  width: 81vw;
+  flex: 1;
+}
+
+:host {
+  display: flex;
+  flex: 1;
 }
 
 .history-container {
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  padding: 10px;
+  padding: 5px;
 }
 
 .load-btn {

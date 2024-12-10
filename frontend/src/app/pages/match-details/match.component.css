@@ -2,12 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: .6rem;
-  width: 81vw;
+  flex: 1;
+}
+
+:host {
+  display: flex;
+  flex: 1;
 }
 
 .match-details > .title {
   display: flex;
   gap: 1rem;
+}
+
+.title > p {
+  font-size: 20px;
 }
 
 .title > .quiz-title {
@@ -48,6 +57,10 @@ h2 > span.percentage-green {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+}
+
+.actions i {
+  font-size: 20px;
 }
 
 .match-status {

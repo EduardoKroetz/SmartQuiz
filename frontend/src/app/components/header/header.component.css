@@ -3,9 +3,24 @@
   flex-direction: row;
   justify-content: space-between;
   background-color: var(--primary-color);
-  padding: 10px;
   color: var(--text-white-color);
   align-items: center;
+  gap: 1rem;
+  position: fixed;
+  width: 100vw;
+  z-index: 2;
+}
+
+.burger {
+  font-size: 25px;
+}
+
+.smartquiz-link {
+  display: none;
+}
+
+.header-container > * {
+  padding: 10px;
 }
 
 .search-bar {

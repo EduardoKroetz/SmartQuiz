@@ -6,8 +6,8 @@
   gap: 1rem;
   background-color: var(--primary-color);
   color: var(--secondary-color);
-  padding: 25px;
+  padding: 10px;
   border-radius: 5px;
-  width: 200px;
+  width: 120px;
 }
 

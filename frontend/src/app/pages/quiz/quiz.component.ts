@@ -13,6 +13,7 @@ import { BackIconComponent } from "../../components/back-icon/back-icon.componen
 import { ConfirmationToastService } from '../../services/confirmation-toast/confirmation-toast.service';
 import { take } from 'rxjs';
 import { QuestionService } from '../../services/question/question.service';
+import { QuizUtils } from '../../utils/quiz-utils';
 
 @Component({
   selector: 'app-quiz',
@@ -104,5 +105,10 @@ export class QuizComponent implements OnInit {
         }
       }
     })
+  }
+
+  
+  formatDifficulty(difficulty: string) {
+    return QuizUtils.FormatDifficulty(difficulty);
   }
 }

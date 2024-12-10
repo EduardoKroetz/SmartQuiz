@@ -16,7 +16,7 @@
       <div class="histories">
         <div [routerLink]="'/matches/'+ match.id" *ngFor="let match of matches" class="info-row">
           <p>{{ match.quiz?.title }}</p>
-          <p>{{ formatDate(match.createdAt) }}</p>
+          <p class="p-details">{{ formatDate(match.createdAt) }}</p>
         </div>
         <div class="empty-list" *ngIf="matches.length === 0">
           Nenhum partida encontrada por aqui...
@@ -29,8 +29,7 @@
       <div class="quizzes">
         <div *ngFor="let quiz of quizzes" [routerLink]="'/quizzes/'+ quiz.id" class="info-row">
           <p>{{ quiz.title }}</p>
-          <p>{{ quiz.theme }}</p>
-          <p>{{ quiz.difficulty }}</p>
+          <p class="p-details">{{ formatDifficulty(quiz.difficulty) }}</p>
         </div>
         <div class="empty-list" *ngIf="quizzes.length === 0">
           Nenhum quiz encontrado

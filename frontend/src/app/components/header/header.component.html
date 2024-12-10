@@ -1,5 +1,6 @@
 <div class="header-container">
-  <a clas href="/">
+  <i (click)="toggleSidebar()" class="burger" [class]="sidebarIsOpen ? 'bi-close' : 'bi-list'"></i>
+  <a class="smartquiz-link" clas href="/">
     <h1 class="title">SmartQuiz</h1>
   </a>
   <app-search-bar class="search-bar"></app-search-bar>

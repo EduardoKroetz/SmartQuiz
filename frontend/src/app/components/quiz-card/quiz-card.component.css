@@ -6,30 +6,26 @@
   color: var(--primary-color);
   padding: 10px;
   border-radius: 7px;
-  height: 130px;
   flex: 1 1 auto;
-  gap: .3rem;
+  gap: .6rem;
 }
 
 .quiz-card-content {
   display: flex;
   flex-direction: column;
-  gap: .4rem;
+  gap: .6rem;
   flex: 1;
 }
 
 .title-container {
   display: flex;
   flex-direction: column;
-  gap: .3rem;
+  gap: .4rem;
 }
 
 .title-container > h4 {
   cursor: pointer;
   color: var(--primary-color);
-}
-
-.quiz-description {
   font-size: 14px;
 }
 

@@ -1,4 +1,5 @@
-<div class="sidebar">
+<div class="sidebar" [class]="isOpen ? 'open' : ''">
+  <i (click)="toggleSidebar()" class="burger bi-x-lg"></i>
   <nav>
     <section 
     (click)="setSection('home')" 

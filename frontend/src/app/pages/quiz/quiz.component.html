@@ -1,10 +1,10 @@
 <div class="quiz" *ngIf="quiz && account">
   <h1 class="title">
-    <div>
+    <p>
       <app-back-icon></app-back-icon>
       {{ quiz.title }}
-    </div>
-    <i (click)="toggle()" [class]="quiz.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+    </p>
+    <i *ngIf="quiz.userId === account.id" (click)="toggle()" [class]="quiz.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
   </h1>
   <p>{{ quiz.description }}</p>
   <div class="container-info">
@@ -18,7 +18,7 @@
       <p>{{ quiz.theme }}</p>
       <p *ngIf="quiz.expires">{{ quiz.expiresInSeconds }} segundos</p>
       <p>{{ quiz.numberOfQuestion }}</p>
-      <p>{{ quiz.difficulty }}</p>
+      <p>{{ formatDifficulty(quiz.difficulty) }}</p>
     </div>
   </div>
   <div class="actions-container">
@@ -28,7 +28,7 @@
   <div class="questions-container">
     <div class="title-container">
       <h2>Questões</h2>
-      <i [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn"></i>
+      <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn"></i>
     </div>
     <div class="question-list">
       <div class="question" *ngFor="let question of questions">

@@ -1,12 +1,29 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 150px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   gap: 1.6rem;
   padding: 0 16px;
   height: 100%;
+  width: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: width 0.4s ease;
+  pointer-events: none;
+  padding: 10px;
+  position: fixed;
+}
+
+.open {
+  width: 150px;
+  opacity: 1;
+  pointer-events: all;
+  z-index: 10;
+}
+
+.sidebar > i {
+  margin-left: auto;
 }
 
 .title {

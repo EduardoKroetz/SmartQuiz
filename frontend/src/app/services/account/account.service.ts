@@ -68,7 +68,6 @@ export class AccountService {
 
         this.apiService.get(`matches?pageNumber=${this.matchesPageNumber}&pageSize=${this.matchesPageSize}`).subscribe({
           next: (response: any) => {
-            console.log(response.data);
             if (response.data.length < this.matchesPageSize)
               this.isMaxMatches = true;
             const matches = this.accountMatchesSubject.getValue();
@@ -111,5 +110,10 @@ export class AccountService {
   addQuiz(quiz: Quiz) {
     const quizzes = this.accountQuizzesSubject.getValue();
     this.accountQuizzesSubject.next([...quizzes,quiz]);
+  }
+
+  addMatch(match: Match) {
+    const matches = this.accountMatchesSubject.getValue();
+    this.accountMatchesSubject.next([...matches, match]);
   }
 }
