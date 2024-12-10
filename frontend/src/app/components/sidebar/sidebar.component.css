@@ -9,6 +9,8 @@
   width: 0;
   z-index: 0;
   opacity: 0;
+  top: 0;
+  left: 0;
   transition: width 0.4s ease;
   pointer-events: none;
   padding: 10px;
@@ -26,8 +28,9 @@
   margin-left: auto;
 }
 
-.title {
-  cursor: pointer;
+.sidebar-title {
+  display: flex;
+  justify-content: space-between;
 }
 
 .sidebar > nav {
@@ -46,10 +49,6 @@
   border-bottom: 1px solid transparent;
 }
 
-.section-container > i {
-  font-size: 26px;
-}
-
 .section-container:hover {
   color: gray;
   transition: all 300ms;
@@ -58,4 +57,28 @@
 
 .border-bottom {
   border-bottom: 1px solid gray;
+}
+
+@media screen and (min-width: 768px) {
+  .open {
+    width: 250px;
+  } 
+}
+
+@media screen and (min-width: 1366px) {
+  .sidebar {
+    width: 250px;
+    z-index: 2;
+    pointer-events: all;
+    padding: 10px;
+    opacity: 1;
+  }
+
+  .sidebar-title > i {
+    display: none;
+  }
+
+  .sidebar-title h1 {
+    font-size: 30px;
+  }
 }

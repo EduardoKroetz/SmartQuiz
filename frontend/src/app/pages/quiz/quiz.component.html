@@ -1,11 +1,11 @@
 <div class="quiz" *ngIf="quiz && account">
-  <h1 class="title">
-    <p>
+  <div class="title">
+    <h1>
       <app-back-icon></app-back-icon>
       {{ quiz.title }}
-    </p>
+    </h1>
     <i *ngIf="quiz.userId === account.id" (click)="toggle()" [class]="quiz.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
-  </h1>
+  </div>
   <p>{{ quiz.description }}</p>
   <div class="container-info">
     <div class="sections-container">

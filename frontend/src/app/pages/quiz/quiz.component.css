@@ -10,18 +10,12 @@
   flex: 1;
 }
 
-i {
-  font-size: 20px;
-}
-
 .title {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
 }
 
-.title > p {
-  font-size: 16px;
+.title > h1 {
+  display: flex;
 }
 
 .title > i {
@@ -114,4 +108,8 @@ i {
 
 .delete-question {
   color: var(--red-color);
+}
+
+@media screen and (min-width: 1366px) {
+  
 }

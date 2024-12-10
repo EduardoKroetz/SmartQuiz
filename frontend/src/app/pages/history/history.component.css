@@ -20,3 +20,9 @@
   margin: 10px auto;
   padding: 10px;
 }
+
+@media screen and (min-width: 768px) {
+  .history-container {
+    padding: 13px;
+  }
+}

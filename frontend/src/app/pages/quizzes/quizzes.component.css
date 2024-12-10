@@ -25,5 +25,12 @@
 
 .quiz-item {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1;
+}
+
+@media screen and (min-width: 1366px) {
+  .quiz-item {
+    flex: 1 1 350px;
+  }
+
 }

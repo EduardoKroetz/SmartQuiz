@@ -20,10 +20,13 @@
 }
 
 .header-container > * {
-  padding: 10px;
+  padding: 10px 25px;
 }
 
 .search-bar {
   width: 100%;
   max-width: 600px;
+}
+
+@media screen and (min-width: 1366px) {
 }

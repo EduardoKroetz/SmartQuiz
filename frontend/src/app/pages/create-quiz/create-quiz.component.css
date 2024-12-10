@@ -56,3 +56,16 @@
   max-width: max-content;
 }
 
+@media screen and (min-width: 1366px) {
+  .form-container {
+    gap: 1rem;
+  }
+
+  .form, .form-rigth-container, .form-left-container {
+    gap: 1rem;
+  }
+
+  .create-btn {
+    margin: 0px auto;
+  }
+}

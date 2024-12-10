@@ -34,7 +34,7 @@
 }
 
 .match-status {
-  width: 105px;
+  width: 120px;
   color: white;
   padding: 5px;
   border-radius: 7px;
@@ -58,4 +58,14 @@
   gap: 1.6rem;
   font-size: 20px;
   padding: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .info {
+    padding: 10px;
+  }
+
+  .match-status {
+    width: 140px; 
+  }
 }

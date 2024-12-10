@@ -2,6 +2,13 @@
   display: flex;
   flex: 1;
   color: var(--secondary-color);
+  padding: 1.5rem;
   margin-top: 50px;
-  padding: 20px 0;
+}
+
+@media screen and (min-width: 1366px) {
+  .main {
+    margin-left: 250px;
+  }
+
 }

@@ -62,3 +62,13 @@
 .generate-btn i {
   font-size: larger;
 }
+
+@media screen and (min-width: 1366px) {
+  .form-container {
+    gap: 1.5rem;
+  }
+
+  .form, .form-rigth-container, .form-left-container {
+    gap: 1.5rem;
+  }
+}

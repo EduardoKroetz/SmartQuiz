@@ -16,7 +16,6 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 18px;
   cursor: pointer;
   color: var(--text-black-color);
 }

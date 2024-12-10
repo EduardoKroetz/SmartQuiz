@@ -10,22 +10,21 @@
   flex: 1;
 }
 
-.match-details > .title {
+.match-details > .title-container {
   display: flex;
   gap: 1rem;
 }
 
-.title > p {
-  font-size: 20px;
-}
-
-.title > .quiz-title {
+.quiz-title {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
   transition: all 200ms;
+  cursor: pointer;
 }
 
-.title > .quiz-title:hover {
-  cursor: pointer;
-  transform: scale(1.03);
+.quiz-title:hover {
+  text-decoration: underline;
 }
 
 h2 > span.percentage-red {

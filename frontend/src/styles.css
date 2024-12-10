@@ -10,40 +10,11 @@
   --blue-color: #3498DB;
   --yellow-color: #F1C40F;
 
-  /* Paddings */
-
-  --small-padding-320: 5px;
-  --medium-padding-320: 8px;
-  --big-padding-320: 10px;
-
-  --small-padding-768: 5px;
-  --medium-padding-768: 8px;
-  --big-padding-768: 10px;
-
-  --small-padding-1360: 5px;
-  --medium-padding-1360: 8px;
-  --big-padding-1360: 10px;
-
-  --small-padding-1920: 5px;
-  --medium-padding-1920: 8px;
-  --big-padding-1920: 10px;
-
   /* Fontes */
 
   --font-360: 13px;
-  --big-font-360: 16px;
 
-  --small-font-768: 5px;
-  --medium-font-768: 8px;
-  --big-font-768: 10px;
-
-  --small-font-1360: 5px;
-  --medium-font-1360: 8px;
-  --big-font-1360: 10px;
-  
-  --small-font-1920: 5px;
-  --medium-font-1920: 8px;
-  --big-font-1920: 10px;
+  --font-768: 18px;
 }
 
 body {
@@ -66,15 +37,15 @@ input, select, button, textarea {
 }
 
 h1 {
-  font-size: var(--big-font-360);
+  font-size: 18px;
 }
 
 h2 {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 h3 {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 button {
@@ -133,4 +104,53 @@ a:hover {
 
 .input-section > input, select {
   padding: 8px;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title i {
+  display: flex;
+  align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+} 
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-color); 
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+@media screen and (min-width: 768px) {
+  * {
+    font-size: var(--font-768);
+  }
+
+  i {
+    font-size: 22px;
+  }
+
+  h1 {
+    font-size: 25px;
+  } 
+  
+  h2 {
+    font-size: 23px;
+  }
+  
+  h3 {
+    font-size: 20px;
+  }
 }

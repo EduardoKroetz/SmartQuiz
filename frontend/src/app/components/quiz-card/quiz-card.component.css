@@ -26,7 +26,6 @@
 .title-container > h4 {
   cursor: pointer;
   color: var(--primary-color);
-  font-size: 14px;
 }
 
 .quiz-flags {
@@ -39,7 +38,6 @@
   padding: 4px;
   color: var(--primary-color);
   border-radius: 4px;
-  font-size: 12px;
 }
 
 .theme-flag {
@@ -81,6 +79,11 @@
 
 .play-btn:hover {
   transform: scale(1.03);
+}
 
+@media screen and (min-width: 768px) {
+  .quiz-card {
+    padding: 15px;
+  }
 }
 

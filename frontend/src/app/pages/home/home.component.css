@@ -4,7 +4,6 @@
   flex-direction: column;
   gap: 1.5rem;
   flex: 1;
-  padding: 10px;
 }
 
 :host {
@@ -17,7 +16,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .quick-access {
@@ -54,7 +53,6 @@
   color: var(--secondary-color);
   flex: 1;
   cursor: pointer;
-  height: 290px;
   overflow: auto;
 }
 
@@ -85,4 +83,10 @@
 
 .empty-list > button {
   max-width: max-content;
+}
+
+@media screen and (min-width: 768px) {
+  .data {
+    padding: 20px;
+  }
 }

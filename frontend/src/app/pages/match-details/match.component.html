@@ -1,11 +1,9 @@
 <div class="match-details" *ngIf="match && match.quiz">
-  <h1 class="title"> 
-    <p>Partida</p>
-    <p>|</p>
-    <p class="quiz-title" [routerLink]="'/quizzes/'+ match.quizId">
+  <h1 class="title-container"> 
+    Partida |
+    <span class="quiz-title" [routerLink]="'/quizzes/'+ match.quizId">
       {{ match.quiz.title }}
-      <i class="bi bi-arrow-right"></i>
-    </p>
+    </span>
   </h1>
   <h2>Você acertou 
     <span 

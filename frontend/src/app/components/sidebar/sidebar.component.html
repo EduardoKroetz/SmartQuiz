@@ -1,5 +1,8 @@
 <div class="sidebar" [class]="isOpen ? 'open' : ''">
-  <i (click)="toggleSidebar()" class="burger bi-x-lg"></i>
+  <div class="sidebar-title title">
+    <a href="/"><h1>SmartQuiz</h1></a>
+    <i (click)="toggleSidebar()" class="burger bi-x-lg"></i>
+  </div>
   <nav>
     <section 
     (click)="setSection('home')" 

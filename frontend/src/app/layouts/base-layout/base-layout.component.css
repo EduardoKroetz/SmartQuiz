@@ -1,8 +1,12 @@
 .base-layout {
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+:host {
+  display: flex;
   height: 100vh;
-  width: 100vw;
 }
 
 .container {

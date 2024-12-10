@@ -24,3 +24,9 @@
 .load-btn {
   margin: 40px auto;
 }
+
+@media screen and (min-width: 1366px) {
+  .quiz-card {
+    flex: 1 1 350px;
+  }
+}
