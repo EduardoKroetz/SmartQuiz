@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 
 @Component({
@@ -10,24 +10,27 @@ import { SidebarService } from '../../services/sidebar/sidebar.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit {
-  currentSection: string = 'home';
+  currentRoute: string = '';
   isOpen = false;
 
-  constructor (private sidebarService: SidebarService) {
-    sidebarService.$isOpen.subscribe({
+  constructor (private sidebarService: SidebarService, private router: Router) {}
+  
+  ngOnInit(): void {
+    this.sidebarService.$isOpen.subscribe({
       next: (isOpen) => {
         this.isOpen = isOpen
       }
     })
-  }
-  
-  ngOnInit(): void {
-    document.addEventListener('click', (ev) => this.handleCloseSidebar(ev));
-  }
 
-  setSection(section: string): void {
-    this.currentSection = section;
-    this.toggleSidebar()
+    this.currentRoute = this.router.url;
+    console.log('Rota atual:', this.currentRoute);
+
+    this.router.events.subscribe(() => {
+      this.currentRoute = this.router.url;;
+      console.log('Rota mudou para:', this.currentRoute);
+    })
+
+    document.addEventListener('click', (ev) => this.handleCloseSidebar(ev));
   }
 
   toggleSidebar() {

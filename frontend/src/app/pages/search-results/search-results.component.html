@@ -1,13 +1,11 @@
 <div class="search-results">
   <h2>Resultados para "{{ reference }}"</h2>
+  <p *ngIf="quizzes.length === 0 && !isLoadingResults">Nenhum resultado encontrado</p>
   <div class="results-container">
     <app-quiz-card class="quiz-card" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
   </div>
   <button (click)="loadMore()" *ngIf="!isMaximumResults" class="load-btn">
     Carregar mais
   </button>
+  <app-spinner-loading *ngIf="isLoadingResults" [isBig]="true" [isDark]="false"></app-spinner-loading>
 </div>
-
-<ng-template #loadTemplate> 
-  <app-spinner-loading></app-spinner-loading>
-</ng-template>

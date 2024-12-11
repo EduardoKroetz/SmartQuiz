@@ -3,6 +3,6 @@ import { ptBR } from "date-fns/locale";
 
 export class DateUtils {
   static FormatDate(date: Date) {
-    return format(date, 'dd/MM/yyyy hh:mm:ss', { locale: ptBR })
+    return format(date, 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })
   }
 }

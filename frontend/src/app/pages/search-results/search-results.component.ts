@@ -19,7 +19,8 @@ export class SearchResultsComponent implements OnInit {
   pageSize = 15;
   pageNumber = 1;
   quizzes: Quiz[] = [];
-  isMaximumResults = false;
+  isMaximumResults = true;
+  isLoadingResults = true;
 
   constructor (private activedRoute: ActivatedRoute, private quizService: QuizService, private toastService: ToastService) {}
 
@@ -32,16 +33,19 @@ export class SearchResultsComponent implements OnInit {
   }
 
   search() {
+    this.isLoadingResults = true;
     this.quizService.searchQuizzes(this.reference, this.pageSize, this.pageNumber).subscribe({
       next: (response: any) => {
         const quizzes : Quiz[] = response.data
         this.quizzes = [...this.quizzes, ...quizzes];
         if (quizzes.length < this.pageSize)
-        {
           this.isMaximumResults = true;
-        }
+        else
+          this.isMaximumResults = false
+        this.isLoadingResults = false;
       },
       error: (error) => {
+        this.isLoadingResults = false;
         this.toastService.showToast(error.error.errors[0])
       }
     })
@@ -54,7 +58,7 @@ export class SearchResultsComponent implements OnInit {
 
   reset() {
     this.quizzes = [];
-    this.isMaximumResults = false;
+    this.isMaximumResults = true;
     this.pageNumber = 1;
   }
 }

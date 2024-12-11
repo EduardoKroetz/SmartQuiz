@@ -9,4 +9,5 @@ import { Component, Input } from '@angular/core';
 })
 export class SpinnerLoadingComponent {
   @Input() isDark = true;
+  @Input() isBig = false;
 }

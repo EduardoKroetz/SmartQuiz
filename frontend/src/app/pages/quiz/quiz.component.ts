@@ -14,11 +14,12 @@ import { ConfirmationToastService } from '../../services/confirmation-toast/conf
 import { take } from 'rxjs';
 import { QuestionService } from '../../services/question/question.service';
 import { QuizUtils } from '../../utils/quiz-utils';
+import { QuizQuestionComponent } from "../../components/quiz-question/quiz-question.component";
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink],
+  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink, QuizQuestionComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
@@ -87,28 +88,12 @@ export class QuizComponent implements OnInit {
       }
     })
   }
-  
-  deleteQuestion(questionId: string, order: number) {
-    this.confirmationToastService.showToast(`Deseja excluir a questão ${order + 1}?`);
-    this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
-      next: (confirm) => {
-        if (confirm) {
-          this.questionService.deleteQuestion(questionId).subscribe({
-            next: () => {
-              this.toastService.showToast("Questão deletada com sucesso!", true);
-              this.questions = this.questions.filter(x => x.id !== questionId);
-            },
-            error: (error) => {
-              this.toastService.showToast(error.error.errors[0]);
-            }
-          })
-        }
-      }
-    })
-  }
 
-  
   formatDifficulty(difficulty: string) {
     return QuizUtils.FormatDifficulty(difficulty);
+  }
+
+  removeQuestion(questionId: string) {
+    this.questions = this.questions.filter(x => x.id !== questionId);
   }
 }

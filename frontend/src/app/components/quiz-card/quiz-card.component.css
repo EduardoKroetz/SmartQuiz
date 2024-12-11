@@ -80,7 +80,7 @@
 }
 
 .play-btn:hover {
-  transform: scale(1.03);
+  transform: scale(1.01);
 }
 
 @media screen and (min-width: 768px) {

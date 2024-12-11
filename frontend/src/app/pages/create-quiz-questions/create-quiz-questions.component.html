@@ -1,7 +1,7 @@
 <div class="create-question">
   <h1 class="title">
     <i [routerLink]="'/quizzes/'+ createQuestion.quizId" class="bi bi-caret-left-fill"></i>
-    Criar Quiz - Questão {{ createQuestion.order + 1 }}
+    Criar Questão {{ createQuestion.order + 1 }}
   </h1>
   <form (submit)="createNewQuestion()">
     <div class="input-section">

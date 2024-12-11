@@ -5,41 +5,41 @@
   </div>
   <nav>
     <section 
-    (click)="setSection('home')" 
+    (click)="toggleSidebar()" 
     routerLink="/" 
-    [class.border-bottom]="currentSection === 'home'" 
+    [class.current-route]="currentRoute === '/'" 
     class="section-container">
     <i class="bi bi-house-fill"></i>
     <p>Home</p>
     </section>
     <section 
-      (click)="setSection('quizzes')" 
+      (click)="toggleSidebar()" 
       routerLink="/quizzes" 
-      [class.border-bottom]="currentSection === 'quizzes'" 
+      [class.current-route]="currentRoute === '/quizzes'" 
       class="section-container">
       <i class="bi bi-patch-question-fill"></i>
       <p>Quizzes</p>
     </section>
     <section 
-      (click)="setSection('generate-quiz')" 
-      routerLink="/quizzes/generate-quiz" 
-      [class.border-bottom]="currentSection === 'generate-quiz'" 
+      (click)="toggleSidebar()" 
+      routerLink="/generate-quiz" 
+      [class.current-route]="currentRoute === '/generate-quiz'" 
       class="section-container">
       <i class="bi bi-arrow-clockwise"></i>
       <p>Gerar Quiz</p>
     </section>
     <section 
-      (click)="setSection('history')" 
+      (click)="toggleSidebar()" 
       routerLink="/history" 
-      [class.border-bottom]="currentSection === 'history'" 
+      [class.current-route]="currentRoute === '/history'" 
       class="section-container">
       <i class="bi bi-hourglass-split"></i>
       <p>Histórico</p>
     </section>
     <section 
-      (click)="setSection('account')" 
+      (click)="toggleSidebar()" 
       routerLink="/account" 
-      [class.border-bottom]="currentSection === 'account'" 
+      [class.current-route]="currentRoute === '/account'" 
       class="section-container">
       <i class="bi bi-person-circle"></i>
       <p>Conta</p>

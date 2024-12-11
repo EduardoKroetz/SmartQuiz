@@ -1,0 +1,16 @@
+<div *ngIf="account" [class]="quiz.userId === account.id ? 'cursor-pointer' : ''" (click)="toggle()" class="question">
+  <div class="info">
+    <p>
+      <span class="font-bold">{{ question.order + 1 }}</span>  - 
+      {{ question.text }}
+    </p>
+    <div *ngIf="quiz.userId === account.id" class="question-actions">
+      <i class="caret" [class]="detailsOpen ? 'bi-caret-down-fill' : 'bi-caret-up-fill'"></i>
+      <i (click)="deleteQuestion(question.id, question.order)" class="bi bi-trash delete-question"></i>
+    </div>
+  </div>
+  <div class="details" [class]="detailsOpen ? 'open' : ''" >
+    <span class="font-bold">Resposta:</span>
+    <p>{{ question.correctOption?.response }}</p>
+  </div>
+</div>

@@ -34,12 +34,12 @@ export const routes: Routes = [
             path: "quizzes", children:
             [
               { path: "", component: QuizzesComponent },
-              { path: "generate-quiz", component: GenerateQuizComponent },
               { path: "create-quiz", component: CreateQuizComponent },
               { path: ":id/questions/:order", component: CreateQuizQuestionsComponent },
               { path: ":id", component: QuizComponent },
             ]
           },
+          { path: "generate-quiz", component: GenerateQuizComponent },
           { path: "matches", children: [
               { path: ":id", component: MatchDetailsComponent },
               { path: "play/:id", component: PlayMatchComponent }

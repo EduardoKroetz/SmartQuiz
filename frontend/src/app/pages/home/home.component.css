@@ -32,6 +32,7 @@
 .list-container {
   display: flex;
   gap: .6rem;
+  flex: 1;
 }
 
 .list-container > .data-list {
@@ -52,8 +53,12 @@
   border-radius: 5px;
   color: var(--secondary-color);
   flex: 1;
-  cursor: pointer;
   overflow: auto;
+}
+
+.data > h2 {
+  cursor: pointer;
+  max-width: max-content;
 }
 
 .p-details {

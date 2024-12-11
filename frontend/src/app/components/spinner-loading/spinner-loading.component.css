@@ -26,6 +26,22 @@
   }
 }
 
+@media screen and (min-width: 1366px) {
+  .spinner {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .big .dark {
+    border: 8px solid var(--primary-color);
+    border-top: 8px solid transparent; 
+  }
+
+  .big .light {
+    border: 8px solid var(--secondary-color);
+    border-top: 8px solid transparent; 
+  }
+}
 
 
 @media screen and (min-width: 1920px) {
@@ -35,13 +51,13 @@
   }
 
   
-.dark {
-  border: 8px solid var(--primary-color);
-  border-top: 8px solid transparent; 
-}
+  .dark {
+    border: 8px solid var(--primary-color);
+    border-top: 8px solid transparent; 
+  }
 
-.light {
-  border: 8px solid var(--secondary-color);
-  border-top: 8px solid transparent; 
-}
+  .light {
+    border: 8px solid var(--secondary-color);
+    border-top: 8px solid transparent; 
+  }
 }

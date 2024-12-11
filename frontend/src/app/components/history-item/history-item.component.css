@@ -6,7 +6,7 @@
   border-radius: 6px;
   align-items: center;
   gap: 3rem;
-  transition: .2s;
+  transition: .1s;
   border-bottom: 3px solid transparent;
   flex: 1;
 }
@@ -74,7 +74,17 @@
   }
 }
 
+@media screen and (min-width: 1366px) {
+  .actions i {
+    font-size: 25px;
+  }
+}
+
 @media screen and (min-width: 1920px) {
+  .actions i {
+    font-size: 40px;
+  }
+  
   .match-status {
     width: 180px; 
   }

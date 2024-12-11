@@ -31,15 +31,7 @@
       <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn"></i>
     </div>
     <div class="question-list">
-      <div class="question" *ngFor="let question of questions">
-        <p>
-          <span class="question-order">{{ question.order + 1 }}</span>  - 
-          {{ question.text }}
-        </p>
-        <div *ngIf="quiz.userId === account.id" class="question-actions">
-          <i (click)="deleteQuestion(question.id, question.order)" class="bi bi-trash delete-question"></i>
-        </div>
-      </div>
+      <app-quiz-question *ngFor="let question of questions" [question]="question" [quiz]="quiz" (deleteQuestionEvent)="removeQuestion($event)"></app-quiz-question>
     </div>
 
   </div>

@@ -5,8 +5,10 @@ export interface Question {
   text: string,
   quizId: string,
   order: number,
+  correctOption: AnswerOption | null,
   options: AnswerOption[] | null
 }
+
 
 export interface CreateQuestion {
   text: string,
