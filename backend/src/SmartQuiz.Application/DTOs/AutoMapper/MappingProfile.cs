@@ -6,6 +6,7 @@ using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Application.DTOs.Reviews;
 using SmartQuiz.Application.DTOs.Users;
+using SmartQuiz.Application.Extensions;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Enums;
 
@@ -21,6 +22,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<Match, GetMatchDto>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(x => x.CreatedAt.ToBrazilianTime()))
             .ForMember(dest => dest.RemainingTimeInSeconds, opt => opt.MapFrom(x => x.GetRemainingTime()));
         
         CreateMap<Question, GetQuestionDto>()
