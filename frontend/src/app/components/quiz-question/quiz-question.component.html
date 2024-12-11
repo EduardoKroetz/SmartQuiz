@@ -6,7 +6,7 @@
     </p>
     <div *ngIf="quiz.userId === account.id" class="question-actions">
       <i class="caret" [class]="detailsOpen ? 'bi-caret-down-fill' : 'bi-caret-up-fill'"></i>
-      <i (click)="deleteQuestion(question.id, question.order)" class="bi bi-trash delete-question"></i>
+      <i (click)="deleteQuestion(question.id, question.order)" class="bi bi-trash delete-question scale-icon"></i>
     </div>
   </div>
   <div class="details" [class]="detailsOpen ? 'open' : ''" >

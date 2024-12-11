@@ -1,34 +1,53 @@
-<div class="quiz" *ngIf="quiz && account">
+<div class="quiz" *ngIf="quiz && account" >
   <div class="title">
     <h1>
       <app-back-icon></app-back-icon>
-      {{ quiz.title }}
+      <input *ngIf="isOwner(); else elseTitle" name="title" class="input-updt" [(ngModel)]="quiz.title" />
     </h1>
     <i *ngIf="quiz.userId === account.id" (click)="toggle()" [class]="quiz.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
   </div>
-  <p>{{ quiz.description }}</p>
+  <input *ngIf="isOwner(); else elseDescription" class="input-updt" [(ngModel)]="quiz.description" name="description" />
   <div class="container-info">
-    <div class="sections-container">
-      <p>Tema</p>
-      <p *ngIf="quiz.expires">Tempo</p>
-      <p>Questões</p>
-      <p>Dificuldade</p>
+    <div>
+      <label for="theme">Tema</label>
+      <input [disabled]="!isOwner()" name="theme" [(ngModel)]="quiz.theme"/>
     </div>
-    <div class="data-container">
-      <p>{{ quiz.theme }}</p>
-      <p *ngIf="quiz.expires">{{ quiz.expiresInSeconds }} segundos</p>
-      <p>{{ quiz.numberOfQuestion }}</p>
-      <p>{{ formatDifficulty(quiz.difficulty) }}</p>
+    <div class="expires-container">
+      <div class="expires">
+        <label for="expires">Expiração</label>
+        <input [disabled]="!isOwner()" [(ngModel)]="quiz.expires" type="checkbox" id="expires" name="expires">
+      </div>
+      <div *ngIf="quiz.expires" class="expiresInSeconds">
+        <label for="expiresInSeconds">Segundos</label>
+        <input [disabled]="!isOwner()" type="number" [(ngModel)]="quiz.expiresInSeconds" id="expiresInSeconds" name="expiresInSeconds">
+      </div>
     </div>
+    <div>
+      <label for="expires">Dificuldade</label>
+      <select [disabled]="!isOwner()" [(ngModel)]="quiz.difficulty" id="difficulty" name="difficulty">
+        <option value="Easy">Fácil</option>
+        <option value="Medium">Médio</option>
+        <option value="Hard">Difícil</option>
+      </select>
+    </div>
+    <div>
+      <label for="expires">Questões</label>
+      <input disabled="" [(ngModel)]="quiz.numberOfQuestion" name="numberOfQuestions"/>
+    </div>
+
   </div>
   <div class="actions-container">
     <app-play-quiz-button *ngIf="quiz.isActive" [quizId]="quiz!.id"></app-play-quiz-button>
     <app-delete-quiz *ngIf="account.id === quiz.userId" [quizId]="quiz.id"></app-delete-quiz>
+    <button *ngIf="isOwner()" (click)="handleUpdateQuiz()" class="update-btn">
+      Atualizar
+      <i class="bi bi-pencil-square"></i>
+    </button>
   </div>
   <div class="questions-container">
     <div class="title-container">
       <h2>Questões</h2>
-      <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn"></i>
+      <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn scale-icon"></i>
     </div>
     <div class="question-list">
       <app-quiz-question *ngFor="let question of questions" [question]="question" [quiz]="quiz" (deleteQuestionEvent)="removeQuestion($event)"></app-quiz-question>
@@ -36,3 +55,11 @@
 
   </div>
 </div>
+
+<ng-template #elseTitle>
+  {{ quiz?.title }}
+</ng-template>
+
+<ng-template #elseDescription>
+  {{ quiz?.description }}
+</ng-template>

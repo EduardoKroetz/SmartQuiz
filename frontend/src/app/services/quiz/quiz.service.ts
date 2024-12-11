@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
-import { CreateQuiz } from '../../interfaces/Quiz';
+import { CreateQuiz, Quiz } from '../../interfaces/Quiz';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +35,10 @@ export class QuizService {
 
   searchQuizzes(reference: string, pageSize: number, pageNumber: number) {
     return this.apiService.get(`quizzes/search?reference=${reference}&pageSize=${pageSize}&pageNumber=${pageNumber}`)
+  }
+
+  updateQuiz(title: string, description: string, expires: boolean, expiresInSeconds: number, difficulty: string, theme: string , quizId: string) 
+  {
+    return this.apiService.put(`quizzes/${quizId}`, { title, description, expires, expiresInSeconds, difficulty, theme })
   }
 }

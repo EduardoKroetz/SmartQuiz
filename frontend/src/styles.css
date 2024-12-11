@@ -57,10 +57,11 @@ button {
   padding: 10px;
   gap: .5rem;
   max-width: max-content;
+  border: 1px solid transparent;
 }
 
 button:hover {
-  transform: scale(1.05);
+  border: 1px solid var(--secondary-color);
 }
 
 button:hover, input:hover, textarea:hover, select:hover {
@@ -74,8 +75,8 @@ i {
   cursor: pointer;
 }
 
-i:hover {
-  transform: scale(1.2);
+.scale-icon:hover {
+  transform: scale(1.15);
 }
 
 a {

@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="actions">
-    <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise"></i>
+    <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise scale-icon"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
   <div *ngIf="responses.length > 0" class="responses-container">

@@ -23,11 +23,9 @@ export class SidebarComponent implements OnInit {
     })
 
     this.currentRoute = this.router.url;
-    console.log('Rota atual:', this.currentRoute);
 
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;;
-      console.log('Rota mudou para:', this.currentRoute);
     })
 
     document.addEventListener('click', (ev) => this.handleCloseSidebar(ev));

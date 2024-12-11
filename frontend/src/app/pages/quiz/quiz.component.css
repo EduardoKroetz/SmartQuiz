@@ -12,10 +12,12 @@
 
 .title {
   justify-content: space-between;
+  gap: .3rem;
 }
 
 .title > h1 {
   display: flex;
+  flex: 1;
 }
 
 .title > i {
@@ -34,6 +36,13 @@
   color: var(--red-color);
 }
 
+.input-updt {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  flex: 1;
+  font-weight: bold;
+}
+
 .container-info, .questions-container{
   display: flex;
   background-color: var(--secondary-color);
@@ -44,23 +53,73 @@
 }
 
 .container-info {
-  flex-direction: row;
-}
-
-.sections-container, .data-container {
-  display: flex;
   flex-direction: column;
-  gap: 0.7rem;
 }
 
-.sections-container > p {
+.container-info > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.container-info > div > label {
+  font-weight: bold;
+  width: 25%;
+}
+
+input, select {
+  flex: 1;
+  background-color: white;
+}
+
+.container-info div select:disabled,
+.container-info div input:disabled
+{
+  background-color: white; 
+  color: var(--primary-color);
+  cursor: text; 
+  opacity: 1; 
+}
+
+.expires-container > div {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+
+.expires-container > div label {
   font-weight: bold;
 }
+
+.expires {
+  padding: 5px 0;
+}
+
+.expires-container #expires {
+  transform: scale(1.4);
+  padding: 10px;
+}
+
+.expiresInSeconds {
+  flex: 1;
+}
+
+.expiresInSeconds input {
+  flex: 1;
+}
+
+/* Actions */
 
 .actions-container {
   display: flex;
   gap: 1rem;
 }
+
+.update-btn {
+  background-color: var(--blue-color);
+}
+
+/* Questions */
 
 .questions-container {
   flex: 1;
@@ -105,6 +164,18 @@
 
 .delete-question {
   color: var(--red-color);
+}
+
+@media screen and (min-width: 768px) {
+  .container-info > div > label {
+    width: 13%;
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  .container-info > div > label {
+    width: 8%;
+  }
 }
 
 @media screen and (min-width: 1920px) {

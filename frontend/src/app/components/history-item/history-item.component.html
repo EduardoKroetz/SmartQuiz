@@ -11,7 +11,7 @@
     <p>{{ formatDate(match.createdAt) }}</p>
   </div>
   <div class="actions">
-    <i [routerLink]="'/quizzes/' + match.quizId" class="bi bi-arrow-clockwise"></i>
+    <i [routerLink]="'/quizzes/' + match.quizId" class="bi bi-arrow-clockwise scale-icon"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
 </div>

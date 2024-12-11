@@ -15,11 +15,12 @@ import { take } from 'rxjs';
 import { QuestionService } from '../../services/question/question.service';
 import { QuizUtils } from '../../utils/quiz-utils';
 import { QuizQuestionComponent } from "../../components/quiz-question/quiz-question.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink, QuizQuestionComponent],
+  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink, QuizQuestionComponent, FormsModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
@@ -69,6 +70,23 @@ export class QuizComponent implements OnInit {
     })
   }
 
+  handleUpdateQuiz() {
+    if (!this.quiz)
+      return
+
+    console.log(this.quiz)
+
+    this.quizService.updateQuiz(
+      this.quiz.title, this.quiz.description, this.quiz.expires, this.quiz.expiresInSeconds, this.quiz.difficulty, this.quiz.theme, this.quiz.id).subscribe({
+        next: () => {
+          this.toastService.showToast('Quiz atualizado com sucesso!', true)
+        },
+        error: (error) => {
+          this.toastService.showToast(error.error.errors[0], false)
+        }
+      })
+  }
+
   toggle() {
     this.confirmationToastService.showToast(`Quer ${this.quiz!.isActive ? 'desativar' : 'ativar'} o quiz?`);
     this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
@@ -95,5 +113,11 @@ export class QuizComponent implements OnInit {
 
   removeQuestion(questionId: string) {
     this.questions = this.questions.filter(x => x.id !== questionId);
+  }
+
+  isOwner() {
+    if (this.quiz && this.account)
+      return this.quiz.userId === this.account.id;
+    return false;
   }
 }
