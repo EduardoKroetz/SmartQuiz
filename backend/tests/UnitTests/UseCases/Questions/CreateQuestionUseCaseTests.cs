@@ -1,8 +1,8 @@
 ﻿using Moq;
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.UseCases.Questions;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -46,14 +46,14 @@ public class CreateQuestionUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act
         var result = await _useCase.Execute(createQuestionDto, userId);
 
         //Assert
-        _questionRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Question>()), Times.Once);
-        _answerOptionRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<AnswerOption>()), Times.Exactly(2));
+        _questionRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Question>()), Times.Once);
+        _answerOptionRepositoryMock.Verify(x => x.AddAsync(It.IsAny<AnswerOption>()), Times.Exactly(2));
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class CreateQuestionUseCaseTests
         var userId = Guid.NewGuid();
         var createQuestionDto = new CreateQuestionDto { QuizId = Guid.NewGuid() };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(createQuestionDto.QuizId, true)).ReturnsAsync((Quiz)null);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(createQuestionDto.QuizId)).ReturnsAsync((Quiz)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(createQuestionDto, userId));
@@ -78,7 +78,7 @@ public class CreateQuestionUseCaseTests
         var quiz = new Quiz { Id = Guid.NewGuid(), Questions = new List<Question>(), UserId = userId };
         var createQuestionDto = new CreateQuestionDto { QuizId = quiz.Id, Order = 0, Text = "Teste?", Options = new List<CreateAnswerOptionInQuestionDto>() { } };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
 
         //Act & Assert
@@ -103,7 +103,7 @@ public class CreateQuestionUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _useCase.Execute(createQuestionDto, userId));
@@ -127,7 +127,7 @@ public class CreateQuestionUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _useCase.Execute(createQuestionDto, userId));
@@ -151,11 +151,11 @@ public class CreateQuestionUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _useCase.Execute(createQuestionDto, userId));
-        _questionRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Question>()), Times.Never);
+        _questionRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Question>()), Times.Never);
     }
 
     [Fact]
@@ -176,10 +176,10 @@ public class CreateQuestionUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _useCase.Execute(createQuestionDto, userId));
-        _questionRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Question>()), Times.Never);
+        _questionRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Question>()), Times.Never);
     }
 }

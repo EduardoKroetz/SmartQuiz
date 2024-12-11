@@ -35,7 +35,7 @@ public class UpdateCorrectOptionUseCaseTests
             Quiz = new Quiz { Id = Guid.NewGuid(), UserId = userId, }
         };
 
-        _questionRepositoryMock.Setup(x => x.GetAsync(question.Id, true)).ReturnsAsync(question);
+        _questionRepositoryMock.Setup(x => x.GetByIdAsync(question.Id)).ReturnsAsync(question);
 
         //Act
         var result = await _useCase.Execute(question.Id, newCorrectOption.Id, userId);
@@ -57,7 +57,7 @@ public class UpdateCorrectOptionUseCaseTests
         var newCorrectOptionId = Guid.NewGuid();
         var userId = Guid.NewGuid();
 
-        _questionRepositoryMock.Setup(r => r.GetAsync(questionId, true)).ReturnsAsync((Question)null);
+        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync((Question)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));
@@ -82,7 +82,7 @@ public class UpdateCorrectOptionUseCaseTests
             }
         };
 
-        _questionRepositoryMock.Setup(r => r.GetAsync(questionId, true)).ReturnsAsync(question);
+        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));
@@ -106,7 +106,7 @@ public class UpdateCorrectOptionUseCaseTests
             }
         };
 
-        _questionRepositoryMock.Setup(r => r.GetAsync(questionId, true)).ReturnsAsync(question);
+        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));

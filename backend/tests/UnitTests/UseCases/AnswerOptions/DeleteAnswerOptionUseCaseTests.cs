@@ -25,7 +25,7 @@ public class DeleteAnswerOptionUseCaseTests
     {
         // Arrange
         var answerOptionId = Guid.NewGuid();
-        _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync((AnswerOption)null);
+        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync((AnswerOption)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -39,8 +39,8 @@ public class DeleteAnswerOptionUseCaseTests
         var answerOptionId = Guid.NewGuid();
         var answerOption = new AnswerOption { Id = answerOptionId, QuestionId = Guid.NewGuid() };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(answerOption.QuestionId, true)).ReturnsAsync((Question)null);
+        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync((Question)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -61,8 +61,8 @@ public class DeleteAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = Guid.NewGuid() } // Outro usuário
         };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(answerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -84,8 +84,8 @@ public class DeleteAnswerOptionUseCaseTests
             AnswerOptions = new List<AnswerOption> { new AnswerOption(), new AnswerOption() } // Exatamente 2 opções
         };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(answerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -110,8 +110,8 @@ public class DeleteAnswerOptionUseCaseTests
             }
         };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetById(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(answerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
 
         // Act
         var result = await _useCase.Execute(answerOptionId, userId);

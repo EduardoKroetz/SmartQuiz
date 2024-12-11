@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
-using SmartQuiz.Core.DTOs.Quizzes;
-using SmartQuiz.Core.DTOs.Reviews;
-using SmartQuiz.Core.DTOs.Users;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Questions;
+using SmartQuiz.Application.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.Reviews;
+using SmartQuiz.Application.DTOs.Users;
 
 namespace IntegrationTests;
 
@@ -230,8 +230,10 @@ public static class Utils
         var quizDto = new EditorQuizDto
         {
             Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
+            Description = "Sample Description Sample Description Sample Description Sample Description Sample Description",
+            Expires = false,
+            Difficulty = "medium",
+            Theme = "Sample Quiz"
         };
 
         var quizData = await CreateQuizAsync(client, token, quizDto);
@@ -240,6 +242,7 @@ public static class Utils
         {
             Text = "Sample Question",
             QuizId = quizId,
+            Order = 0,
             Options = new List<CreateAnswerOptionInQuestionDto>
             {
                 new CreateAnswerOptionInQuestionDto { IsCorrectOption = false, Response = "Sample Option 1" },

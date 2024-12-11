@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using IntegrationTests.Factories;
 using Newtonsoft.Json;
-using SmartQuiz.Core.DTOs.Users;
+using SmartQuiz.Application.DTOs.Users;
 
 namespace IntegrationTests.Controllers;
 

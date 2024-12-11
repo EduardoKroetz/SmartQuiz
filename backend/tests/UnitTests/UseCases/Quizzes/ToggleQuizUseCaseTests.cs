@@ -35,7 +35,7 @@ public class ToggleQuizUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(q => q.GetAsync(quizId, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
         _quizRepositoryMock.Setup(q => q.UpdateAsync(It.IsAny<Quiz>())).Returns(Task.CompletedTask);
 
         // Act
@@ -56,7 +56,7 @@ public class ToggleQuizUseCaseTests
         var quizId = Guid.NewGuid();
         var userId = Guid.NewGuid();
 
-        _quizRepositoryMock.Setup(q => q.GetAsync(quizId, true)).ReturnsAsync((Quiz)null);
+        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _toggleQuizUseCase.Execute(quizId, userId));
@@ -76,7 +76,7 @@ public class ToggleQuizUseCaseTests
             Questions = new List<Question>()
         };
 
-        _quizRepositoryMock.Setup(q => q.GetAsync(quizId, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _toggleQuizUseCase.Execute(quizId, Guid.NewGuid()));
@@ -96,7 +96,7 @@ public class ToggleQuizUseCaseTests
             Questions = new List<Question>()
         };
 
-        _quizRepositoryMock.Setup(q => q.GetAsync(quizId, true)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _toggleQuizUseCase.Execute(quizId, userId));

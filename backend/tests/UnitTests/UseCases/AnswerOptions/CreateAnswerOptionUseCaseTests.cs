@@ -1,8 +1,10 @@
-﻿using Moq;
+﻿using AutoMapper;
+using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.UseCases.AnswerOptions;
-using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.AutoMapper;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -13,13 +15,18 @@ public class CreateAnswerOptionUseCaseTests
 {
     private readonly Mock<IAnswerOptionRepository> _mockAnswerOptionRepository;
     private readonly Mock<IQuestionRepository> _mockQuestionRepository;
+    private readonly IMapper _mapper;
     private readonly CreateAnswerOptionUseCase _useCase;
 
     public CreateAnswerOptionUseCaseTests()
     {
         _mockAnswerOptionRepository = new Mock<IAnswerOptionRepository>();
         _mockQuestionRepository = new Mock<IQuestionRepository>();
-        _useCase = new CreateAnswerOptionUseCase(_mockAnswerOptionRepository.Object, _mockQuestionRepository.Object);
+        _mapper = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        }).CreateMapper();
+        _useCase = new CreateAnswerOptionUseCase(_mockAnswerOptionRepository.Object, _mockQuestionRepository.Object, _mapper);
     }
 
     [Fact]
@@ -27,7 +34,7 @@ public class CreateAnswerOptionUseCaseTests
     {
         // Arrange
         var createAnswerOption = new CreateAnswerOptionDto { QuestionId = Guid.NewGuid() };
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(It.IsAny<Guid>(), true)).ReturnsAsync((Question)null);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Question)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -47,7 +54,7 @@ public class CreateAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = Guid.NewGuid() } // Outro usuário
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -75,7 +82,7 @@ public class CreateAnswerOptionUseCaseTests
             }
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
 
         // Act
         await _useCase.Execute(createAnswerOption, userId);
@@ -103,14 +110,14 @@ public class CreateAnswerOptionUseCaseTests
             AnswerOptions = new List<AnswerOption>()
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetAsync(createAnswerOption.QuestionId, true)).ReturnsAsync(question);
+        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
 
         // Act
         var result = await _useCase.Execute(createAnswerOption, userId);
 
         // Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
-        _mockAnswerOptionRepository.Verify(repo => repo.CreateAsync(It.Is<AnswerOption>(ao =>
+        _mockAnswerOptionRepository.Verify(repo => repo.AddAsync(It.Is<AnswerOption>(ao =>
             ao.QuestionId == createAnswerOption.QuestionId &&
             ao.IsCorrectOption == createAnswerOption.IsCorrectOption &&
             ao.Response == createAnswerOption.Response)), Times.Once);

@@ -1,6 +1,6 @@
 ﻿
 using IntegrationTests.Factories;
-using SmartQuiz.Core.DTOs.Reviews;
+using SmartQuiz.Application.DTOs.Reviews;
 
 namespace IntegrationTests.Controllers;
 

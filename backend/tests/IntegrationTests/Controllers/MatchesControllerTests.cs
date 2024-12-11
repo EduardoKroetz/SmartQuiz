@@ -26,7 +26,6 @@ public class MatchesControllerTests : IClassFixture<SmartQuizWebApplicationFacto
 
         // Assert
         Assert.NotNull(matchData.matchId);
-        Assert.NotNull(matchData.nextQuestion);
     }
 
     [Fact]
@@ -36,7 +35,9 @@ public class MatchesControllerTests : IClassFixture<SmartQuizWebApplicationFacto
         var token = await Utils.SeedUserAsync(_client);
         var quizId = await Utils.SeedQuizAsync(_client, token);
         var matchData = await Utils.CreateMatchAsync(_client, token, quizId);
-        var optionId = (Guid)matchData.nextQuestion.options[0].id;
+        var matchId = (Guid)matchData.matchId;
+        var nextQuestion = await Utils.GetNextQuestionAsync(_client, token, matchId);
+        var optionId = (Guid)nextQuestion.question.options[0].id;
 
         // Act
         var responseData = await Utils.SubmitResponseAsync(_client, token, (Guid)matchData.matchId, optionId);

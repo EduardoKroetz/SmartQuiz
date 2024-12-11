@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using IntegrationTests.Factories;
 using Newtonsoft.Json;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Questions;
 
 namespace IntegrationTests.Controllers;
 

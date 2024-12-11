@@ -1,7 +1,7 @@
 ﻿using IntegrationTests.Factories;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
-using SmartQuiz.Core.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Questions;
+using SmartQuiz.Application.DTOs.Quizzes;
 
 namespace IntegrationTests.Controllers;
 
@@ -26,8 +26,10 @@ public class QuizzesControllerTests : IClassFixture<SmartQuizWebApplicationFacto
         var quizDto = new EditorQuizDto
         {
             Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
+            Description = "Sample Description Sample Description Sample Description Sample Description Sample Description",
+            Expires = false,
+            Difficulty = "Easy",
+            Theme = "Sample Quiz Test"
         };
 
         // Act
@@ -66,8 +68,10 @@ public class QuizzesControllerTests : IClassFixture<SmartQuizWebApplicationFacto
         var quizDto = new EditorQuizDto
         {
             Title = "Sample Quiz",
-            Description = "Sample Description",
-            Expires = false
+            Description = "Sample Description Sample Description Sample Description Sample Description Sample Description",
+            Expires = false,
+            Difficulty = "Easy",
+            Theme = "Sample Quiz Test"
         };
         var quizData = await Utils.CreateQuizAsync(_client, token, quizDto);
         var quizId = (Guid)quizData.id;
@@ -101,11 +105,12 @@ public class QuizzesControllerTests : IClassFixture<SmartQuizWebApplicationFacto
 
         var updatedQuizDto = new EditorQuizDto
         {
-            Title = "Updated Quiz Title",
-            Description = "Updated Description",
-            Expires = false
+            Title = "Sample Quiz Updated",
+            Description = "Sample Description Sample Description Sample Description Sample Description Sample Description",
+            Expires = false,
+            Difficulty = "Easy",
+            Theme = "Sample Quiz Test Updated"
         };
-
         // Act
         var updatedQuiz = await Utils.UpdateQuizAsync(_client, token, updatedQuizDto, quizId);
 

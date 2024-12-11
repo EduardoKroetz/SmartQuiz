@@ -1,6 +1,6 @@
 ﻿
 using IntegrationTests.Factories;
-using SmartQuiz.Core.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.AnswerOptions;
 
 namespace IntegrationTests.Controllers;
 

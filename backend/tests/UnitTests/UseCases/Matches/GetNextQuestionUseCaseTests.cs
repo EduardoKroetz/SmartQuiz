@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using AutoMapper;
+using Moq;
 using Newtonsoft.Json;
+using SmartQuiz.Application.DTOs.AutoMapper;
 using SmartQuiz.Application.UseCases.Matches;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
@@ -10,13 +12,18 @@ public class GetNextQuestionUseCaseTests
 {
     private readonly Mock<IMatchRepository> _matchRepositoryMock;
     private readonly Mock<IQuestionRepository> _questionRepositoryMock;
+    private readonly IMapper _mapper;
     private readonly GetNextQuestionUseCase _useCase;
 
     public GetNextQuestionUseCaseTests()
     {
         _matchRepositoryMock = new Mock<IMatchRepository>();
         _questionRepositoryMock = new Mock<IQuestionRepository>();
-        _useCase = new GetNextQuestionUseCase(_matchRepositoryMock.Object, _questionRepositoryMock.Object);
+        _mapper = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        }).CreateMapper();
+        _useCase = new GetNextQuestionUseCase(_matchRepositoryMock.Object, _questionRepositoryMock.Object, _mapper);
     }
 
     [Fact]
@@ -28,7 +35,7 @@ public class GetNextQuestionUseCaseTests
         var quiz = new Quiz { Questions = new List<Question>() { nextQuestion } };
         var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created };
 
-        _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
+        _matchRepositoryMock.Setup(x => x.GetByIdAsync(match.Id)).ReturnsAsync(match);
         _matchRepositoryMock.Setup(x => x.GetNextQuestion(match)).ReturnsAsync(nextQuestion);
 
         //Act
@@ -49,7 +56,7 @@ public class GetNextQuestionUseCaseTests
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { Id = Guid.NewGuid(), Quiz = quiz, UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Created, Responses = new List<Response>() };
 
-        _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
+        _matchRepositoryMock.Setup(x => x.GetByIdAsync(match.Id)).ReturnsAsync(match);
         _questionRepositoryMock.Setup(x => x.GetQuizQuestionByOrder(match.QuizId, 0)).ReturnsAsync(nextQuestion);
 
         //Act
@@ -68,7 +75,7 @@ public class GetNextQuestionUseCaseTests
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Finished };
 
-        _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
+        _matchRepositoryMock.Setup(x => x.GetByIdAsync(match.Id)).ReturnsAsync(match);
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _useCase.Execute(match.Id, userId));
@@ -83,7 +90,7 @@ public class GetNextQuestionUseCaseTests
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = userId, Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 
-        _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
+        _matchRepositoryMock.Setup(x => x.GetByIdAsync(match.Id)).ReturnsAsync(match);
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _useCase.Execute(match.Id, userId));
@@ -98,7 +105,7 @@ public class GetNextQuestionUseCaseTests
         var quiz = new Quiz { Questions = new List<Question>() { new(), new() } };
         var match = new SmartQuiz.Core.Entities.Match { UserId = Guid.NewGuid(), Status = SmartQuiz.Core.Enums.EMatchStatus.Failed };
 
-        _matchRepositoryMock.Setup(x => x.GetAsync(match.Id)).ReturnsAsync(match);
+        _matchRepositoryMock.Setup(x => x.GetByIdAsync(match.Id)).ReturnsAsync(match);
 
         //Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _useCase.Execute(match.Id, userId));

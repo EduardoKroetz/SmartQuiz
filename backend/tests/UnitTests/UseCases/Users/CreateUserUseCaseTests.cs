@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.Users;
-using SmartQuiz.Core.DTOs.Users;
+using SmartQuiz.Application.DTOs.Users;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -35,7 +35,7 @@ public class CreateUserUseCaseTests
 
 
         // Assert
-        _userRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<User>()), Times.Once);
+        _userRepositoryMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
 
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
         Assert.Equal("mocked_token", (string)data.Token);

@@ -23,7 +23,7 @@ public class FinalizeMatchUseCaseTests
     {
         // Arrange
         var matchId = Guid.NewGuid();
-        _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync((SmartQuiz.Core.Entities.Match)null);
+        _mockMatchRepository.Setup(repo => repo.GetByIdAsync(matchId)).ReturnsAsync((SmartQuiz.Core.Entities.Match)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -38,7 +38,7 @@ public class FinalizeMatchUseCaseTests
         var matchId = Guid.NewGuid();
         var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = Guid.NewGuid() }; // Outro usuário é o dono
 
-        _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
+        _mockMatchRepository.Setup(repo => repo.GetByIdAsync(matchId)).ReturnsAsync(match);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -53,7 +53,7 @@ public class FinalizeMatchUseCaseTests
         var matchId = Guid.NewGuid();
         var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Created };
 
-        _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
+        _mockMatchRepository.Setup(repo => repo.GetByIdAsync(matchId)).ReturnsAsync(match);
 
         // Act
         var result = await _useCase.Execute(matchId, userId);
@@ -73,7 +73,7 @@ public class FinalizeMatchUseCaseTests
         var matchId = Guid.NewGuid();
         var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Finished };
 
-        _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
+        _mockMatchRepository.Setup(repo => repo.GetByIdAsync(matchId)).ReturnsAsync(match);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -88,7 +88,7 @@ public class FinalizeMatchUseCaseTests
         var matchId = Guid.NewGuid();
         var match = new SmartQuiz.Core.Entities.Match { Id = matchId, UserId = userId, Status = EMatchStatus.Failed };
 
-        _mockMatchRepository.Setup(repo => repo.GetAsync(matchId)).ReturnsAsync(match);
+        _mockMatchRepository.Setup(repo => repo.GetByIdAsync(matchId)).ReturnsAsync(match);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>

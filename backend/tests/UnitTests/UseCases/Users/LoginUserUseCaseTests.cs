@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.Users;
-using SmartQuiz.Core.DTOs.Users;
+using SmartQuiz.Application.DTOs.Users;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 

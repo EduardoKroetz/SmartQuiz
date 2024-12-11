@@ -11,15 +11,13 @@ public class CreateMatchUseCaseTests
 {
     private readonly Mock<IMatchRepository> _matchRepositoryMock;
     private readonly Mock<IQuizRepository> _quizRepositoryMock;
-    private readonly Mock<IQuestionRepository> _questionRepositoryMock;
     private readonly CreateMatchUseCase _useCase;
 
     public CreateMatchUseCaseTests()
     {
         _matchRepositoryMock = new Mock<IMatchRepository>();
         _quizRepositoryMock = new Mock<IQuizRepository>();
-        _questionRepositoryMock = new Mock<IQuestionRepository>();
-        _useCase = new CreateMatchUseCase(_matchRepositoryMock.Object, _quizRepositoryMock.Object, _questionRepositoryMock.Object);
+        _useCase = new CreateMatchUseCase(_matchRepositoryMock.Object, _quizRepositoryMock.Object);
     }
 
     [Fact]
@@ -30,8 +28,7 @@ public class CreateMatchUseCaseTests
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = true, ExpiresInSeconds = 120 };
         var nextQuestion = new Question { Id = Guid.NewGuid(), QuizId = quiz.Id, Order = 0, Text = "", AnswerOptions = [] };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, false)).ReturnsAsync(quiz);
-        _questionRepositoryMock.Setup(x => x.GetQuizQuestionByOrder(quiz.Id, 0)).ReturnsAsync(nextQuestion);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act
         var result = await _useCase.Execute(quiz.Id, userId);
@@ -50,7 +47,7 @@ public class CreateMatchUseCaseTests
         //Arrange
         var userId = Guid.NewGuid();
         var quizId = Guid.NewGuid();
-        _quizRepositoryMock.Setup(x => x.GetAsync(quizId, false)).ReturnsAsync((Quiz)null);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(quizId, userId));
@@ -63,7 +60,7 @@ public class CreateMatchUseCaseTests
         var userId = Guid.NewGuid();
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = false };
 
-        _quizRepositoryMock.Setup(x => x.GetAsync(quiz.Id, false)).ReturnsAsync(quiz);
+        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _useCase.Execute(quiz.Id, userId));

@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.UseCases.Quizzes;
-using SmartQuiz.Core.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -22,13 +22,13 @@ public class CreateQuizUseCaseTests
     public async Task Execute_ValidQuiz_ShouldCreate()
     {
         //Arrange
-        var quizDto = new EditorQuizDto { Title = "tite", Description = "description", };
+        var quizDto = new EditorQuizDto { Title = "title", Description = "description", Expires = false, ExpiresInSeconds = 0, Difficulty = "medium", Theme = "quiz"};
 
         //Act
         var result = await _createQuizUseCase.Execute(quizDto, Guid.NewGuid());
 
         //Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
-        _quizRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Quiz>()), Times.Once);
+        _quizRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Quiz>()), Times.Once);
     }
 }
