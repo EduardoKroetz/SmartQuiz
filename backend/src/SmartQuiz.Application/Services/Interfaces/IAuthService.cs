@@ -1,6 +1,4 @@
-﻿
-
-using SmartQuiz.Core.Entities;
+﻿using SmartQuiz.Core.Entities;
 
 namespace SmartQuiz.Application.Services.Interfaces;
 

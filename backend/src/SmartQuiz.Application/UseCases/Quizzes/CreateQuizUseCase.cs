@@ -1,7 +1,6 @@
-﻿
-using SmartQuiz.Application.Common;
-using SmartQuiz.Core.DTOs.Quizzes;
-using SmartQuiz.Core.DTOs.Responses;
+﻿using SmartQuiz.Application.DTOs.Records;
+using SmartQuiz.Application.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
@@ -19,14 +18,11 @@ public class CreateQuizUseCase
 
     public async Task<ResultDto<IdResult>> Execute(EditorQuizDto createQuizDto, Guid userId)
     {
-        if (!Enum.TryParse(createQuizDto.Difficulty, true,out EDifficulty difficulty))
-        {
+        if (!Enum.TryParse(createQuizDto.Difficulty, true, out EDifficulty difficulty))
             throw new InvalidOperationException("Dificuldade inválida. Dificuldades disponíveis: easy, medium, hard");
-        }
-        
+
         var quiz = new Quiz
         {
-            Id = Guid.NewGuid(),
             Title = createQuizDto.Title,
             Description = createQuizDto.Description,
             Difficulty = difficulty,
@@ -37,7 +33,7 @@ public class CreateQuizUseCase
             UserId = userId
         };
 
-        await _quizRepository.CreateAsync(quiz);
+        await _quizRepository.AddAsync(quiz);
 
         return new ResultDto<IdResult>(new IdResult(quiz.Id));
     }

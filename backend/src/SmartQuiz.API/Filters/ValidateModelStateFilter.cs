@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SmartQuiz.API.Extensions;
-using SmartQuiz.Core.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Responses;
 
 namespace SmartQuiz.API.Filters;
 

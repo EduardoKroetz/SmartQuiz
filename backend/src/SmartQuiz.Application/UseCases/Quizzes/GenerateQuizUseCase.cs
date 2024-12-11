@@ -2,38 +2,38 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SmartQuiz.Application.Common;
+using SmartQuiz.Application.DTOs.Records;
 using SmartQuiz.Application.UseCases.Questions;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
-using SmartQuiz.Core.DTOs.Quizzes;
-using SmartQuiz.Core.DTOs.Responses;
-using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Questions;
+using SmartQuiz.Application.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.Responses;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class GenerateQuizUseCase
 {
-    public GenerateQuizUseCase(IQuizRepository quizRepository ,IConfiguration configuration, CreateQuizUseCase createQuizUseCase, ToggleQuizUseCase toggleQuizUseCase, CreateQuestionUseCase createQuestionUseCase)
+    private readonly CreateQuestionUseCase _createQuestionUseCase;
+    private readonly CreateQuizUseCase _createQuizUseCase;
+    private readonly HttpClient _httpClient;
+    private readonly ToggleQuizUseCase _toggleQuizUseCase;
+
+    private readonly string ApiUrl;
+
+    public GenerateQuizUseCase(IConfiguration configuration,
+        CreateQuizUseCase createQuizUseCase, ToggleQuizUseCase toggleQuizUseCase,
+        CreateQuestionUseCase createQuestionUseCase)
     {
         _createQuizUseCase = createQuizUseCase;
         _toggleQuizUseCase = toggleQuizUseCase;
         _createQuestionUseCase = createQuestionUseCase;
         _createQuizUseCase = createQuizUseCase;
-        _quizRepository = quizRepository;
         var geminiApiKey = configuration["GeminiApiKey"] ?? throw new Exception("Gemini ApiKey is missing");
         _httpClient = new HttpClient();
-        ApiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={geminiApiKey}";
+        ApiUrl =
+            $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={geminiApiKey}";
     }
 
-    private readonly string ApiUrl;
-    private readonly HttpClient _httpClient;
-    private readonly CreateQuizUseCase _createQuizUseCase;
-    private readonly ToggleQuizUseCase _toggleQuizUseCase;
-    private readonly CreateQuestionUseCase _createQuestionUseCase;
-    private readonly IQuizRepository _quizRepository;
-    
     public async Task<ResultDto<IdResult>> Execute(GenerateQuizDto generateQuizDto, Guid userId)
     {
         var prompt = @$"
@@ -57,19 +57,19 @@ public class GenerateQuizUseCase
                     ]
                 }}
         ";
-        
+
         var payload = new
         {
-           contents = new object[]
-           {
-               new
-               {
-                   parts = new object[]
-                   {
-                       new { text = prompt }
-                   }
-               }
-           }
+            contents = new object[]
+            {
+                new
+                {
+                    parts = new object[]
+                    {
+                        new { text = prompt }
+                    }
+                }
+            }
         };
 
         var content = new StringContent(
@@ -77,7 +77,7 @@ public class GenerateQuizUseCase
             Encoding.UTF8,
             "application/json"
         );
-        
+
         //Requisição para o Gemini
         var response = await _httpClient.PostAsync(ApiUrl, content);
         if (response.IsSuccessStatusCode == false)
@@ -89,23 +89,18 @@ public class GenerateQuizUseCase
         // Deserializar a resposta completa com metadados
         var responseContentString = await response.Content.ReadAsStringAsync();
         var geminiContent = JsonConvert.DeserializeObject<dynamic>(responseContentString);
-        if (geminiContent == null)
-        {
-            throw new InvalidOperationException("Dados em formato inválido");
-        }
-        
+        if (geminiContent == null) throw new InvalidOperationException("Dados em formato inválido");
+
         //Pegar somente o texto gerado e converter para um formato json válido
         var escapedJsonString = geminiContent.candidates[0].content.parts[0].text;
-        var jsonString = (string) Regex.Replace(escapedJsonString.ToString(), @"\\", string.Empty);
+        var jsonString = (string)Regex.Replace(escapedJsonString.ToString(), @"\\", string.Empty);
         jsonString = jsonString.Trim();
         jsonString = jsonString.Substring(1, jsonString.Length - 2);
-        
+
         // Deserializar o conteúdo JSON
         var quizResponse = JsonConvert.DeserializeObject<QuizResponse>(jsonString);
         if (quizResponse == null)
-        {
             throw new ArgumentException("O conteúdo do JSON gerado não pôde ser deserializado corretamente.");
-        }
 
         //Criar o quiz com base nas informações da resposta
         var editorQuizDto = new EditorQuizDto
@@ -121,7 +116,7 @@ public class GenerateQuizUseCase
         //Criar o Quiz
         var quizResultDto = await _createQuizUseCase.Execute(editorQuizDto, userId);
         var quizId = quizResultDto.Data!.Id;
-        
+
         //Criar as questões para o quiz
         foreach (var questionResponse in quizResponse.Questions)
         {
@@ -136,7 +131,7 @@ public class GenerateQuizUseCase
                 };
                 optionsDto.Add(answerOptionDto);
             }
-        
+
             //Criar a questão
             var createQuestionDto = new CreateQuestionDto
             {
@@ -145,13 +140,13 @@ public class GenerateQuizUseCase
                 Text = questionResponse.Text,
                 Options = optionsDto
             };
-        
+
             await _createQuestionUseCase.Execute(createQuestionDto, userId);
         }
 
         //Ativar o quiz
         await _toggleQuizUseCase.Execute(quizId, userId);
-        
+
         return new ResultDto<IdResult>(new IdResult(quizResultDto.Data!.Id));
     }
 }

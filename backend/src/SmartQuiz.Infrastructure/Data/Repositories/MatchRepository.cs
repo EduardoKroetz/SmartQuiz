@@ -1,27 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SmartQuiz.Core.DTOs.Matches;
-using SmartQuiz.Core.DTOs.Quizzes;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
+using SmartQuiz.Infrastructure.Data.Repositories.Base;
 
 namespace SmartQuiz.Infrastructure.Data.Repositories;
 
-public class MatchRepository : IMatchRepository
+public class MatchRepository : Repository<Match>, IMatchRepository
 {
-    private readonly SmartQuizDbContext _dbContext;
     private readonly IQuestionRepository _questionRepository;
 
-    public MatchRepository(SmartQuizDbContext dbContext, IQuestionRepository questionRepository)
+    public MatchRepository(SmartQuizDbContext dbContext, IQuestionRepository questionRepository) : base(dbContext)
     {
-        _dbContext = dbContext;
         _questionRepository = questionRepository;
-    }
-
-    public async Task CreateAsync(Match match)
-    {
-        await _dbContext.Matches.AddAsync(match);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Question?> GetNextQuestion(Match match)
@@ -30,11 +21,11 @@ public class MatchRepository : IMatchRepository
         // Basicamente ele ordena de forma decrescente pela ordem
         // das questões no Quiz que está sendo jogado
         // e então pega o primeiro (em ordem decrescente)
-        var lastResponse = await _dbContext
+        var lastResponse = await context
             .Responses
             .Where(x => x.MatchId.Equals(match.Id))
             .Include(x => x.AnswerOption)
-                .ThenInclude(x => x.Question)
+            .ThenInclude(x => x.Question)
             .OrderByDescending(x => x.AnswerOption.Question.Order)
             .Select(x => new { x.AnswerOption.Question.Order })
             .FirstOrDefaultAsync();
@@ -46,65 +37,19 @@ public class MatchRepository : IMatchRepository
         return await _questionRepository.GetQuizQuestionByOrder(match.QuizId, lastResponse.Order + 1);
     }
 
-    public async Task<Match?> GetAsync(Guid matchId)
+    public new async Task<Match?> GetByIdAsync(Guid matchId)
     {
-        return await _dbContext.Matches
+        return await context.Matches
             .Include(x => x.Responses)
             .Include(x => x.Quiz)
             .ThenInclude(x => x.Questions)
             .FirstOrDefaultAsync(x => x.Id == matchId);
     }
 
-    public async Task<GetMatchDto?> GetDetailsAsync(Guid matchId)
+    public async Task<List<Match>> GetMatchesAsync(Guid userId, int skip, int take, string? reference = null,
+        string? status = null, bool? reviewed = null, string? orderBy = null)
     {
-        return await _dbContext.Matches
-            .Include(x => x.Responses)
-            .Include(x => x.Quiz)
-            .ThenInclude(x => x.Questions)
-            .Select(x => new GetMatchDto
-            {
-                Id = x.Id,
-                Score = x.Score,
-                CreatedAt = x.CreatedAt,
-                ExpiresIn = x.ExpiresIn,
-                Status = x.Status.ToString(),
-                QuizId = x.QuizId,
-                UserId = x.UserId,
-                Reviewed = x.Reviewed,
-                ReviewId = x.ReviewId,
-                RemainingTimeInSeconds = x.GetRemainingTime(),
-                Quiz = new GetQuizDto
-                (
-                    x.Quiz.Id,
-                    x.Quiz.Title,
-                    x.Quiz.Description,
-                    x.Quiz.Expires,
-                    x.Quiz.ExpiresInSeconds,
-                    x.Quiz.IsActive,
-                    x.Quiz.Theme,
-                    x.Quiz.Questions.Count,
-                    x.Quiz.Difficulty,
-                    x.Quiz.UserId
-                )
-            })
-            .FirstOrDefaultAsync(x => x.Id == matchId);
-    }
-
-    public async Task UpdateAsync(Match match)
-    {
-        _dbContext.Matches.Update(match);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(Match match)
-    {
-        _dbContext.Matches.Remove(match);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<List<GetMatchDto>> GetMatchesAsync(Guid userId, int skip, int take, string? reference = null, string? status = null, bool? reviewed = null, string? orderBy = null)
-    {
-        var query = _dbContext.Matches.AsQueryable();
+        var query = context.Matches.AsQueryable();
 
         query = query.Include(x => x.Quiz);
 
@@ -121,34 +66,19 @@ public class MatchRepository : IMatchRepository
         if (status != null)
         {
             if (status == "created")
-            {
                 query = query.Where(x => x.Status.Equals(EMatchStatus.Created));
-            }
             else if (status == "finished")
-            {
                 query = query.Where(x => x.Status.Equals(EMatchStatus.Finished));
-            }
-            else if (status == "failed")
-            {
-                query = query.Where(x => x.Status.Equals(EMatchStatus.Failed));
-            }
+            else if (status == "failed") query = query.Where(x => x.Status.Equals(EMatchStatus.Failed));
         }
 
-        if (reviewed != null)
-        {
-            query = query.Where(x => x.Reviewed.Equals(reviewed));
-        }
+        if (reviewed != null) query = query.Where(x => x.Reviewed.Equals(reviewed));
 
         if (orderBy != null)
         {
             if (orderBy == "score")
-            {
                 query = query.OrderBy(x => x.Score);
-            }
-            else if (orderBy == "created_at")
-            {
-                query = query.OrderBy(x => x.CreatedAt);
-            }
+            else if (orderBy == "created_at") query = query.OrderBy(x => x.CreatedAt);
         }
         else
         {
@@ -162,33 +92,18 @@ public class MatchRepository : IMatchRepository
             .OrderByDescending(x => x.CreatedAt)
             .Include(x => x.Quiz)
             .ThenInclude(x => x.Questions)
-            .Select(x => new GetMatchDto
-            {
-                Id = x.Id,
-                Score = x.Score,
-                CreatedAt = x.CreatedAt,
-                ExpiresIn = x.ExpiresIn,
-                Status = x.Status.ToString(),
-                QuizId = x.QuizId,
-                UserId = x.UserId,
-                Reviewed = x.Reviewed,
-                ReviewId = x.ReviewId,
-                RemainingTimeInSeconds = x.GetRemainingTime(),
-                Quiz = new GetQuizDto
-                (
-                    x.Quiz.Id,
-                    x.Quiz.Title,
-                    x.Quiz.Description,
-                    x.Quiz.Expires,
-                    x.Quiz.ExpiresInSeconds,
-                    x.Quiz.IsActive,
-                    x.Quiz.Theme,
-                    x.Quiz.Questions.Count,
-                    x.Quiz.Difficulty,
-                    x.Quiz.UserId
-                )
-            })
             .ToListAsync();
+    }
 
+    public async Task<List<Match>> GetUserMatchesAsync(Guid userId, int skip, int take)
+    {
+        return await context.Matches
+            .AsNoTracking()
+            .Where(x => x.UserId == userId)
+            .Skip(skip)
+            .Take(take)
+            .Include(x => x.Quiz)
+            .ThenInclude(x => x.Questions)
+            .ToListAsync();
     }
 }

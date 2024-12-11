@@ -1,5 +1,5 @@
 ﻿using SmartQuiz.Application.Exceptions;
-using SmartQuiz.Core.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
@@ -15,24 +15,15 @@ public class ToggleQuizUseCase
 
     public async Task<ResultDto> Execute(Guid quizId, Guid userId)
     {
-        var quiz = await _quizRepository.GetAsync(quizId, true);
-        if (quiz == null)
-        {
+        var quiz = await _quizRepository.GetByIdAsync(quizId);
+        if (quiz == null) 
             throw new NotFoundException("Quiz não encontrado");
-        }
 
         if (quiz.UserId != userId)
-        {
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-        }
 
-        if (quiz.IsActive == false)
-        {
-            if (quiz.Questions.Count == 0)
-            {
-                throw new ArgumentException("Não é possível ativar o Quiz pois ele não possui nenhuma questão relacionada");
-            }
-        }
+        if (quiz.IsActive == false && quiz.Questions.Count == 0)
+            throw new ArgumentException("Não é possível ativar o Quiz pois ele não possui nenhuma questão relacionada");
 
         quiz.IsActive = !quiz.IsActive;
 

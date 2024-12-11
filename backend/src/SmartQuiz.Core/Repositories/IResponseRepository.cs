@@ -1,10 +1,8 @@
-﻿using SmartQuiz.Core.DTOs.Responses;
-using SmartQuiz.Core.Entities;
+﻿using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories.Base;
 
 namespace SmartQuiz.Core.Repositories;
 
-public interface IResponseRepository
+public interface IResponseRepository : IRepository<Response>
 {
-    Task CreateAsync(Response matchResponse);
-    Task<List<GetResponseDto>> GetResponsesByMatch(Guid matchId);
 }

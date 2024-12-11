@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartQuiz.API.Extensions;
 using SmartQuiz.Application.UseCases.Quizzes;
-using SmartQuiz.Core.DTOs.Quizzes;
+using SmartQuiz.Application.DTOs.Quizzes;
 
 namespace SmartQuiz.API.Controllers;
 
@@ -52,23 +52,6 @@ public class QuizzesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchQuizAsync([FromServices] SearchQuizUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1, [FromQuery] string? reference = null)
-    {
-        var result = await useCase.Execute(reference, pageSize, pageNumber);
-        return Ok(result);
-    }
-
-    /// <summary>
-    /// Pesquisar Quiz por Reviews e ordenar por maior avaliação
-    /// </summary>
-    /// <param name="reference"></param>
-    /// <param name="useCase"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="pageNumber"></param>
-    /// <returns></returns>
-    [HttpGet("reviews/search")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> SearchQuizByReviewsAsync([FromServices] SearchQuizByReviewsUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1, [FromQuery] string? reference = null)
     {
         var result = await useCase.Execute(reference, pageSize, pageNumber);
         return Ok(result);

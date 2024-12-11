@@ -1,5 +1,5 @@
-﻿
-using SmartQuiz.Core.DTOs.Responses;
+﻿using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Responses;
@@ -7,10 +7,11 @@ namespace SmartQuiz.Application.UseCases.Responses;
 public class CreateResponseUseCase
 {
     private readonly IAnswerOptionRepository _answerOptionRepository;
-    private readonly IResponseRepository _responseRepository;
     private readonly IMatchRepository _matchRepository;
+    private readonly IResponseRepository _responseRepository;
 
-    public CreateResponseUseCase(IAnswerOptionRepository answerOptionRepository, IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
+    public CreateResponseUseCase(IAnswerOptionRepository answerOptionRepository,
+        IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
     {
         _answerOptionRepository = answerOptionRepository;
         _responseRepository = matchResponseRepository;
@@ -20,39 +21,26 @@ public class CreateResponseUseCase
     public async Task<ResultDto> Execute(Guid userId, Guid matchId, Guid answerOptionId)
     {
         //Buscar opção
-        var answerOption = await _answerOptionRepository.GetById(answerOptionId);
-        if (answerOption == null)
-        {
-            throw new ArgumentException("Opção não encontrada");
-        }
+        var answerOption = await _answerOptionRepository.GetByIdAsync(answerOptionId);
+        if (answerOption == null) throw new ArgumentException("Opção não encontrada");
 
         //Buscar partida
-        var match = await _matchRepository.GetAsync(matchId);
-        if (match == null)
-        {
-            throw new ArgumentException("Partida não encontrada");
-        }
+        var match = await _matchRepository.GetByIdAsync(matchId);
+        if (match == null) throw new ArgumentException("Partida não encontrada");
 
         if (match.UserId != userId)
-        {
             throw new UnauthorizedAccessException("Você não tem permissão acessar esse recurso");
-        }
 
-        if (match.Status == Core.Enums.EMatchStatus.Finished)
-        {
+        if (match.Status == EMatchStatus.Finished)
             throw new InvalidOperationException("Essa partida já foi finalizada");
-        }
 
-        if (match.Status == Core.Enums.EMatchStatus.Failed)
-        {
-            throw new InvalidOperationException("Partida expirada");
-        }
+        if (match.Status == EMatchStatus.Failed) throw new InvalidOperationException("Partida expirada");
 
         //Verificar se o tempo de expiração já passou
         if (match.AlreadyExpiration() && match.Quiz.Expires)
         {
             //Finalizar a partida caso já tenha expirado
-            match.Status = Core.Enums.EMatchStatus.Failed;
+            match.Status = EMatchStatus.Failed;
             await _matchRepository.UpdateAsync(match);
 
             throw new InvalidOperationException("Partida expirada");
@@ -61,12 +49,12 @@ public class CreateResponseUseCase
         //Criar resposta
         var matchResponse = match.CreateResponse(answerOption);
 
-        await _responseRepository.CreateAsync(matchResponse);
+        await _responseRepository.AddAsync(matchResponse);
 
         //Finaliza a partida caso essa seja a última questão
         if (answerOption.Question.Order + 1 == match.Quiz.Questions.Count)
         {
-            match.Status = Core.Enums.EMatchStatus.Finished;
+            match.Status = EMatchStatus.Finished;
             await _matchRepository.UpdateAsync(match);
         }
 
@@ -79,5 +67,4 @@ public class CreateResponseUseCase
 
         return new ResultDto(new { ResponseId = matchResponse.Id, MatchId = matchId });
     }
-
 }

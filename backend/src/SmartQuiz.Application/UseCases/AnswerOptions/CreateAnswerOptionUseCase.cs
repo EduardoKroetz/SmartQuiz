@@ -1,7 +1,7 @@
-﻿
+﻿using AutoMapper;
 using SmartQuiz.Application.Exceptions;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Responses;
+using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -11,25 +11,23 @@ public class CreateAnswerOptionUseCase
 {
     private readonly IAnswerOptionRepository _answerOptionRepository;
     private readonly IQuestionRepository _questionRepository;
+    private readonly IMapper _mapper;
 
-    public CreateAnswerOptionUseCase(IAnswerOptionRepository answerOptionRepository, IQuestionRepository questionRepository)
+    public CreateAnswerOptionUseCase(IAnswerOptionRepository answerOptionRepository, IQuestionRepository questionRepository, IMapper mapper)
     {
         _answerOptionRepository = answerOptionRepository;
         _questionRepository = questionRepository;
+        _mapper = mapper;
     }
 
     public async Task<ResultDto> Execute(CreateAnswerOptionDto createAnswerOption, Guid userId)
     {
-        var question = await _questionRepository.GetAsync(createAnswerOption.QuestionId);
-        if (question == null)
-        {
+        var question = await _questionRepository.GetByIdAsync(createAnswerOption.QuestionId);
+        if (question == null) 
             throw new NotFoundException("Questão não encontrada");
-        }
 
         if (question.Quiz.UserId != userId)
-        {
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-        }
 
         //Caso seja a opção que está sendo criada é a correta da questão, vai remover a opção correta atual da questão
         if (createAnswerOption.IsCorrectOption)
@@ -43,15 +41,9 @@ public class CreateAnswerOptionUseCase
             }
         }
 
-        var answerOption = new AnswerOption
-        {
-            Id = Guid.NewGuid(),
-            IsCorrectOption = createAnswerOption.IsCorrectOption,
-            QuestionId = createAnswerOption.QuestionId,
-            Response = createAnswerOption.Response
-        };
+        var answerOption = _mapper.Map<AnswerOption>(createAnswerOption);
 
-        await _answerOptionRepository.CreateAsync(answerOption);
+        await _answerOptionRepository.AddAsync(answerOption);
 
         return new ResultDto(new { AnswerOptionId = answerOption.Id, QuestionId = question.Id });
     }

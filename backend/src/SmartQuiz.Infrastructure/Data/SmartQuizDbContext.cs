@@ -5,7 +5,9 @@ namespace SmartQuiz.Infrastructure.Data;
 
 public class SmartQuizDbContext : DbContext
 {
-    public SmartQuizDbContext(DbContextOptions<SmartQuizDbContext> options) : base(options) { }
+    public SmartQuizDbContext(DbContextOptions<SmartQuizDbContext> options) : base(options)
+    {
+    }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
@@ -14,7 +16,6 @@ public class SmartQuizDbContext : DbContext
     public DbSet<AnswerOption> AnswerOptions { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Response> Responses { get; set; }
-    public DbSet<EmailCode> EmailCodes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -40,20 +41,17 @@ public class SmartQuizDbContext : DbContext
         {
             options.HasKey(x => x.Id);
             options.Property(x => x.Difficulty).HasConversion<string>();
-            
+
             options.HasMany(x => x.Questions)
                 .WithOne(x => x.Quiz)
                 .HasForeignKey(x => x.QuizId);
 
             options.HasMany(x => x.Matchs)
-                 .WithOne(x => x.Quiz)
-                 .HasForeignKey(x => x.QuizId);
+                .WithOne(x => x.Quiz)
+                .HasForeignKey(x => x.QuizId);
         });
 
-        builder.Entity<Match>(options =>
-        {
-            options.HasKey(x => x.Id);
-        });
+        builder.Entity<Match>(options => { options.HasKey(x => x.Id); });
 
         builder.Entity<Question>(options =>
         {
@@ -85,12 +83,6 @@ public class SmartQuizDbContext : DbContext
 
             options.HasOne(x => x.Quiz)
                 .WithMany();
-        });
-
-        builder.Entity<EmailCode>(options =>
-        {
-            options.HasKey(x => x.Code);
-            options.HasIndex(x => x.Email).IsUnique(true);
         });
     }
 }

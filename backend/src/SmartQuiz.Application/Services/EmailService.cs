@@ -16,10 +16,13 @@ public class EmailService : IEmailService
 
     public async Task SendEmailAsync(string to, string subject, string message)
     {
-        var from = _configuration["Emails:Sender"] ?? throw new Exception("Não foi possível encontrar o email nas configurações");
-        var senderPassword = _configuration["Emails:SenderPassword"] ?? throw new Exception("Não foi possível encontrar o email nas configurações");
+        var from = _configuration["Emails:Sender"] ??
+                   throw new Exception("Não foi possível encontrar o email nas configurações");
+        var senderPassword = _configuration["Emails:SenderPassword"] ??
+                             throw new Exception("Não foi possível encontrar o email nas configurações");
 
-        var emailServer = _configuration["Emails:Server"] ?? throw new Exception("Não foi possível encontrar o servidor de email nas configurações");
+        var emailServer = _configuration["Emails:Server"] ??
+                          throw new Exception("Não foi possível encontrar o servidor de email nas configurações");
 
         var mailMessage = new MailMessage(from, to);
         mailMessage.Subject = subject;
@@ -43,5 +46,4 @@ public class EmailService : IEmailService
             throw new Exception("Não foi possível enviar o e-mail");
         }
     }
-
 }

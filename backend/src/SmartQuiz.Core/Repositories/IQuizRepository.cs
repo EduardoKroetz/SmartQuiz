@@ -1,15 +1,12 @@
 ﻿
 using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories.Base;
 
 namespace SmartQuiz.Core.Repositories;
 
-public interface IQuizRepository
+public interface IQuizRepository : IRepository<Quiz>
 {
-    Task CreateAsync(Quiz quiz);
-    Task<Quiz?> GetAsync(Guid id, bool includeQuestions = false);
-    Task<List<Quiz>> SearchQuizByReviews(string[]? keyWords, int skip, int take);
     Task<List<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take);
-    Task UpdateAsync(Quiz quiz);
-    Task DeleteAsync(Quiz quiz);
     Task<bool> HasMatchesRelated(Guid quizId);
+    Task<List<Quiz>> GetUserQuizzesAsync(Guid userId, int skip, int take);
 }

@@ -1,9 +1,10 @@
 ﻿
+using SmartQuiz.Core.Entities.Base;
+
 namespace SmartQuiz.Core.Entities;
 
-public class Question
+public class Question : Entity
 {
-    public Guid Id { get; set; }
     public string Text { get; set; }
     public Guid QuizId { get; set; }
     public Quiz Quiz { get; set; }

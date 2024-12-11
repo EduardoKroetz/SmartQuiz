@@ -1,12 +1,12 @@
-﻿using SmartQuiz.Core.Enums;
+﻿using SmartQuiz.Core.Entities.Base;
+using SmartQuiz.Core.Enums;
 
 namespace SmartQuiz.Core.Entities;
 
-public class Match
+public class Match : Entity
 {
-    public Guid Id { get; set; }
     public int Score { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public EMatchStatus Status { get; set; }
     public Guid QuizId { get; set; }
     public Quiz Quiz { get; set; }

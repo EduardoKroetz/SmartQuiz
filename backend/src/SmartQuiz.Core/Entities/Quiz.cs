@@ -1,10 +1,10 @@
-﻿using SmartQuiz.Core.Enums;
+﻿using SmartQuiz.Core.Entities.Base;
+using SmartQuiz.Core.Enums;
 
 namespace SmartQuiz.Core.Entities;
 
-public class Quiz
+public class Quiz : Entity
 {
-    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string Theme { get; set; }

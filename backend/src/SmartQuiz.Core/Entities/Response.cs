@@ -1,10 +1,11 @@
 ﻿
 
+using SmartQuiz.Core.Entities.Base;
+
 namespace SmartQuiz.Core.Entities;
 
-public class Response
+public class Response : Entity
 {
-    public Guid Id { get; set; }
     public Guid AnswerOptionId { get; set; }
     public AnswerOption AnswerOption { get; set; }
     public Guid MatchId { get; set; }

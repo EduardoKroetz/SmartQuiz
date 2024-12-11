@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartQuiz.API.Extensions;
 using SmartQuiz.Application.UseCases.Reviews;
-using SmartQuiz.Core.DTOs.Reviews;
+using SmartQuiz.Application.DTOs.Reviews;
 
 namespace SmartQuiz.API.Controllers;
 

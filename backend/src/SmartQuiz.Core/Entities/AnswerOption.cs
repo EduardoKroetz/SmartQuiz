@@ -1,9 +1,10 @@
 ﻿
+using SmartQuiz.Core.Entities.Base;
+
 namespace SmartQuiz.Core.Entities;
 
-public class AnswerOption
+public class AnswerOption : Entity
 {
-    public Guid Id { get; set; }
     public string Response { get; set; }
     public bool IsCorrectOption { get; set; }
     public Guid QuestionId { get; set; }

@@ -1,13 +1,13 @@
-﻿namespace SmartQuiz.Core.Entities;
+﻿using SmartQuiz.Core.Entities.Base;
 
-public class User
+namespace SmartQuiz.Core.Entities;
+
+public class User : Entity
 {
-    public Guid Id { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public List<Match> Matches { get; set; } = [];
     public List<Quiz> Quizzes { get; set; } = [];
     public List<Review> Reviews { get; set; } = [];
-    public bool EmailIsVerified { get; set; }
 }

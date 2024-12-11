@@ -1,5 +1,4 @@
-﻿
-namespace SmartQuiz.Application.Services.Interfaces;
+﻿namespace SmartQuiz.Application.Services.Interfaces;
 
 public interface IEmailService
 {

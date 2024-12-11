@@ -45,26 +45,6 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                     b.ToTable("AnswerOptions");
                 });
 
-            modelBuilder.Entity("SmartQuiz.Core.Entities.EmailCode", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Code");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("EmailCodes");
-                });
-
             modelBuilder.Entity("SmartQuiz.Core.Entities.Match", b =>
                 {
                     b.Property<Guid>("Id")
@@ -232,9 +212,6 @@ namespace SmartQuiz.Infrastructure.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("EmailIsVerified")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()

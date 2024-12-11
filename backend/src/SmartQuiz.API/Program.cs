@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmartQuiz.API.Filters;
 using SmartQuiz.API.Middlewares;
+using SmartQuiz.Application.DTOs.AutoMapper;
 using SmartQuiz.Application.Services;
 using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.AnswerOptions;
@@ -15,7 +16,7 @@ using SmartQuiz.Application.UseCases.Quizzes;
 using SmartQuiz.Application.UseCases.Responses;
 using SmartQuiz.Application.UseCases.Reviews;
 using SmartQuiz.Application.UseCases.Users;
-using SmartQuiz.Core.DTOs.Questions;
+using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Core.Repositories;
 using SmartQuiz.Infrastructure.Data;
 using SmartQuiz.Infrastructure.Data.Repositories;
@@ -122,6 +123,9 @@ void InjectDependencies(IServiceCollection services)
         };
     });
 
+    //Add AutoMapper
+    services.AddAutoMapper(typeof(MappingProfile));
+    
     services.AddProblemDetails();
     services.AddExceptionHandler<ExceptionHandler>();
 
@@ -133,7 +137,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<IMatchRepository, MatchRepository>();
     services.AddScoped<IResponseRepository, ResponseRepository>();
     services.AddScoped<IReviewRepository, ReviewRepository>();
-    services.AddScoped<IEmailCodeRepository, EmailCodeRepository>();
 
     //Services
     services.AddScoped<IAuthService, AuthService>();
@@ -151,7 +154,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<CreateQuizUseCase>();
     services.AddScoped<GetQuizByIdUseCase>();
     services.AddScoped<SearchQuizUseCase>();
-    services.AddScoped<SearchQuizByReviewsUseCase>();
     services.AddScoped<ToggleQuizUseCase>();
     services.AddScoped<UpdateQuizUseCase>();
     services.AddScoped<DeleteQuizUseCase>();
@@ -182,9 +184,6 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<DeleteReviewUseCase>();
     services.AddScoped<UpdateReviewUseCase>();
     services.AddScoped<GetReviewDetailsUseCase>();
-
-    services.AddScoped<VerifyEmailUseCase>();
-    services.AddScoped<VerifyEmailCodeUseCase>();
 }
 
 public class Startup { }

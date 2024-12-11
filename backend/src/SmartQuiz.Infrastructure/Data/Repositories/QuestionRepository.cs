@@ -1,96 +1,46 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
+using SmartQuiz.Infrastructure.Data.Repositories.Base;
 
 namespace SmartQuiz.Infrastructure.Data.Repositories;
 
-public class QuestionRepository : IQuestionRepository
+public class QuestionRepository : Repository<Question>, IQuestionRepository
 {
-    private readonly SmartQuizDbContext _dbContext;
-
-    public QuestionRepository(SmartQuizDbContext dbContext)
+    public QuestionRepository(SmartQuizDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
-    public async Task CreateAsync(Question question)
+    public new async Task<Question?> GetByIdAsync(Guid id)
     {
-        await _dbContext.Questions.AddAsync(question);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<Question?> GetAsync(Guid id, bool includeRelations = true)
-    {
-        var query = _dbContext.Questions.AsQueryable();
-
-        if (includeRelations)
-        {
-            query = query.Include(x => x.AnswerOptions).Include(x => x.Quiz);
-        }
-
-        return await query.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        return await context.Questions
+            .Include(x => x.AnswerOptions)
+            .Include(x => x.Quiz)
+            .FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public async Task<Question?> GetQuizQuestionByOrder(Guid quizId, int order)
     {
-        return await _dbContext
+        return await context
             .Questions
-                .Include(x => x.AnswerOptions)
+            .Include(x => x.AnswerOptions)
             .Where(x => x.QuizId.Equals(quizId))
             .Where(x => x.Order.Equals(order))
-            .Select(x => new Question { Id = x.Id, Text = x.Text, Order = x.Order, AnswerOptions = x.AnswerOptions, QuizId = x.QuizId })
             .FirstOrDefaultAsync();
     }
 
     public async Task UpdateRangeAsync(List<Question> questions)
     {
-        _dbContext.Questions.UpdateRange(questions);
-        await _dbContext.SaveChangesAsync();
+        context.Questions.UpdateRange(questions);
+        await context.SaveChangesAsync();
     }
 
-    public async Task<List<GetQuestionDto>> GetQuestionsByQuizId(Guid quizId)
+    public async Task<List<Question>> GetQuestionsByQuizId(Guid quizId)
     {
-        return await _dbContext.Questions
+        return await context.Questions
             .AsNoTracking()
             .Where(x => x.QuizId == quizId)
-            .Select(x => new GetQuestionDto
-            {
-                Id = x.Id,
-                Text = x.Text,
-                QuizId = x.QuizId,
-                Order = x.Order,
-                Options = x.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response)).ToList()
-            })
             .OrderBy(x => x.Order)
             .ToListAsync();
-    }
-
-    public async Task<GetQuestionDto?> GetQuestionDetails(Guid questionId)
-    {
-        return await _dbContext.Questions
-            .AsNoTracking()
-            .Select(x => new GetQuestionDto
-            {
-                Id = x.Id,
-                Text = x.Text,
-                QuizId = x.QuizId,
-                Order = x.Order,
-                Options = x.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response)).ToList()
-            })
-            .FirstOrDefaultAsync(x => x.Id == questionId);
-    }
-
-    public async Task UpdateAsync(Question question)
-    {
-        _dbContext.Questions.Update(question);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(Question question)
-    {
-        _dbContext.Questions.Remove(question);
-        await _dbContext.SaveChangesAsync();
     }
 }

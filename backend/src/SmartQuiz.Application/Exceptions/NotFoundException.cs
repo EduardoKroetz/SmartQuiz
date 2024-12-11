@@ -1,5 +1,4 @@
-﻿
-namespace SmartQuiz.Application.Exceptions;
+﻿namespace SmartQuiz.Application.Exceptions;
 
 public class NotFoundException : Exception
 {

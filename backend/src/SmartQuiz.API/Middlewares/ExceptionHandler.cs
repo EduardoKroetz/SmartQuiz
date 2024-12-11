@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using SmartQuiz.Core.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Responses;
 
 namespace SmartQuiz.API.Middlewares;
 

@@ -1,7 +1,6 @@
-﻿
-using SmartQuiz.Application.Exceptions;
-using SmartQuiz.Core.DTOs.Responses;
-using SmartQuiz.Core.DTOs.Reviews;
+﻿using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Reviews;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Reviews;
@@ -17,16 +16,11 @@ public class UpdateReviewUseCase
 
     public async Task<ResultDto> Execute(UpdateReviewDto dto, Guid reviewId, Guid userId)
     {
-        var review = await _reviewRepository.GetById(reviewId);
-        if (review == null)
-        {
-            throw new NotFoundException("Avaliação não encontrada");
-        }
+        var review = await _reviewRepository.GetByIdAsync(reviewId);
+        if (review == null) throw new NotFoundException("Avaliação não encontrada");
 
         if (review.UserId != userId)
-        {
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-        }
 
         review.Description = dto.Description;
         review.Rating = dto.Rating;

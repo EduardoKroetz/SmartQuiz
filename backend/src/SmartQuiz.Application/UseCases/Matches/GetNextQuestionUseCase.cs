@@ -1,7 +1,7 @@
-﻿
-using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.DTOs.Questions;
-using SmartQuiz.Core.DTOs.Responses;
+﻿using AutoMapper;
+using SmartQuiz.Application.DTOs.Questions;
+using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Matches;
@@ -10,38 +10,30 @@ public class GetNextQuestionUseCase
 {
     private readonly IMatchRepository _matchRepository;
     private readonly IQuestionRepository _questionRepository;
+    private readonly IMapper _mapper;
 
-    public GetNextQuestionUseCase(IMatchRepository matchRepository, IQuestionRepository questionRepository)
+    public GetNextQuestionUseCase(IMatchRepository matchRepository, IQuestionRepository questionRepository, IMapper mapper)
     {
         _matchRepository = matchRepository;
         _questionRepository = questionRepository;
+        _mapper = mapper;
     }
 
     public async Task<ResultDto> Execute(Guid matchId, Guid userId)
     {
         //Busca a partida
-        var match = await _matchRepository.GetAsync(matchId);
-        if (match == null)
-        {
+        var match = await _matchRepository.GetByIdAsync(matchId);
+        if (match == null) 
             throw new ArgumentException("Partida não encontrada");
-        }
 
         if (userId != match.UserId)
-        {
             throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-        }
 
         //Verifica se já foi finalizada
-        if (match.Status == Core.Enums.EMatchStatus.Finished)
-        {
+        if (match.Status == EMatchStatus.Finished)
             throw new InvalidOperationException("Essa partida já foi finalizada");
-        }
 
-        if (match.Status == Core.Enums.EMatchStatus.Failed)
-        {
-            throw new InvalidOperationException("Partida expirada");
-
-        }
+        if (match.Status == EMatchStatus.Failed) throw new InvalidOperationException("Partida expirada");
 
         //Busca próxima questão
         var nextQuestion = await _matchRepository.GetNextQuestion(match);
@@ -53,10 +45,7 @@ public class GetNextQuestionUseCase
                 nextQuestion = await _questionRepository.GetQuizQuestionByOrder(match.QuizId, 0);
 
                 if (nextQuestion == null)
-                {
                     throw new ArgumentException("Não foi possível buscar a primeira questão do Quiz");
-                }
-
             }
             else
             {
@@ -67,14 +56,7 @@ public class GetNextQuestionUseCase
         var dto = new
         {
             IsLastQuestion = nextQuestion.Order + 1 == match.Quiz.Questions.Count,
-            Question = new GetQuestionDto
-            {
-                Id = nextQuestion.Id,
-                Text = nextQuestion.Text,
-                QuizId = nextQuestion.QuizId,
-                Order = nextQuestion.Order,
-                Options = nextQuestion.AnswerOptions.Select(o => new GetAnswerOptionDto(o.Id, o.Response)).ToList()
-            }
+            Question = _mapper.Map<GetQuestionDto>(nextQuestion)
         };
 
         return new ResultDto(dto);

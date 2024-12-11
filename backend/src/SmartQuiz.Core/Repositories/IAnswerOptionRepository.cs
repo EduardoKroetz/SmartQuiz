@@ -1,13 +1,9 @@
-﻿using SmartQuiz.Core.DTOs.AnswerOptions;
-using SmartQuiz.Core.Entities;
+﻿using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Repositories.Base;
 
 namespace SmartQuiz.Core.Repositories;
 
-public interface IAnswerOptionRepository
+public interface IAnswerOptionRepository : IRepository<AnswerOption>
 {
-    Task<AnswerOption?> GetById(Guid id);
-    Task CreateAsync(AnswerOption option);
-    Task UpdateAsync(AnswerOption option);
-    Task DeleteAsync(AnswerOption option);
-    Task<List<GetAnswerOptionDto>> GetByQuestionId(Guid questionId);
+    Task<List<AnswerOption>> GetByQuestionId(Guid questionId);
 }

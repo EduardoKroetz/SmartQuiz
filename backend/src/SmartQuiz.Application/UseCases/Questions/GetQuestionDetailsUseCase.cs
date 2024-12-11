@@ -1,6 +1,7 @@
-﻿
+﻿using AutoMapper;
+using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.Exceptions;
-using SmartQuiz.Core.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Questions;
@@ -8,22 +9,22 @@ namespace SmartQuiz.Application.UseCases.Questions;
 public class GetQuestionDetailsUseCase
 {
     private readonly IQuestionRepository _questionRepository;
+    private readonly IMapper _mapper;
 
-    public GetQuestionDetailsUseCase(IQuestionRepository questionRepository)
+    public GetQuestionDetailsUseCase(IQuestionRepository questionRepository, IMapper mapper)
     {
         _questionRepository = questionRepository;
+        _mapper = mapper;
     }
 
     public async Task<ResultDto> Execute(Guid questionId)
     {
-        var questionDetails = await _questionRepository.GetQuestionDetails(questionId);
-        if (questionDetails == null)
-        {
+        var question = await _questionRepository.GetByIdAsync(questionId);
+        if (question == null) 
             throw new NotFoundException("Questão não encontrada");
-        }
 
-        return new ResultDto(questionDetails);
+        var questionDto = _mapper.Map<GetQuestionDto>(question);
+        
+        return new ResultDto(questionDto);
     }
-
 }
-

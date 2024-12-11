@@ -1,10 +1,11 @@
 ﻿
 
+using SmartQuiz.Core.Entities.Base;
+
 namespace SmartQuiz.Core.Entities;
 
-public class Review
+public class Review : Entity
 {
-    public Guid Id { get; set; }
     public string Description { get; set; }
     private int _rating { get; set; }
     public int Rating

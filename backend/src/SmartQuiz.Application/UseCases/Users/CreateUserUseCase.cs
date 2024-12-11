@@ -1,15 +1,15 @@
 ﻿using SmartQuiz.Application.Services.Interfaces;
-using SmartQuiz.Core.DTOs.Responses;
-using SmartQuiz.Core.DTOs.Users;
+using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Application.DTOs.Users;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Users;
 
-public class CreateUserUseCase : IUseCase
+public class CreateUserUseCase
 {
-    private readonly IUserRepository _userRepository;
     private readonly IAuthService _authService;
+    private readonly IUserRepository _userRepository;
 
     public CreateUserUseCase(IUserRepository userRepository, IAuthService authService)
     {
@@ -20,24 +20,19 @@ public class CreateUserUseCase : IUseCase
     public async Task<ResultDto> Execute(CreateUserDto createUserDto)
     {
         var userExists = await _userRepository.GetByEmailAsync(createUserDto.Email);
-        if (userExists != null)
-        {
-            throw new InvalidOperationException("Esse e-mail já está cadastrado");
-        }
+        if (userExists != null) throw new InvalidOperationException("Esse e-mail já está cadastrado");
 
         var passwordHash = _authService.HashPassword(createUserDto.Password);
         var user = new User
         {
-            Id = Guid.NewGuid(),
             Username = createUserDto.Username,
             Email = createUserDto.Email,
-            PasswordHash = passwordHash,
+            PasswordHash = passwordHash
         };
 
-        await _userRepository.CreateAsync(user);
+        await _userRepository.AddAsync(user);
 
         var token = _authService.GenerateJwtToken(user);
         return new ResultDto(new { Token = token, user.Id });
     }
-
 }
