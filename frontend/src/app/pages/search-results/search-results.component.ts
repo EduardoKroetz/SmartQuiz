@@ -6,6 +6,7 @@ import { Quiz } from '../../interfaces/Quiz';
 import { CommonModule } from '@angular/common';
 import { QuizCardComponent } from "../../components/quiz-card/quiz-card.component";
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-search-results',
@@ -46,7 +47,7 @@ export class SearchResultsComponent implements OnInit {
       },
       error: (error) => {
         this.isLoadingResults = false;
-        this.toastService.showToast(error.error.errors[0])
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error))
       }
     })
   }

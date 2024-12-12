@@ -30,18 +30,19 @@ public class GenerateQuizUseCase
         _createQuizUseCase = createQuizUseCase;
         var geminiApiKey = configuration["GeminiApiKey"] ?? throw new Exception("Gemini ApiKey is missing");
         _httpClient = new HttpClient();
+        _httpClient.Timeout = TimeSpan.FromSeconds(350);
         ApiUrl =
-            $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={geminiApiKey}";
+            $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={geminiApiKey}";
     }
 
     public async Task<ResultDto<IdResult>> Execute(GenerateQuizDto generateQuizDto, Guid userId)
     {
         var prompt = @$"
-                Crie um Quiz de múltipla escolha sobre o tema '{generateQuizDto.Theme}' com {generateQuizDto.NumberOfQuestions} questões na dificuldade '{generateQuizDto.Difficulty}'. 
+                Crie um Quiz de múltipla escolha sobre o tema '{generateQuizDto.Theme}' com {generateQuizDto.NumberOfQuestions} questões de dificuldade '{generateQuizDto.Difficulty}'. 
                 Sem nenhum tipo de formatação markdown, somente JSON em formato de string. Ex:
                 {{
-                    ""title"": ""Título do Quiz"",
-                    ""description"": ""Descrição curta do Quiz"", 
+                    ""title"": ""Título do Quiz com no máximo 50 caracteres"",
+                    ""description"": ""Descrição do Quiz com no mínimo 45 caracteres e no máximo 100 caracteres"", 
                     ""questions"": [
                         {{
                             ""text"": ""Texto da pergunta aqui"",
@@ -81,26 +82,39 @@ public class GenerateQuizUseCase
         //Requisição para o Gemini
         var response = await _httpClient.PostAsync(ApiUrl, content);
         if (response.IsSuccessStatusCode == false)
-        {
-            var contentRes = await response.Content.ReadAsStringAsync();
             throw new InvalidOperationException("Não foi possível concluir a requisição para a API do Gemini");
-        }
-
+        
+        
         // Deserializar a resposta completa com metadados
         var responseContentString = await response.Content.ReadAsStringAsync();
-        var geminiContent = JsonConvert.DeserializeObject<dynamic>(responseContentString);
-        if (geminiContent == null) throw new InvalidOperationException("Dados em formato inválido");
 
-        //Pegar somente o texto gerado e converter para um formato json válido
-        var escapedJsonString = geminiContent.candidates[0].content.parts[0].text;
-        var jsonString = (string)Regex.Replace(escapedJsonString.ToString(), @"\\", string.Empty);
-        jsonString = jsonString.Trim();
-        jsonString = jsonString.Substring(1, jsonString.Length - 2);
+        Root geminiContent;
+        try
+        {
+            geminiContent = JsonConvert.DeserializeObject<Root>(responseContentString)!;
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException("Não foi possível deserializar a resposta");
+        }
 
-        // Deserializar o conteúdo JSON
-        var quizResponse = JsonConvert.DeserializeObject<QuizResponse>(jsonString);
-        if (quizResponse == null)
+        
+        //Formatar para um json válido
+        var textJson = geminiContent.Candidates[0].Content.Parts[0].Text;
+        textJson = Regex.Replace(textJson, @"\p{C}+", ""); 
+        textJson = Regex.Replace(textJson, @"```json", "");
+        textJson = Regex.Unescape(textJson.Trim('`', ' ', '\n', '\r'));
+        
+        //Deserializar o texto Json
+        QuizResponse quizResponse;
+        try
+        {
+            quizResponse = JsonConvert.DeserializeObject<QuizResponse>(textJson)!;
+        }
+        catch (Exception e)
+        {
             throw new ArgumentException("O conteúdo do JSON gerado não pôde ser deserializado corretamente.");
+        }
 
         //Criar o quiz com base nas informações da resposta
         var editorQuizDto = new EditorQuizDto
@@ -151,8 +165,11 @@ public class GenerateQuizUseCase
     }
 }
 
-public record QuizResponse(string Title, string Description, List<QuizQuestionsResponse> Questions);
+internal record Root(List<Candidate> Candidates);
+internal record Candidate(Content Content, string FinishReason);
+internal record Content(List<Part> Parts, string Role);
+internal record Part(string Text);
 
-public record QuizQuestionsResponse(string Text, int Order, List<QuestionAnswerOptionResponse> AnswerOptions);
-
-public record QuestionAnswerOptionResponse(string Response, bool IsCorrectOption);
+internal record QuizResponse(string Title, string Description, List<QuizQuestionsResponse> Questions);
+internal record QuizQuestionsResponse(string Text, int Order, List<QuestionAnswerOptionResponse> AnswerOptions);
+internal record QuestionAnswerOptionResponse(string Response, bool IsCorrectOption);

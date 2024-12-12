@@ -4,6 +4,7 @@ import { MatchService } from '../../services/match/match.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-quiz-card',
@@ -25,7 +26,7 @@ export class QuizCardComponent {
         this.router.navigate(['/matches/play/'+ matchId])
       },
       error: (error) => {
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }

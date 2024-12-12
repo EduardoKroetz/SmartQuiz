@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { QuizService } from '../../services/quiz/quiz.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { ToastService } from '../../services/toast/toast.service';
@@ -17,6 +17,7 @@ import { QuizUtils } from '../../utils/quiz-utils';
 import { QuizQuestionComponent } from "../../components/quiz-question/quiz-question.component";
 import { FormsModule } from '@angular/forms';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-quiz',
@@ -85,8 +86,9 @@ export class QuizComponent implements OnInit {
           this.isUpdating = false;
         },
         error: (error) => {
+          console.log(error)
           this.isUpdating = false;
-          this.toastService.showToast(error.error.errors[0], false)
+          this.toastService.showToast(ErrorUtils.getErrorFromResponse(error, "Ocorreu um erro ao atualizar. Tente novamente mais tarde"), false)
         }
       })
   }
@@ -102,7 +104,7 @@ export class QuizComponent implements OnInit {
               this.toastService.showToast(`Quiz ${this.quiz!.isActive ? 'ativado' : 'desativado'} com sucesso!`, true)
             },
             error: (error) => {
-              this.toastService.showToast(error.error.errors[0], false)
+              this.toastService.showToast(ErrorUtils.getErrorFromResponse(error), false)
             }
           });
         }

@@ -10,6 +10,7 @@ import { ConfirmationToastService } from '../../services/confirmation-toast/conf
 import { DeleteMatchComponent } from "../delete-match/delete-match.component";
 import { MatchUtils } from '../../utils/match-utils';
 import { take } from 'rxjs';
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-history-item',
@@ -38,7 +39,7 @@ export class HistoryItemComponent {
               this.accountService.removeMatch(this.match!.id)
             },
             error: (error) => {
-              this.toastService.showToast(error.error.errors[0], false);
+              this.toastService.showToast(ErrorUtils.getErrorFromResponse(error), false);
             }
           });
         }

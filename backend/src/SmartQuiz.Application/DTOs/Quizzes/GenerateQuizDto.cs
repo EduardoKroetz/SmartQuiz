@@ -11,6 +11,7 @@ public class GenerateQuizDto
     public string Difficulty { get; set; }
 
     [Required(ErrorMessage = "Informe o número de questões")]
+    [Range(1, 20, ErrorMessage = "O número de questões deve ser entre 1 e 20")]
     public int NumberOfQuestions { get; set; }
 
     public bool Expires { get; set; }

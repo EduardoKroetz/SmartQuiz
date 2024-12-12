@@ -6,6 +6,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { FormsModule } from '@angular/forms';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 import { CommonModule } from '@angular/common';
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-register',
@@ -33,7 +34,7 @@ export class RegisterComponent {
       },
       error: (error) => {
         this.loading = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     })
   }

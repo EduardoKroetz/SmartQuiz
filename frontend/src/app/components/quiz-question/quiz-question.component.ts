@@ -9,6 +9,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { take } from 'rxjs';
 import { Quiz } from '../../interfaces/Quiz';
 import { SpinnerLoadingComponent } from "../spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-quiz-question',
@@ -54,7 +55,7 @@ export class QuizQuestionComponent implements OnInit {
             },
             error: (error) => {
               this.isDeleting = false;
-              this.toastService.showToast(error.error.errors[0]);
+              this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
             }
           })
         }

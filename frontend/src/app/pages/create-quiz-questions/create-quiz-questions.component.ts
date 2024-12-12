@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Quiz } from '../../interfaces/Quiz';
 import { QuestionService } from '../../services/question/question.service';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-create-quiz-questions',
@@ -62,7 +63,7 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
       error: (error: any) => {
         this.isCreating = false;
         this.createQuestion.options[this.selectedCorrectOption].isCorrectOption = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }
@@ -81,7 +82,7 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
       },
       error: (error: any) => {
         this.isToggling = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }  

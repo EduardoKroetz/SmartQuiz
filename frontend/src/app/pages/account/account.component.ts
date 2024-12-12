@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ToastService } from '../../services/toast/toast.service';
 import { FormsModule } from '@angular/forms';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-account',
@@ -49,7 +50,7 @@ export class AccountComponent implements OnInit {
       },
       error: (error) => {
         this.isUpdatingInfo = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }
@@ -65,7 +66,7 @@ export class AccountComponent implements OnInit {
       },
       error: (error) => {
         this.isUpdatingPassword = false;
-        this.toastService.showToast(error.error.errors[0], false)
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error), false)
       }
     })
   }

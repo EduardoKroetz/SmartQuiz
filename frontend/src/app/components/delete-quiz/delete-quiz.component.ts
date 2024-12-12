@@ -6,6 +6,7 @@ import { QuizService } from '../../services/quiz/quiz.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SpinnerLoadingComponent } from "../spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-delete-quiz',
@@ -36,7 +37,7 @@ export class DeleteQuizComponent {
             },
             error: (error) => {
               this.isDeleting = false;
-              this.toastService.showToast(error.error.errors[0], false);
+              this.toastService.showToast(ErrorUtils.getErrorFromResponse(error), false);
             }
           });
         }

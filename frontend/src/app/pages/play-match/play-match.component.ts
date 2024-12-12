@@ -9,6 +9,7 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-play-match',
@@ -85,7 +86,7 @@ export class PlayMatchComponent implements OnInit {
       },
       error: (error) => {
         this.isLoadingNextQuestion = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
         setTimeout(() => { this.location.back() }, 500)
       }
     })
@@ -111,7 +112,7 @@ export class PlayMatchComponent implements OnInit {
       },
       error: (error) => {
         this.isLoadingNextQuestion = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }

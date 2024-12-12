@@ -7,6 +7,7 @@ import { QuizService } from '../../services/quiz/quiz.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-generate-quiz',
@@ -46,7 +47,7 @@ export class GenerateQuizComponent {
       },
       error: (error) => {
         this.isGenerating = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     })
   }

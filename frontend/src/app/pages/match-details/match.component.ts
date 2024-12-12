@@ -12,6 +12,7 @@ import { Response } from '../../interfaces/Response';
 import { ResponseItemComponent } from "../../components/response-item/response-item.component";
 import { MatchUtils } from '../../utils/match-utils';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-match',
@@ -70,7 +71,7 @@ export class MatchDetailsComponent {
       },
       error: (error) => {
         this.isLoadingResponses = false;
-        this.toastService.showToast(error.error.errors[0])
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error))
       }
     })
   }

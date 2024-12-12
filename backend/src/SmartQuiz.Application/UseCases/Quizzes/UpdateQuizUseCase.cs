@@ -18,7 +18,8 @@ public class UpdateQuizUseCase
     public async Task<ResultDto> Execute(Guid quizId, EditorQuizDto editorQuizDto, Guid userId)
     {
         var quiz = await _quizRepository.GetByIdAsync(quizId);
-        if (quiz == null) throw new NotFoundException("Quiz não encontrado");
+        if (quiz == null) 
+            throw new NotFoundException("Quiz não encontrado");
 
         if (quiz.UserId != userId)
             throw new UnauthorizedAccessException("Você não possui permissão para acessar esse recurso");

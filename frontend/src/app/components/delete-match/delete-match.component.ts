@@ -4,6 +4,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { MatchService } from '../../services/match/match.service';
 import { ConfirmationToastService } from '../../services/confirmation-toast/confirmation-toast.service';
 import { Router } from '@angular/router';
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-delete-match',
@@ -29,7 +30,7 @@ export class DeleteMatchComponent {
               this.router.navigate(['/history']);
             },
             error: (error) => {
-              this.toastService.showToast(error.error.errors[0], false);
+              this.toastService.showToast(ErrorUtils.getErrorFromResponse(error), false);
             }
           });
         }

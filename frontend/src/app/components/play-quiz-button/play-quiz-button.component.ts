@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AccountService } from '../../services/account/account.service';
 import { CommonModule } from '@angular/common';
 import { SpinnerLoadingComponent } from "../spinner-loading/spinner-loading.component";
+import { ErrorUtils } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-play-quiz-button',
@@ -36,7 +37,7 @@ export class PlayQuizButtonComponent {
       },
       error: (error) => {
         this.isCreating = false;
-        this.toastService.showToast(error.error.errors[0]);
+        this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }
     });
   }
