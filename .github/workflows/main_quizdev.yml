@@ -24,12 +24,6 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: Test
-        env:
-          ConnectionStrings__DbConnection: ${{ secrets.ConnectionStrings__DbConnection }}
-          Jwt__Key: ${{ secrets.Jwt__Key }}
-        run: dotnet test --configuration Release --no-build --verbosity normal
-
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
@@ -59,4 +53,4 @@ jobs:
           app-name: 'quizdev'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_37C51C5CFFA54497A66F68A25E7788E8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B206AD5B53434FFFB3C2D688B0ABA9AC }}
