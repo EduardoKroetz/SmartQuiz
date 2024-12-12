@@ -1,6 +1,7 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
@@ -21,11 +22,16 @@ public class UpdateQuizUseCase
 
         if (quiz.UserId != userId)
             throw new UnauthorizedAccessException("Você não possui permissão para acessar esse recurso");
+        
+        if (!Enum.TryParse(editorQuizDto.Difficulty, true, out EDifficulty difficulty))
+            throw new InvalidOperationException("Dificuldade inválida. Dificuldades disponíveis: easy, medium, hard");
 
         quiz.Title = editorQuizDto.Title;
         quiz.Description = editorQuizDto.Description;
         quiz.Expires = editorQuizDto.Expires;
         quiz.ExpiresInSeconds = editorQuizDto.ExpiresInSeconds;
+        quiz.Difficulty = difficulty;
+        quiz.Theme = editorQuizDto.Theme;
 
         await _quizRepository.UpdateAsync(quiz);
 

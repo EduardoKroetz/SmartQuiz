@@ -23,7 +23,8 @@ public class GetResponsesByMatchUseCase
     public async Task<ResultDto> Execute(Guid matchId)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);
-        if (match == null) throw new NotFoundException("Partida não encontrada");
+        if (match == null) 
+            throw new NotFoundException("Partida não encontrada");
 
         var responses  = await _responseRepository.Query()
             .Include(x => x.AnswerOption)
@@ -33,6 +34,7 @@ public class GetResponsesByMatchUseCase
             .Select(x => new GetResponseDto
             {
                 QuestionId = x.AnswerOption.Id,
+                QuestionOrder = x.AnswerOption.Question.Order,
                 AnswerOptionId = x.AnswerOptionId,
                 AnswerOption = _mapper.Map<GetAnswerOptionDto>(x.AnswerOption),
                 CorrectOption = _mapper.Map<GetAnswerOptionDto>(x.AnswerOption.Question.AnswerOptions.FirstOrDefault(x => x.IsCorrectOption == true)),
@@ -40,6 +42,8 @@ public class GetResponsesByMatchUseCase
             })
             .ToListAsync();
         
-        return new ResultDto(responses);
+        var ordenedResponses = responses.OrderBy(x => x.QuestionOrder).ToList();
+        
+        return new ResultDto(ordenedResponses);
     }
 }

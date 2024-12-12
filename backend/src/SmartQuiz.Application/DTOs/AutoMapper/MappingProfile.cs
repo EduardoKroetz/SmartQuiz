@@ -27,6 +27,9 @@ public class MappingProfile : Profile
         
         CreateMap<Question, GetQuestionDto>()
             .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.AnswerOptions));
+        CreateMap<Question, GetQuestionWithCorrectOptionDto>()
+            .ForMember(dest => dest.CorrectOption, opt => opt.MapFrom(src => src.AnswerOptions.FirstOrDefault(x => x.IsCorrectOption)))
+            .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.AnswerOptions));
         
         CreateMap<Quiz, GetQuizDto>()
             .ConstructUsing(src => new GetQuizDto(src.Id, src.Title, src.Description, src.Expires, src.ExpiresInSeconds, src.IsActive, src.Theme, src.Questions.Count, src.Difficulty, src.UserId));

@@ -20,7 +20,7 @@ public class GetQuestionsByQuizUseCase
     {
         var questions = await _questionRepository.GetQuestionsByQuizId(quizId);
 
-        var questionsDto = _mapper.Map<IEnumerable<GetQuestionDto>>(questions);     
+        var questionsDto = _mapper.Map<IEnumerable<GetQuestionWithCorrectOptionDto>>(questions);     
         
         return new ResultDto(questionsDto);
     }

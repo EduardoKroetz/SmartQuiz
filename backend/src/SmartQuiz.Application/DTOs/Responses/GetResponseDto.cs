@@ -6,6 +6,7 @@ namespace SmartQuiz.Application.DTOs.Responses;
 public class GetResponseDto
 {
     public Guid QuestionId { get; set; }
+    public int QuestionOrder { get; set; }
     public Guid AnswerOptionId { get; set; }
     public GetAnswerOptionDto AnswerOption { get; set; }
     public GetAnswerOptionDto CorrectOption { get; set; }

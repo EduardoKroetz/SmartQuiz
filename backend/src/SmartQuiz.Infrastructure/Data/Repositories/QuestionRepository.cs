@@ -39,6 +39,7 @@ public class QuestionRepository : Repository<Question>, IQuestionRepository
     {
         return await context.Questions
             .AsNoTracking()
+            .Include(x => x.AnswerOptions)
             .Where(x => x.QuizId == quizId)
             .OrderBy(x => x.Order)
             .ToListAsync();
