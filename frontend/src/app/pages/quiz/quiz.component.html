@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<app-spinner-loading [isBig]="true" [isDark]="false"></app-spinner-loading>
+<app-spinner-loading *ngIf="isLoadingQuiz" style="margin: auto;" [isBig]="true" [isDark]="false"></app-spinner-loading>
 
 <ng-template #elseTitle>
   {{ quiz?.title }}

@@ -5,7 +5,7 @@ export class ErrorUtils {
     ) || null;
   }
 
-  static getErrorFromResponse(error: any, defaultMessage = "Não foi possível completar a requisição") {
+  static getErrorFromResponse(error: any, defaultMessage = "Não foi possível completar a requisição") : string {
     return ErrorUtils.getErrorFromResponse(error) ?? defaultMessage;
   }
 }
