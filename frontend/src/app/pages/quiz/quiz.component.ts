@@ -31,7 +31,7 @@ export class QuizComponent implements OnInit {
   quiz: Quiz | null = null; 
   questions: Question[] = [];
   account: Account | null = null;
-
+  isLoadingQuiz = true;
   isUpdating = false;
 
   constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private accountService: AccountService, private location: Location, private confirmationToastService: ConfirmationToastService, private questionService: QuestionService) {}
@@ -44,11 +44,14 @@ export class QuizComponent implements OnInit {
   }
 
   private setQuiz() {
+    this.isLoadingQuiz = true;
     this.quizService.getQuizById(this.id).subscribe({
       next: (response: any) => {
         this.quiz = response.data;
+        this.isLoadingQuiz = false;
       },
       error: () => {
+        this.isLoadingQuiz = false;
         this.toastService.showToast("Não foi possível obter o quiz", false);
         this.location.back();
       }
