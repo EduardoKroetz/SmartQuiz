@@ -23,10 +23,10 @@ export class DeleteQuizComponent {
 
   deleteMatch() {
     this.confirmationToastService.showToast("Deseja excluir o quiz?");
-    this.isDeleting = true;
     const subscription = this.confirmationToastService.confirmed$.subscribe({
       next: (confirm) => {
         if (confirm) {
+          this.isDeleting = true;
           this.quizService.deleteQuiz(this.quizId).subscribe({
             next: () => {
               this.toastService.showToast("Quiz deletado com sucesso!", true);

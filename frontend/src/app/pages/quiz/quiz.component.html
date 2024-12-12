@@ -30,7 +30,7 @@
     </div>
     <div>
       <label for="expires">Questões</label>
-      <input disabled="" [(ngModel)]="quiz.numberOfQuestion" name="numberOfQuestions"/>
+      <input disabled="" [(ngModel)]="questions.length" name="numberOfQuestions"/>
     </div>
 
   </div>
@@ -46,7 +46,7 @@
   <div class="questions-container">
     <div class="title-container">
       <h2>Questões</h2>
-      <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + quiz.numberOfQuestion" class="bi-plus-lg add-question-btn scale-icon"></i>
+      <i *ngIf="quiz.userId === account.id" [routerLink]="'questions/' + questions.length" class="bi-plus-lg add-question-btn scale-icon"></i>
     </div>
     <div class="question-list">
       <app-quiz-question *ngFor="let question of questions" [question]="question" [quiz]="quiz" (deleteQuestionEvent)="removeQuestion($event)"></app-quiz-question>

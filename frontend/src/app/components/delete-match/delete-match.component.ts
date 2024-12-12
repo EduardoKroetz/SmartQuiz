@@ -3,6 +3,7 @@ import { AccountService } from '../../services/account/account.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { MatchService } from '../../services/match/match.service';
 import { ConfirmationToastService } from '../../services/confirmation-toast/confirmation-toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-match',
@@ -14,7 +15,7 @@ import { ConfirmationToastService } from '../../services/confirmation-toast/conf
 export class DeleteMatchComponent {
   @Input() matchId = '';
 
-  constructor (public accountService: AccountService, private matchService: MatchService, private confirmationToastService: ConfirmationToastService, private toastService: ToastService) {}
+  constructor (public accountService: AccountService, private matchService: MatchService, private confirmationToastService: ConfirmationToastService, private toastService: ToastService, private router: Router) {}
 
   deleteMatch() {
     this.confirmationToastService.showToast("Deseja excluir a partida?");
@@ -25,6 +26,7 @@ export class DeleteMatchComponent {
             next: () => {
               this.toastService.showToast("Partida deletada com sucesso!", true);
               this.accountService.removeMatch(this.matchId)
+              this.router.navigate(['/history']);
             },
             error: (error) => {
               this.toastService.showToast(error.error.errors[0], false);
