@@ -29,7 +29,7 @@ export class PlayMatchComponent implements OnInit {
   expires = true;
   isLoadingNextQuestion = false;
 
-  constructor (private activatedRoute: ActivatedRoute, private accountService: AccountService, private matchService: MatchService, private toastService: ToastService, private location: Location, private route: Router) {}
+  constructor (private activatedRoute: ActivatedRoute, private accountService: AccountService, private matchService: MatchService, private toastService: ToastService, private route: Router) {}
 
   ngOnInit(): void {
     this.matchId = this.activatedRoute.snapshot.paramMap.get('id') || '';
@@ -71,8 +71,8 @@ export class PlayMatchComponent implements OnInit {
           }
       },
       error: () => {
+        this.route.navigate(['matches/'+this.matchId]);
         this.toastService.showToast("Não foi possível obter os dados da partida", false);
-        setTimeout(() => { this.location.back() }, 500)
       }
     })
   }
@@ -86,8 +86,8 @@ export class PlayMatchComponent implements OnInit {
       },
       error: (error) => {
         this.isLoadingNextQuestion = false;
+        this.route.navigate(['matches/'+this.matchId])
         this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
-        setTimeout(() => { this.location.back() }, 500)
       }
     })
   }

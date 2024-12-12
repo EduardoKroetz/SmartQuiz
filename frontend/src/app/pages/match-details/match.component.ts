@@ -31,7 +31,7 @@ export class MatchDetailsComponent {
   isLoadingMatch = true;
   isLoadingResponses = true;
 
-  constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private location: Location, private router: Router) {}
+  constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private router: Router) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';

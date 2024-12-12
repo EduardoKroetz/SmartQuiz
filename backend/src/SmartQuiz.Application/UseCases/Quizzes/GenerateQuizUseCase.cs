@@ -93,7 +93,7 @@ public class GenerateQuizUseCase
         {
             geminiContent = JsonConvert.DeserializeObject<Root>(responseContentString)!;
         }
-        catch (Exception e)
+        catch
         {
             throw new InvalidOperationException("Não foi possível deserializar a resposta");
         }
@@ -111,7 +111,7 @@ public class GenerateQuizUseCase
         {
             quizResponse = JsonConvert.DeserializeObject<QuizResponse>(textJson)!;
         }
-        catch (Exception e)
+        catch
         {
             throw new ArgumentException("O conteúdo do JSON gerado não pôde ser deserializado corretamente.");
         }

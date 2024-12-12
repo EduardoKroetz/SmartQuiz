@@ -1,2 +1,3 @@
 
-<i (click)="deleteMatch()" class="bi bi-trash scale-icon"></i>
+<i (click)="deleteMatch()" *ngIf="!isDeleting" class="bi bi-trash scale-icon"></i>
+<app-spinner-loading [isBig]="false" [isDark]="true" *ngIf="isDeleting"></app-spinner-loading>

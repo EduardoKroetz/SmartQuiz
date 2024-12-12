@@ -31,8 +31,8 @@ public class Quiz : Entity
     public bool IsActive { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
-    public List<Question> Questions { get; set; }
-    public List<Match> Matchs { get; set; }
+    public List<Question> Questions { get; set; } = [];
+    public List<Match> Matchs { get; set; } = [];
 
     private void ValidateExpiresInSeconds(int expiresInSeconds)
     {
@@ -55,5 +55,16 @@ public class Quiz : Entity
     public List<Question> GetQuestionsByOrderGratherThan(int order)
     {
         return Questions.Where(x => x.Order > order).ToList();
+    }
+
+    public void RemoveQuestion(Question question)
+    {
+        Questions.Remove(question);
+        foreach (var newQuestion in Questions)
+        {
+            if (newQuestion.Order > question.Order)
+                newQuestion.Order--;
+        }
+        
     }
 }

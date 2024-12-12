@@ -120,7 +120,15 @@ export class QuizComponent implements OnInit {
   }
 
   removeQuestion(questionId: string) {
+    const question = this.questions.find(x => x.id === questionId);
     this.questions = this.questions.filter(x => x.id !== questionId);
+    if (!question)
+      return
+    //Reajustar ordem das questões 
+    this.questions.forEach(q => {
+      if (q.order > question.order)
+        q.order--;
+    })
   }
 
   isOwner() {
