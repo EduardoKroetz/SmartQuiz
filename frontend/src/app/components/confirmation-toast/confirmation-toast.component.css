@@ -56,7 +56,7 @@
   background-color: var(--green-color);
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .toast {
     width: 400px;
   }

@@ -1,7 +1,7 @@
-<div class="match-details" *ngIf="match && match.quiz">
+<div class="match-details" >
   <h1 class="title-container"> 
     Partida |
-    <span class="quiz-title" [routerLink]="'/quizzes/'+ match.quizId">
+    <span *ngIf="match && match.quiz" class="quiz-title" [routerLink]="'/quizzes/'+ match.quizId">
       {{ match.quiz.title }}
     </span>
   </h1>
@@ -13,19 +13,20 @@
     </span> das questões!
   </h2>
   <div class="container-info">
-    <div class="sections-container">
+    <app-spinner-loading style="margin: auto;" *ngIf="isLoadingMatch" [isBig]="true" [isDark]="true"></app-spinner-loading>
+    <div *ngIf="match && match.quiz" class="sections-container">
       <p>Pontuação</p>
       <p>Criado em</p>
       <p *ngIf="match.quiz.expires">Expiração</p>
       <p>Status</p>
     </div>
-    <div class="data-container">
+    <div *ngIf="match && match.quiz" class="data-container">
       <p>{{ match.score }} </p>
-      <p>{{ format(match.createdAt) }}</p>
+      <p>{{ format(match!.createdAt) }}</p>
       <p *ngIf="match.quiz.expires">{{ format(match.expiresIn) }}</p>
       <p 
         class="match-status" 
-        [routerLink]="'/matches/play/'+ match.id"
+        (click)="continueMatch()"
         [class]="match.status === 'Finished' ? 'status-green' :
         match.status === 'Failed' ? 
         'status-red' : 
@@ -36,12 +37,13 @@
       </p>
     </div>
   </div>
-  <div class="actions">
+  <div *ngIf="match && match.quiz" class="actions">
     <i [routerLink]="'/quizzes/' + match.quiz.id" class="bi bi-arrow-clockwise scale-icon"></i>
     <app-delete-match [matchId]="match.id"></app-delete-match>
   </div>
-  <div *ngIf="responses.length > 0" class="responses-container">
+  <div *ngIf="responses.length > 0 || isLoadingResponses" class="responses-container">
     <h2>Respostas</h2>
     <app-response-item *ngFor="let response of responses; let i = index" [response]="response" [questionNumber]="i + 1"></app-response-item>
+    <app-spinner-loading *ngIf="isLoadingResponses" [isBig]="true" [isDark]="true"></app-spinner-loading>
   </div>
 </div>

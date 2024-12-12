@@ -1,4 +1,5 @@
-<button (click)="deleteMatch()">
-  <p>Deletar</p>
-  <i class="bi bi-trash"></i>
+<button [disabled]="isDeleting" (click)="deleteMatch()">
+  <p>{{ isDeleting ? "Deletando" : "Deletar"}}</p>
+  <i *ngIf="!isDeleting" class="bi bi-trash"></i>
+  <app-spinner-loading *ngIf="isDeleting" [isBig]="false" [isDark]="false"></app-spinner-loading>
 </button>

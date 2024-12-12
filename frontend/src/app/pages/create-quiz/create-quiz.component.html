@@ -47,9 +47,10 @@
 
     </div>
     
-    <button type="submit" class="create-btn">
+    <button [disabled]="isCreating" type="submit" class="create-btn">
       Criar Quiz
       <i class="bi bi-plus-lg"></i>
+      <app-spinner-loading *ngIf="isCreating" [isDark]="false" [isBig]="false"></app-spinner-loading>
     </button>
   </form>
 </div>

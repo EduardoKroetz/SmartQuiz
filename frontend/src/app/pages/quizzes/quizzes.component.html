@@ -12,13 +12,17 @@
   <div class="quiz-list-section">
     <div>
       <h2>Seus Quizzes</h2>
-      <div *ngIf="quizzes.length === 0">
+      <div *ngIf="quizzes.length === 0 && !accountService.isLoadingQuizzes">
         Nenhum quiz encontrado
       </div>
     </div>
-    <div class="quiz-list">
+    <div class="quiz-list" *ngIf="!accountService.isLoadingQuizzes; else elseLoading">
       <app-quiz-card class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
     </div>
 
   </div>
 </div>
+
+<ng-template #elseLoading>
+  <app-spinner-loading [isBig]="true" [isDark]="false"></app-spinner-loading>
+</ng-template>

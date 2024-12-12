@@ -62,7 +62,7 @@
   font-size: larger;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .form-container {
     gap: 1.5rem;
   }

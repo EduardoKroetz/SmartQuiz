@@ -56,7 +56,7 @@
   max-width: max-content;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .form-container {
     gap: 1rem;
   }

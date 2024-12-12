@@ -7,15 +7,15 @@ i {
   font-size: 20px;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   i {
-    font-size: 25px;
+    font-size: 20px;
   }
 }
 
 
 @media screen and (min-width: 1920px) {
   i {
-    font-size: 40px;
+    font-size: 25px;
   }
 }

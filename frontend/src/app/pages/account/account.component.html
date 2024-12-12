@@ -1,9 +1,9 @@
-<div class="account" *ngIf="account">
+<div class="account">
   <h1 class="title">
     <app-back-icon></app-back-icon>
     Conta
   </h1>
-  <div class="content">
+  <div *ngIf="account && !accountService.isLoadingAccount; else elseloading" class="content">
     <div class="info-container">
       <div class="input-section">
         <label for="id">Id</label>
@@ -17,11 +17,10 @@
         <label for="email">E-mail</label>
         <input class="data" id="email" name="email" [(ngModel)]="account.email" />
       </div>
-      <button class="update-btn">
-        <div (click)="handleUpdate()" *ngIf="!isUpdatingInfo; else loadingTemplate">
-          Atualizar Informações
-          <i class="bi bi-pencil-square"></i>
-        </div>
+      <button class="update-btn" (click)="handleUpdate()" [disabled]="isUpdatingInfo">
+        <p>{{ isUpdatingInfo ? "Atualizando" : "Atualizar" }}</p>
+        <i *ngIf="!isUpdatingInfo" class="bi bi-pencil-square"></i>
+        <app-spinner-loading *ngIf="isUpdatingInfo" [isDark]="false" [isBig]="false"></app-spinner-loading>
       </button>
     </div>
     <div class="info-container">
@@ -34,11 +33,10 @@
         <label for="email">Nova senha</label>
         <input class="data" id="email" name="email" [(ngModel)]="newPassword" />
       </div>
-      <button class="update-btn">
-        <div (click)="handleUpdatePassword()" *ngIf="!isUpdatingPassword; else loadingTemplate">
-          Atualizar Senha
-          <i class="bi bi-pencil-square"></i>
-        </div>
+      <button class="update-btn" (click)="handleUpdatePassword()" [disabled]="isUpdatingPassword">
+        <p>{{ isUpdatingPassword ? "Atualizando" : "Atualizar senha" }}</p>
+        <i *ngIf="!isUpdatingPassword" class="bi bi-pencil-square"></i>
+        <app-spinner-loading *ngIf="isUpdatingPassword" [isDark]="false" [isBig]="false"></app-spinner-loading>
       </button>
     </div>
     <div class="actions">
@@ -50,6 +48,10 @@
   </div>
 </div>
 
-<ng-template #loadingTemplate>
-  <app-spinner-loading [isDark]="false"></app-spinner-loading>
+<ng-template #elseloadingSmall>
+  <app-spinner-loading [isDark]="false" [isBig]="false"></app-spinner-loading>
+</ng-template>
+
+<ng-template #elseloading>
+  <app-spinner-loading [isDark]="false" [isBig]="true"></app-spinner-loading>
 </ng-template>

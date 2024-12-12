@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../services/toast/toast.service';
 import { AccountService } from '../../services/account/account.service';
 import { Match } from '../../interfaces/Match';
@@ -11,11 +11,12 @@ import { DeleteMatchComponent } from "../../components/delete-match/delete-match
 import { Response } from '../../interfaces/Response';
 import { ResponseItemComponent } from "../../components/response-item/response-item.component";
 import { MatchUtils } from '../../utils/match-utils';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-match',
   standalone: true,
-  imports: [CommonModule, RouterLink, DeleteMatchComponent, ResponseItemComponent],
+  imports: [CommonModule, RouterLink, DeleteMatchComponent, ResponseItemComponent, SpinnerLoadingComponent],
   templateUrl: './match.component.html',
   styleUrl: './match.component.css'
 })
@@ -26,7 +27,10 @@ export class MatchDetailsComponent {
   responses: Response[] = []; 
   percentageOfHits = 0;
 
-  constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private location: Location) {}
+  isLoadingMatch = true;
+  isLoadingResponses = true;
+
+  constructor (private route: ActivatedRoute, private toastService: ToastService, private accountService: AccountService, private matchService: MatchService, private location: Location, private router: Router) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
@@ -40,10 +44,12 @@ export class MatchDetailsComponent {
       next: (response: any) => {
         this.match = response.data;
         this.percentageOfHits = parseFloat(((100 / this.match!.quiz!.numberOfQuestion) * this.match!.score).toFixed(2));
+        this.isLoadingMatch = false;
       },
       error: () => {
+        this.isLoadingMatch = false;
         this.toastService.showToast("Não foi possível obter a partida", false);
-        this.location.back();
+        this.router.navigate(["/history"]);
       }
     })
   }
@@ -60,8 +66,10 @@ export class MatchDetailsComponent {
     this.matchService.getResponses(this.id).subscribe({
       next: (response: any) => {
         this.responses = response.data;
+        this.isLoadingResponses = false;
       },
       error: (error) => {
+        this.isLoadingResponses = false;
         this.toastService.showToast(error.error.errors[0])
       }
     })
@@ -73,5 +81,12 @@ export class MatchDetailsComponent {
 
   formatStatus(status: string) {
     return MatchUtils.FormatStatus(status);
+  }
+
+  continueMatch() {
+    if (!this.match || this.match.status != 'Created')
+      return;
+
+    this.router.navigate([`/matches/play/${this.match.id}`])
   }
 }

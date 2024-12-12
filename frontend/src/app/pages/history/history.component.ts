@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account/account.service';
 import { Match } from '../../interfaces/Match';
 import { BackIconComponent } from "../../components/back-icon/back-icon.component";
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, HistoryItemComponent, BackIconComponent],
+  imports: [CommonModule, HistoryItemComponent, BackIconComponent, SpinnerLoadingComponent],
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })

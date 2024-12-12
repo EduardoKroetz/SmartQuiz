@@ -8,11 +8,12 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-play-match',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SpinnerLoadingComponent],
   templateUrl: './play-match.component.html',
   styleUrl: './play-match.component.css'
 })
@@ -25,6 +26,7 @@ export class PlayMatchComponent implements OnInit {
   isLastQuestion = false;
   finished = false;
   expires = true;
+  isLoadingNextQuestion = false;
 
   constructor (private activatedRoute: ActivatedRoute, private accountService: AccountService, private matchService: MatchService, private toastService: ToastService, private location: Location, private route: Router) {}
 
@@ -79,8 +81,10 @@ export class PlayMatchComponent implements OnInit {
       next: (response: any) => {
         this.isLastQuestion = response.data.isLastQuestion;
         this.currentQuestion = response.data.question;
+        this.isLoadingNextQuestion = false;
       },
       error: (error) => {
+        this.isLoadingNextQuestion = false;
         this.toastService.showToast(error.error.errors[0]);
         setTimeout(() => { this.location.back() }, 500)
       }
@@ -93,6 +97,7 @@ export class PlayMatchComponent implements OnInit {
       this.toastService.showToast("Informe uma opção", false)
       return
     }
+    this.isLoadingNextQuestion = true;
     this.matchService.submitResponse(this.matchId, this.optionId).subscribe({
       next: () => {
         this.optionId = null;
@@ -105,6 +110,7 @@ export class PlayMatchComponent implements OnInit {
         }
       },
       error: (error) => {
+        this.isLoadingNextQuestion = false;
         this.toastService.showToast(error.error.errors[0]);
       }
     });

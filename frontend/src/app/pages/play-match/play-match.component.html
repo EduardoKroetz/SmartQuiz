@@ -1,4 +1,4 @@
-<div class="play-match" *ngIf="currentQuestion && match">
+<div class="play-match" *ngIf="currentQuestion && match; else elseLoading">
   <div class="question-container">
     <h1>{{ match.quiz?.title }} | Questão {{ currentQuestion.order + 1 }}</h1>
     <p class="question-text">{{ currentQuestion.text }}</p>
@@ -13,10 +13,14 @@
   </div>
   <div class="next-container">
     <p *ngIf="expires">Tempo restante: {{ match.remainingTimeInSeconds }} segundos</p>
-    <button (click)="submitResponse()" class="next-question-btn">
+    <button [disabled]="isLoadingNextQuestion" (click)="submitResponse()" class="next-question-btn">
       {{ isLastQuestion ? "Finalizar" : "Próxima Questão" }}
       <i class="bi bi-arrow-right"></i>
+      <app-spinner-loading *ngIf="isLoadingNextQuestion" [isBig]="false" [isDark]="false"></app-spinner-loading>
     </button>
   </div>
-
 </div>
+
+<ng-template #elseLoading>
+  <app-spinner-loading style="margin: auto;" [isBig]="true" [isDark]="false"></app-spinner-loading>
+</ng-template>

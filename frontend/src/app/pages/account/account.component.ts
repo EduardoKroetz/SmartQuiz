@@ -22,7 +22,7 @@ export class AccountComponent implements OnInit {
   isUpdatingInfo = false;
   isUpdatingPassword = false;
 
-  constructor (private accountService: AccountService, private authService: AuthService, private toastService: ToastService) {}
+  constructor (public accountService: AccountService, private authService: AuthService, private toastService: ToastService) {}
 
   ngOnInit(): void {
     this.accountService.$user.subscribe({

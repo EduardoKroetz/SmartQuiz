@@ -1,4 +1,5 @@
-<button (click)="createMatch()" class="play-btn">
-  Jogar
-  <i class="bi bi-play"></i>
+<button [disabled]="isCreating" (click)="createMatch()" class="play-btn">
+  <p>{{ isCreating ? "Criando Partida" : "Jogar" }}</p>
+  <i *ngIf="!isCreating" class="bi bi-play"></i>
+  <app-spinner-loading *ngIf="isCreating" [isDark]="false" [isBig]="false" ></app-spinner-loading>
 </button>

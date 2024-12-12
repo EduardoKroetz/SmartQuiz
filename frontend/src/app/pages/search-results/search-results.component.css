@@ -25,14 +25,14 @@
   margin: 40px auto;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 768px) {
   .quiz-card {
-    flex: 1 1 350px;
+    flex: 1 1 330px;
   }
 }
 
 @media screen and (min-width: 1920px) {
   .quiz-card {
-    flex: 1 1 450px;
+    flex: 1 1 380px;
   }
 }

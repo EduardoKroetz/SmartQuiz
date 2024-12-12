@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { SmartquizDescComponent } from "../../components/smartquiz-desc/smartquiz-desc.component";
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AccountService } from '../../services/account/account.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { CommonModule } from '@angular/common';
 import { ErrorUtils } from '../../utils/error-utils';
@@ -33,8 +32,7 @@ export class LoginComponent {
       next: (response: any) => {
         this.authService.setToken(response.data.token);
         this.isLoading = false;
-        this.toastService.showToast("Login efetuado com sucesso!", true);
-        this.router.navigate(["/"])
+        location.href = "/";
       },
       error: (response: any) => {
         const errors: string[] = response.error.errors;

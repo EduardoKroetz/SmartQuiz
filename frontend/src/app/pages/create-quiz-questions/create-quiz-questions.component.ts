@@ -7,11 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Quiz } from '../../interfaces/Quiz';
 import { QuestionService } from '../../services/question/question.service';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-create-quiz-questions',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, SpinnerLoadingComponent],
   templateUrl: './create-quiz-questions.component.html',
   styleUrl: './create-quiz-questions.component.css'
 })
@@ -20,6 +21,9 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
   selectedCorrectOption: number = -1; 
   private sub: any;
   quiz: Quiz | null = null;
+  isCreating = false;
+  isToggling = false;
+  isLoadingQuiz = false;
 
   constructor (private activatedRoute: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private route:Router, private questionService: QuestionService) {}
 
@@ -48,12 +52,15 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
     }
 
     this.createQuestion.options[this.selectedCorrectOption].isCorrectOption = true;
+    this.isCreating = true;
     this.questionService.createQuestion(this.createQuestion).subscribe({
       next: () => {
         this.toastService.showToast("Questão criada com sucesso!", true);
+        this.isCreating = false;
         this.route.navigate([`/quizzes/${this.createQuestion.quizId}/questions/${this.createQuestion.order + 1}`])
       },
       error: (error: any) => {
+        this.isCreating = false;
         this.createQuestion.options[this.selectedCorrectOption].isCorrectOption = false;
         this.toastService.showToast(error.error.errors[0]);
       }
@@ -65,22 +72,31 @@ export class CreateQuizQuestionsComponent implements OnInit, OnDestroy {
       this.route.navigate([`/quizzes/${this.createQuestion.quizId}`])
       return
     }
-
+    this.isToggling = true;
     this.quizService.toggleQuiz(this.createQuestion.quizId).subscribe({
       next: () => {
         this.toastService.showToast("Quiz ativado com sucesso!", true);
+        this.isToggling = false;
         this.route.navigate([`/quizzes/${this.createQuestion.quizId}`])
       },
       error: (error: any) => {
+        this.isToggling = false;
         this.toastService.showToast(error.error.errors[0]);
       }
     });
   }  
 
   setQuiz(quizId: string) {
+    this.isLoadingQuiz = true;
     this.quizService.getQuizById(quizId).subscribe({
       next: (response: any) => {
         this.quiz = response.data;
+        this.isLoadingQuiz = false;
+      },
+      error: () => {
+        this.toastService.showToast("Não foi possível obter o Quiz", false)
+        this.isLoadingQuiz = false;
+        this.route.navigate(["/quizzes"])
       }
     })
   }

@@ -1,5 +1,5 @@
 <div class="home">
-  <div class="info-container">
+  <div *ngIf="!accountService.isLoadingAccount; else elseLoadingDark" class="info-container">
     <app-presentation-box title="Pontuação Total" [data]="account?.totalScore"></app-presentation-box>
     <app-presentation-box title="Pontuação Máxima" [data]="account?.maxScore"></app-presentation-box>
     <app-presentation-box title="Partidas Jogadas" [data]="account?.matchesPlayed"></app-presentation-box>
@@ -13,7 +13,7 @@
   <div class="list-container">
     <div class="data">
       <h2 routerLink="/history">Histórico</h2>
-      <div class="histories">
+      <div class="histories" *ngIf="!accountService.isLoadingMatches; else elseLoading">
         <div [routerLink]="'/matches/'+ match.id" *ngFor="let match of matches" class="info-row">
           <p>{{ match.quiz?.title }}</p>
           <p class="p-details">{{ formatDate(match.createdAt) }}</p>
@@ -26,7 +26,7 @@
 
     <div class="data">
       <h2 routerLink="/quizzes">Meus Quizzes</h2>
-      <div class="quizzes">
+      <div class="quizzes" *ngIf="!accountService.isLoadingQuizzes; else elseLoading">
         <div *ngFor="let quiz of quizzes" [routerLink]="'/quizzes/'+ quiz.id" class="info-row">
           <p>{{ quiz.title }}</p>
           <p class="p-details">{{ formatDifficulty(quiz.difficulty) }}</p>
@@ -39,3 +39,11 @@
     </div>
   </div>
 </div>
+
+<ng-template #elseLoading>
+  <app-spinner-loading [isDark]="false" [isBig]="true"></app-spinner-loading>
+</ng-template>
+
+<ng-template #elseLoadingDark>
+  <app-spinner-loading [isDark]="true" [isBig]="true"></app-spinner-loading>
+</ng-template>

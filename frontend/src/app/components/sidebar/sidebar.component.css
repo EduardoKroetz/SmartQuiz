@@ -67,12 +67,17 @@
 }
 
 @media screen and (min-width: 768px) {
+  .section-container {
+    padding: 10px;
+  }
+
+
   .open {
     width: 250px;
   } 
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .sidebar {
     width: 250px;
     z-index: 2;
@@ -80,6 +85,8 @@
     padding: 10px;
     opacity: 1;
   }
+
+  
 
   .sidebar-title > i {
     display: none;

@@ -12,15 +12,13 @@
       <label for="theme">Tema</label>
       <input [disabled]="!isOwner()" name="theme" [(ngModel)]="quiz.theme"/>
     </div>
-    <div class="expires-container">
-      <div class="expires">
-        <label for="expires">Expiração</label>
-        <input [disabled]="!isOwner()" [(ngModel)]="quiz.expires" type="checkbox" id="expires" name="expires">
-      </div>
-      <div *ngIf="quiz.expires" class="expiresInSeconds">
-        <label for="expiresInSeconds">Segundos</label>
-        <input [disabled]="!isOwner()" type="number" [(ngModel)]="quiz.expiresInSeconds" id="expiresInSeconds" name="expiresInSeconds">
-      </div>
+    <div class="expires">
+      <label for="expires">Expiração</label>
+      <input [disabled]="!isOwner()" [(ngModel)]="quiz.expires" type="checkbox" id="expires" name="expires">
+    </div>
+    <div *ngIf="quiz.expires" class="expiresInSeconds">
+      <label for="expiresInSeconds">Segundos</label>
+      <input [disabled]="!isOwner()" type="number" [(ngModel)]="quiz.expiresInSeconds" id="expiresInSeconds" name="expiresInSeconds">
     </div>
     <div>
       <label for="expires">Dificuldade</label>
@@ -39,9 +37,10 @@
   <div class="actions-container">
     <app-play-quiz-button *ngIf="quiz.isActive" [quizId]="quiz!.id"></app-play-quiz-button>
     <app-delete-quiz *ngIf="account.id === quiz.userId" [quizId]="quiz.id"></app-delete-quiz>
-    <button *ngIf="isOwner()" (click)="handleUpdateQuiz()" class="update-btn">
-      Atualizar
-      <i class="bi bi-pencil-square"></i>
+    <button [disabled]="isUpdating" *ngIf="isOwner()" (click)="handleUpdateQuiz()" class="update-btn">
+      <p>{{ isUpdating ? "Atualizando" : "Atualizar" }}</p>
+      <i *ngIf="!isUpdating" class="bi bi-pencil-square"></i>
+      <app-spinner-loading *ngIf="isUpdating" [isBig]="false" [isDark]="false"></app-spinner-loading>
     </button>
   </div>
   <div class="questions-container">

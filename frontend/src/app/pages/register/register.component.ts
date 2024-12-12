@@ -29,8 +29,7 @@ export class RegisterComponent {
         this.loading = false;
         const token = response.data.token
         this.authService.setToken(token);
-        this.toastService.showToast("Usuário registrado com sucesso!", true);
-        this.route.navigate(['/'])
+        location.href = "/";
       },
       error: (error) => {
         this.loading = false;

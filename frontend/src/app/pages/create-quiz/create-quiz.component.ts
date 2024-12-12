@@ -8,26 +8,30 @@ import { ErrorUtils } from '../../utils/error-utils';
 import { Router } from '@angular/router';
 import { BackIconComponent } from "../../components/back-icon/back-icon.component";
 import { AccountService } from '../../services/account/account.service';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-create-quiz',
   standalone: true,
-  imports: [FormsModule, CommonModule, BackIconComponent],
+  imports: [FormsModule, CommonModule, BackIconComponent, SpinnerLoadingComponent],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css'
 })
 export class CreateQuizComponent {
   createQuizProps : CreateQuiz = { title: "", theme: "", description: "", difficulty: "", expires: true, expiresInSeconds: 0, numberOfQuestions: 0 };
   createQuizError : CreateQuizErrors = createQuizErrorDefault;
+  isCreating = false;
 
   constructor (private quizService: QuizService, private accountService: AccountService, private toastService: ToastService, private router: Router) {}
 
   createQuiz() {
     this.createQuizError = createQuizErrorDefault;
+    this.isCreating = true;
     this.quizService.createQuiz(this.createQuizProps).subscribe({
       next: (response: any) => {
         const quizId = response.data.id;
         this.toastService.showToast("Quiz criado com sucesso!", true);
+        this.isCreating = false;
         this.quizService.getQuizById(quizId).subscribe({
           next: (quizResponse: any) => {
             this.accountService.addQuiz(quizResponse.data);
@@ -36,6 +40,7 @@ export class CreateQuizComponent {
         this.router.navigate([`/quizzes/${quizId}/questions/0`])
       },
       error: (error) => {
+        this.isCreating = false;
         const errors = error.error.errors;
 
         this.createQuizError.titleError = ErrorUtils.getErrorMessage(errors, ['Título', 'título']);

@@ -8,11 +8,12 @@ import { Match } from '../../interfaces/Match';
 import { DateUtils } from '../../utils/date-utils';
 import Account from '../../interfaces/Account';
 import { QuizUtils } from '../../utils/quiz-utils';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PresentationBoxComponent, RouterLink, CommonModule],
+  imports: [PresentationBoxComponent, RouterLink, CommonModule, SpinnerLoadingComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit {
   matches: Match[] = [];
   account: Account | null = null;
 
-  constructor (private accountService: AccountService) {}
+  constructor (public accountService: AccountService) {}
 
   ngOnInit(): void {
     if (this.accountService.firstMatchesLoad)

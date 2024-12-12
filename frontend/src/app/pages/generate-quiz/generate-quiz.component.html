@@ -38,16 +38,11 @@
 
     </div>
     <div class="btn-container">
-      <button *ngIf="!isGenerating; else loadingTemplate" [disabled]="isGenerating" type="submit" class="generate-btn">
+      <button [disabled]="isGenerating" type="submit" class="generate-btn">
         <p>Gerar Quiz</p>
-        <i  class="bi bi-arrow-clockwise"></i>
+        <i *ngIf="!isGenerating" class="bi bi-arrow-clockwise"></i>
+        <app-spinner-loading *ngIf="isGenerating" [isDark]="false" [isBig]="false"></app-spinner-loading>
       </button>
     </div>
-
-    
   </form>
 </div>
-
-<ng-template #loadingTemplate>
-  <app-spinner-loading [isDark]="false"></app-spinner-loading>
-</ng-template>

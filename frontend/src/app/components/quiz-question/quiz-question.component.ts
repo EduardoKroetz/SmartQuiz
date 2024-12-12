@@ -8,11 +8,12 @@ import { QuestionService } from '../../services/question/question.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { take } from 'rxjs';
 import { Quiz } from '../../interfaces/Quiz';
+import { SpinnerLoadingComponent } from "../spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-quiz-question',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SpinnerLoadingComponent],
   templateUrl: './quiz-question.component.html',
   styleUrl: './quiz-question.component.css'
 })
@@ -22,6 +23,7 @@ export class QuizQuestionComponent implements OnInit {
   @Input() quiz: Quiz = null!;
   account: Account | null = null;
   detailsOpen = false;
+  isDeleting = false;
 
   constructor (private accountService: AccountService, private confirmationToastService: ConfirmationToastService, private questionService: QuestionService, private toastService: ToastService) {}
 
@@ -43,12 +45,15 @@ export class QuizQuestionComponent implements OnInit {
     this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
       next: (confirm) => {
         if (confirm) {
+          this.isDeleting = true;
           this.questionService.deleteQuestion(questionId).subscribe({
             next: () => {
               this.toastService.showToast("Questão deletada com sucesso!", true);
+              this.isDeleting = false;
               this.deleteQuestionEvent.emit(questionId);
             },
             error: (error) => {
+              this.isDeleting = false;
               this.toastService.showToast(error.error.errors[0]);
             }
           })

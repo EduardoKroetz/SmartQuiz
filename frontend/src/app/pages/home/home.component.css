@@ -73,6 +73,7 @@
 
 .info-row {
   display: flex;
+  cursor: pointer;
   justify-content: space-between;
   background-color: var(--secondary-color);
   border-radius: 5px;

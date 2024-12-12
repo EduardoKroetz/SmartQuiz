@@ -42,6 +42,7 @@
 }
 
 .login-btn {
+  color: var(--primary-color);
   padding: 10px 40px;
   margin: 30px auto;
 }
@@ -51,7 +52,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .login {
     align-items: normal;
   }

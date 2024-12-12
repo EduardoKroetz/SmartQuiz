@@ -5,6 +5,7 @@ import { ToastService } from '../toast/toast.service';
 import { Quiz } from '../../interfaces/Quiz';
 import { Match } from '../../interfaces/Match';
 import Account from '../../interfaces/Account';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +25,27 @@ export class AccountService {
   matchesPageNumber = 1;
   isMaxMatches = false;
 
-  constructor (private apiService: ApiService, private toastService: ToastService) {
+  isLoadingAccount = true;
+  isLoadingMatches = true;
+  isLoadingQuizzes = true;
+
+  constructor (private apiService: ApiService, private toastService: ToastService, private router: Router) {
     this.setUser();
   }
 
   setUser() {
+    this.isLoadingAccount = true;
     this.apiService.get("accounts").subscribe({
       next: (response: any) => {
         this.accountSubject.next(response.data);
+        this.isLoadingAccount = false;
       },
       error: () => {
-        this.toastService.showToast("Occoreu um erro ao tentar buscar as informações da conta", );
+        this.isLoadingAccount = false;
+        this.toastService.showToast("Você não está autenticado! Redirecionando...", );
+        setTimeout(() => {
+          this.router.navigate(["/login"])
+        }, 1500);
       } 
     });
   }
@@ -43,6 +54,7 @@ export class AccountService {
     if (!this.firstQuizzesLoad)
       return
 
+    this.isLoadingQuizzes = true;
     this.$user.subscribe({
       next: (user) => {
         if (!user)
@@ -51,8 +63,10 @@ export class AccountService {
           next: (response: any) => {
             this.accountQuizzesSubject.next(response.data)
             this.firstQuizzesLoad = false;
+            this.isLoadingQuizzes = false;
           },
           error: () => {
+            this.isLoadingQuizzes = false;
             this.toastService.showToast("Não foi possível obter os quizzes", false);
           }
         })
@@ -61,6 +75,7 @@ export class AccountService {
   }
 
   getAccountMatches() {
+    this.isLoadingMatches = true;
     this.$user.subscribe({
       next: (user) => {
         if (!user)
@@ -73,8 +88,10 @@ export class AccountService {
             const matches = this.accountMatchesSubject.getValue();
             this.accountMatchesSubject.next([...matches ,...response.data]);
             this.firstMatchesLoad = false;
+            this.isLoadingMatches = false;
           },
           error: () => {
+            this.isLoadingMatches = false;
             this.toastService.showToast("Não foi possível obter as partidas", false);
           }
         })

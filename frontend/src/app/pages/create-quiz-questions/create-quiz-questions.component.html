@@ -3,7 +3,7 @@
     <i [routerLink]="'/quizzes/'+ createQuestion.quizId" class="bi bi-caret-left-fill"></i>
     Criar Questão {{ createQuestion.order + 1 }}
   </h1>
-  <form (submit)="createNewQuestion()">
+  <form (submit)="createNewQuestion()" *ngIf="!isLoadingQuiz; else elseLoading">
     <div class="input-section">
       <label for="text">Questão</label>
       <input type="text" name="text" [(ngModel)]="createQuestion.text" id="text">
@@ -29,12 +29,20 @@
       </div>
     </div>
     <div class="btn-container">
-      <button type="submit" class="create-btn">Criar Questão {{ createQuestion.order + 1 }}
-        <i class="bi bi-plus-lg"></i>
+      <button [disabled]="isCreating" type="submit" class="create-btn">
+        Criar Questão {{ createQuestion.order + 1 }}
+        <i *ngIf="!isCreating" class="bi bi-plus-lg"></i>
+        <app-spinner-loading *ngIf="isCreating" [isBig]="false" [isDark]="false"></app-spinner-loading>
       </button>
-      <button *ngIf="createQuestion.order > 0" (click)="toggleQuiz()" type="button" class="completed-btn">Concluir
+      <button [disabled]="isToggling" *ngIf="createQuestion.order > 0" (click)="toggleQuiz()" type="button" class="completed-btn">
+        Concluir
         <i class="bi bi-arrow-right"></i>
+        <app-spinner-loading *ngIf="isToggling" [isBig]="false" [isDark]="false"></app-spinner-loading>
       </button>
     </div>
   </form>
 </div>
+
+<ng-template #elseLoading>
+  <app-spinner-loading [isBig]="true" [isDark]="false"></app-spinner-loading>
+</ng-template>

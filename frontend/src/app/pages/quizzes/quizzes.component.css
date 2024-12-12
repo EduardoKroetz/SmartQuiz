@@ -28,16 +28,16 @@
   flex: 1;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 768px) {
   .quiz-item {
-    flex: 1 1 350px;
+    flex: 1 1 320px;
   }
 
 }
 
 @media screen and (min-width: 1920px) {
   .quiz-item {
-    flex: 1 1 450px;
+    flex: 1 1 370px;
   }
 
 }

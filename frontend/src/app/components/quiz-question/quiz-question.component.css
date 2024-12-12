@@ -52,10 +52,6 @@
 
 @media screen and (min-width: 1920px) {
   .question {
-    padding: 13px;
-  }
-  
-  i {
-    font-size: 40px;
+    padding: 8px;
   }
 }

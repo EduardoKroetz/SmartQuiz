@@ -13,14 +13,14 @@
 
 @media screen and (min-width: 768px) {
   .presentation-box {
-    width: 240px;
+    width: 200px;
     padding: 15px;
   }
 }
 
 @media screen and (min-width: 1920px) {
   .presentation-box {
-    width: 370px;
+    width: 300px;
     padding: 25px;
   }
 }

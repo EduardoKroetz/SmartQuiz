@@ -13,15 +13,14 @@
   flex: 1;
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .main {
-    margin: 65px 5px 5px 275px;
+    margin: 62px 5px 5px 275px;
   }
-
 }
 
 @media screen and (min-width: 1920px) {
   .main {
-    margin: 95px 5px 5px 275px;
+    margin: 91px 5px 5px 275px;
   }
 }

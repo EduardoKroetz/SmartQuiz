@@ -5,7 +5,8 @@
   </h1>
   <div class="history-container">
     <app-history-item *ngFor="let match of matches" [match]="match"></app-history-item>
-    <h3 *ngIf="matches.length === 0">Nenhuma partida encontrada...</h3>
+    <h3 *ngIf="matches.length === 0 && !accountService.isLoadingMatches">Nenhuma partida encontrada...</h3>
   </div>
-  <button *ngIf="!accountService.isMaxMatches" (click)="loadMore()" class="load-btn">Carregar mais</button>
+  <button *ngIf="!accountService.isMaxMatches && matches.length > 0" (click)="loadMore()" [disabled]="accountService.isLoadingMatches" class="load-btn">Carregar mais</button>
+  <app-spinner-loading *ngIf="accountService.isLoadingMatches" [isBig]="true" [isDark]="false"></app-spinner-loading>
 </div>

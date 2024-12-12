@@ -17,6 +17,7 @@
 
 .title > h1 {
   display: flex;
+  align-items: center;
   flex: 1;
 }
 
@@ -36,10 +37,14 @@
   color: var(--red-color);
 }
 
+.title input {
+  font-size: 16px;
+}
+
 .input-updt {
   background-color: var(--primary-color);
   color: var(--secondary-color);
-  flex: 1;
+  width: 100%;
   font-weight: bold;
 }
 
@@ -59,15 +64,14 @@
 .container-info > div {
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
+} 
 
 .container-info > div > label {
   font-weight: bold;
   width: 25%;
 }
 
-input, select {
+.container-info div input, select {
   flex: 1;
   background-color: white;
 }
@@ -81,23 +85,12 @@ input, select {
   opacity: 1; 
 }
 
-.expires-container > div {
-  display: flex;
-  align-items: center;
-  gap: .3rem;
-}
 
-.expires-container > div label {
-  font-weight: bold;
-}
-
-.expires {
-  padding: 5px 0;
-}
-
-.expires-container #expires {
+#expires {
   transform: scale(1.4);
   padding: 10px;
+  flex: 0;
+  margin-left: 3px;
 }
 
 .expiresInSeconds {
@@ -106,7 +99,7 @@ input, select {
 
 .expiresInSeconds input {
   flex: 1;
-}
+} 
 
 /* Actions */
 
@@ -167,32 +160,36 @@ input, select {
 }
 
 @media screen and (min-width: 768px) {
+  .title input {
+    font-size: 18px;
+  }  
+
   .container-info > div > label {
-    width: 13%;
+    width: 15%;
   }
 }
 
-@media screen and (min-width: 1366px) {
+@media screen and (min-width: 1360px) {
   .container-info > div > label {
-    width: 8%;
+    width: 11%;
   }
 }
 
 @media screen and (min-width: 1920px) {
+  .title input {
+    font-size: 25px;
+  }
+
   .container-info, .questions-container {
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
   }
 
   .title > i {
-    font-size: 50px;
+    font-size: 45px;
   }
 
-  .question {
-    padding: 13px;
-  }
-  
-  i {
-    font-size: 40px;
+  #expires {
+    transform: scale(2);
   }
 }

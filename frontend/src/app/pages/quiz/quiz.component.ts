@@ -16,11 +16,12 @@ import { QuestionService } from '../../services/question/question.service';
 import { QuizUtils } from '../../utils/quiz-utils';
 import { QuizQuestionComponent } from "../../components/quiz-question/quiz-question.component";
 import { FormsModule } from '@angular/forms';
+import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink, QuizQuestionComponent, FormsModule],
+  imports: [CommonModule, PlayQuizButtonComponent, DeleteQuizComponent, BackIconComponent, RouterLink, QuizQuestionComponent, FormsModule, SpinnerLoadingComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.css'
 })
@@ -29,6 +30,8 @@ export class QuizComponent implements OnInit {
   quiz: Quiz | null = null; 
   questions: Question[] = [];
   account: Account | null = null;
+
+  isUpdating = false;
 
   constructor (private route: ActivatedRoute, private quizService: QuizService, private toastService: ToastService, private accountService: AccountService, private location: Location, private confirmationToastService: ConfirmationToastService, private questionService: QuestionService) {}
 
@@ -74,14 +77,15 @@ export class QuizComponent implements OnInit {
     if (!this.quiz)
       return
 
-    console.log(this.quiz)
-
+    this.isUpdating = true;
     this.quizService.updateQuiz(
       this.quiz.title, this.quiz.description, this.quiz.expires, this.quiz.expiresInSeconds, this.quiz.difficulty, this.quiz.theme, this.quiz.id).subscribe({
         next: () => {
           this.toastService.showToast('Quiz atualizado com sucesso!', true)
+          this.isUpdating = false;
         },
         error: (error) => {
+          this.isUpdating = false;
           this.toastService.showToast(error.error.errors[0], false)
         }
       })
@@ -91,7 +95,6 @@ export class QuizComponent implements OnInit {
     this.confirmationToastService.showToast(`Quer ${this.quiz!.isActive ? 'desativar' : 'ativar'} o quiz?`);
     this.confirmationToastService.confirmed$.pipe(take(1)).subscribe({
       next: (confirm) => {
-        console.log(confirm);
         if (confirm){
           this.quizService.toggleQuiz(this.quiz!.id).subscribe({
             next: () => {

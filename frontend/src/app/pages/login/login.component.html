@@ -12,15 +12,12 @@
         <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="password" name="password" type="text" id="password">
         <div *ngIf="passwordError" class="error">{{ passwordError }}</div>
       </div>
-      <button class="login-btn">
-        <p *ngIf="!isLoading; else loadingTemplate">Entrar</p>
+      <button [disabled]="isLoading" class="login-btn">
+        <p>{{ isLoading ? "Entrando" : "Entrar" }}</p>
+        <app-spinner-loading *ngIf="isLoading" [isBig]="false" [isDark]="true" class="loading-spinner"></app-spinner-loading>
       </button>
     </form>
     <div routerLink="/register" class="not-registered">Não se registrou? Registre-se</div>
   </div>
   <app-smartquiz-desc class="column-2"></app-smartquiz-desc>
 </div>
-
-<ng-template #loadingTemplate>
-  <app-spinner-loading [isDark]="true" class="loading-spinner"></app-spinner-loading>
-</ng-template>
