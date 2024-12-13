@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SmartquizDescComponent } from "../../components/smartquiz-desc/smartquiz-desc.component";
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../services/toast/toast.service';
 import { CommonModule } from '@angular/common';
@@ -23,7 +23,7 @@ export class LoginComponent {
   passwordError: string | null  = null;
   isLoading = false;
 
-  constructor (private authService: AuthService, private toastService: ToastService, private router: Router) {}
+  constructor (private authService: AuthService, private toastService: ToastService) {}
 
   submit() {
     this.isLoading = true;
@@ -33,7 +33,7 @@ export class LoginComponent {
       next: (response: any) => {
         this.authService.setToken(response.data.token);
         this.isLoading = false;
-        this.router.navigate(["/"])
+        location.href = "/";
       },
       error: (response: any) => {
         const errors: string[] = response.error.errors;
