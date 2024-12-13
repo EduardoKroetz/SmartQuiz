@@ -1,4 +1,4 @@
-using System.Text;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -37,7 +37,7 @@ public class GenerateQuizUseCase
 
     public async Task<ResultDto<IdResult>> Execute(GenerateQuizDto generateQuizDto, Guid userId)
     {
-        var prompt = @$"
+        var quizPrompt = @$"
                 Crie um Quiz de múltipla escolha sobre o tema '{generateQuizDto.Theme}' com {generateQuizDto.NumberOfQuestions} questões de dificuldade '{generateQuizDto.Difficulty}'. 
                 Sem nenhum tipo de formatação markdown, somente JSON em formato de string. Ex:
                 {{
@@ -58,64 +58,46 @@ public class GenerateQuizUseCase
                     ]
                 }}
         ";
-
-        var payload = new
+        
+        // Estrutura do payload para a API
+        var payload = new { contents = new object[] { new { parts = new object[]
         {
-            contents = new object[]
-            {
-                new
-                {
-                    parts = new object[]
-                    {
-                        new { text = prompt }
-                    }
-                }
-            }
-        };
+            new { text = quizPrompt }
+        }}}};
 
-        var content = new StringContent(
-            JsonConvert.SerializeObject(payload),
-            Encoding.UTF8,
-            "application/json"
-        );
-
-        //Requisição para o Gemini
-        var response = await _httpClient.PostAsync(ApiUrl, content);
+        //Requisição para a API do Gemini
+        var response = await _httpClient.PostAsJsonAsync(ApiUrl, payload);
         if (response.IsSuccessStatusCode == false)
             throw new InvalidOperationException("Não foi possível concluir a requisição para a API do Gemini");
         
-        
-        // Deserializar a resposta completa com metadados
-        var responseContentString = await response.Content.ReadAsStringAsync();
-
+        // Deserializar a resposta da API (com metadados)
         Root geminiContent;
         try
         {
-            geminiContent = JsonConvert.DeserializeObject<Root>(responseContentString)!;
+            geminiContent = JsonConvert.DeserializeObject<Root>(await response.Content.ReadAsStringAsync())!;
         }
         catch
         {
             throw new InvalidOperationException("Não foi possível deserializar a resposta");
         }
+        var generatedContent = geminiContent.Candidates[0].Content.Parts[0].Text; //Acessar o conteúdo gerado
 
-        
-        //Formatar para um json válido
-        var textJson = geminiContent.Candidates[0].Content.Parts[0].Text;
-        textJson = Regex.Replace(textJson, @"\p{C}+", ""); 
-        textJson = Regex.Replace(textJson, @"```json", "");
-        textJson = Regex.Unescape(textJson.Trim('`', ' ', '\n', '\r'));
+        // Limpar e ajustar o JSON gerado
+        generatedContent = Regex.Replace(generatedContent, @"\p{C}+", ""); 
+        generatedContent = Regex.Replace(generatedContent, @"```json", "");
+        generatedContent = Regex.Unescape(generatedContent.Trim('`', ' ', '\n', '\r'));
         
         //Deserializar o texto Json
         QuizResponse quizResponse;
         try
         {
-            quizResponse = JsonConvert.DeserializeObject<QuizResponse>(textJson)!;
+            quizResponse = JsonConvert.DeserializeObject<QuizResponse>(generatedContent)!;
         }
         catch
         {
             throw new ArgumentException("O conteúdo do JSON gerado não pôde ser deserializado corretamente.");
         }
-
+        
         //Criar o quiz com base nas informações da resposta
         var editorQuizDto = new EditorQuizDto
         {
