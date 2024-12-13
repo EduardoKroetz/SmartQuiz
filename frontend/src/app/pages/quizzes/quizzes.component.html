@@ -16,13 +16,12 @@
         Nenhum quiz encontrado
       </div>
     </div>
-    <div class="quiz-list" *ngIf="!accountService.isLoadingQuizzes; else elseLoading">
+    <div class="quiz-list">
       <app-quiz-card class="quiz-item" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
     </div>
-
+    <app-spinner-loading *ngIf="accountService.isLoadingQuizzes" [isBig]="true" [isDark]="false"></app-spinner-loading>
+    <button (click)="loadMoreQuizzes()" style="margin: auto;" *ngIf="!accountService.isMaxQuizzes && !accountService.isLoadingQuizzes">
+      Carregar mais
+    </button>
   </div>
 </div>
-
-<ng-template #elseLoading>
-  <app-spinner-loading [isBig]="true" [isDark]="false"></app-spinner-loading>
-</ng-template>

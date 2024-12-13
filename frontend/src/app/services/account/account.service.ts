@@ -20,6 +20,10 @@ export class AccountService {
   $matches = this.accountMatchesSubject.asObservable();
 
   firstQuizzesLoad = true;
+  quizzesPageSize = 10;
+  quizzesPageNumber = 1;
+  isMaxQuizzes = false;
+
   firstMatchesLoad = true;
   matchesPageSize = 10;
   matchesPageNumber = 1;
@@ -51,17 +55,17 @@ export class AccountService {
   }
 
   getAccountQuizzes() {
-    if (!this.firstQuizzesLoad)
-      return
-
     this.isLoadingQuizzes = true;
     this.$user.subscribe({
       next: (user) => {
         if (!user)
           return
-        this.apiService.get(`accounts/${user.id}/quizzes`).subscribe({
+        this.apiService.get(`accounts/${user.id}/quizzes?pageNumber=${this.quizzesPageNumber}&pageSize=${this.quizzesPageSize}`).subscribe({
           next: (response: any) => {
-            this.accountQuizzesSubject.next(response.data)
+            if (response.data.length < this.quizzesPageSize)
+              this.isMaxQuizzes = true;
+            const quizzes = this.accountQuizzesSubject.getValue();
+            this.accountQuizzesSubject.next([...quizzes ,...response.data]);
             this.firstQuizzesLoad = false;
             this.isLoadingQuizzes = false;
           },
@@ -72,6 +76,11 @@ export class AccountService {
         })
       }
     })
+  }
+
+  loadMoreQuizzes() {
+    this.quizzesPageNumber++;
+    this.getAccountQuizzes();
   }
 
   getAccountMatches() {

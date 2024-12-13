@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     if (this.accountService.firstMatchesLoad)
       this.accountService.getAccountMatches();
-    this.accountService.getAccountQuizzes();
+    if (this.accountService.firstQuizzesLoad)
+      this.accountService.getAccountQuizzes();
     this.setAccount();
 
     this.accountService.$quizzes.subscribe({

@@ -20,7 +20,8 @@ export class QuizzesComponent implements OnInit {
   constructor (public accountService: AccountService) {}
 
   ngOnInit(): void {
-    this.accountService.getAccountQuizzes();
+    if (this.accountService.firstQuizzesLoad)
+      this.accountService.getAccountQuizzes();
     this.getQuizzes();
   }
 
@@ -30,5 +31,9 @@ export class QuizzesComponent implements OnInit {
         this.quizzes = data;
       }
     })
+  }
+
+  loadMoreQuizzes() {
+    this.accountService.loadMoreQuizzes();
   }
 }

@@ -4,7 +4,7 @@
   <div class="results-container">
     <app-quiz-card class="quiz-card" *ngFor="let quiz of quizzes" [quiz]="quiz"></app-quiz-card>
   </div>
-  <button (click)="loadMore()" *ngIf="!isMaximumResults" class="load-btn">
+  <button (click)="loadMore()" *ngIf="!isMaximumResults && !isLoadingResults" class="load-btn">
     Carregar mais
   </button>
   <app-spinner-loading *ngIf="isLoadingResults" [isBig]="true" [isDark]="false"></app-spinner-loading>
