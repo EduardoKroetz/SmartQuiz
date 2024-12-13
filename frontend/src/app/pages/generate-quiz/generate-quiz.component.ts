@@ -37,7 +37,7 @@ export class GenerateQuizComponent {
         //Buscar o quiz criado para colocar atualizar o estado
         this.quizService.getQuizById(quizId).subscribe({
           next: (response: any) => {
-            this.accountService.addQuiz(response.data.quiz)
+            this.accountService.addQuiz(response.data)
           },
           error: () => {
             this.toastService.showToast('Não foi possível obter o quiz gerado');

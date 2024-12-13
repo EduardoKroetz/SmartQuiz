@@ -4,16 +4,15 @@
     <form (submit)="handleSubmit()" class="register-form">
       <div class="form-section">
         <label id="username">Nome de usuário</label>
-        <input [(ngModel)]="username" type="text" id="username" name="username">
+        <input [(ngModel)]="username" autocomplete="username" type="text" id="username" name="username">
+        <div *ngIf="usernameError" class="error">{{ usernameError }}</div>
       </div>
       <div class="form-section">
         <label id="email">E-mail</label>
-        <input [(ngModel)]="email" type="text" id="email" name="email">
+        <input [(ngModel)]="email" type="email" id="email" name="email">
+        <div *ngIf="emailError" class="error">{{ emailError }}</div>
       </div>
-      <div class="form-section">
-        <label id="password">Senha</label>
-        <input [(ngModel)]="password" type="text" id="password" name="password">
-      </div>
+      <app-password-form [isLogin]="false" [passwordError]="passwordError" (passwordChange)="handleChangePassword($event)"></app-password-form>
       <button class="register-btn">
         <p *ngIf="!loading; else loadingTemplate">Registrar</p></button>
     </form>

@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { ErrorUtils } from '../../utils/error-utils';
 import { AuthService } from '../../services/auth/auth.service';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
+import { PasswordFormComponent } from "../../components/password-form/password-form.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SmartquizDescComponent, RouterLink, FormsModule, CommonModule, SpinnerLoadingComponent],
+  imports: [SmartquizDescComponent, RouterLink, FormsModule, CommonModule, SpinnerLoadingComponent, PasswordFormComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -32,7 +33,7 @@ export class LoginComponent {
       next: (response: any) => {
         this.authService.setToken(response.data.token);
         this.isLoading = false;
-        location.href = "/";
+        this.router.navigate(["/"])
       },
       error: (response: any) => {
         const errors: string[] = response.error.errors;
@@ -47,5 +48,8 @@ export class LoginComponent {
     });
   }
 
+  handleChangePassword(password: string) {
+    this.password = password;
+  }
 
 }

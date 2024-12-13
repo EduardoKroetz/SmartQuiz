@@ -4,14 +4,10 @@
     <form (submit)="submit()" class="login-form">
       <div class="form-section">
         <label id="email">E-mail</label>
-        <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="email" name="email" type="text" id="email">
+        <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="email" autocomplete="email" name="email" type="text" id="email">
         <div *ngIf="emailError" class="error">{{ emailError }}</div>
       </div>
-      <div class="form-section">
-        <label id="password">Senha</label>
-        <input [ngClass]="passwordError ? 'border-error' : ''" [(ngModel)]="password" name="password" type="text" id="password">
-        <div *ngIf="passwordError" class="error">{{ passwordError }}</div>
-      </div>
+      <app-password-form  [isLogin]="true" [passwordError]="passwordError" (passwordChange)="handleChangePassword($event)"></app-password-form>
       <button [disabled]="isLoading" class="login-btn">
         <p>{{ isLoading ? "Entrando" : "Entrar" }}</p>
         <app-spinner-loading *ngIf="isLoading" [isBig]="false" [isDark]="true" class="loading-spinner"></app-spinner-loading>
