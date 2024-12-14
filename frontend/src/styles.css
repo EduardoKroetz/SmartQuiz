@@ -38,6 +38,10 @@ input, select, button, textarea {
   transition: all 150ms;
 }
 
+hr {
+  width: 70%;
+}
+
 button:disabled {
   color: var(--secondary-color);
 }

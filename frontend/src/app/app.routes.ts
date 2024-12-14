@@ -15,6 +15,9 @@ import { PlayMatchComponent } from './pages/play-match/play-match.component';
 import { CreateQuizComponent } from './pages/create-quiz/create-quiz.component';
 import { CreateQuizQuestionsComponent } from './pages/create-quiz-questions/create-quiz-questions.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
+import { CallbackComponent } from './pages/callback/callback.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 
 export const routes: Routes = [
   {
@@ -53,5 +56,8 @@ export const routes: Routes = [
     ]
   },
   { path:  "register", component: RegisterComponent },
-  { path:  "login", component: LoginComponent }
+  { path:  "login", component: LoginComponent },
+  { path: "callback", component: CallbackComponent },
+  { path: "privacy-policy", component: PrivacyPolicyComponent },
+  { path: "terms-of-service", component: TermsOfServiceComponent }
 ];

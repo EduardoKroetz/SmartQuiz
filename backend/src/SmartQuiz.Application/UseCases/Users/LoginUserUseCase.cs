@@ -22,6 +22,11 @@ public class LoginUserUseCase
         if (user == null) 
             throw new ArgumentException("Email ou senha são inválidos");
 
+        if (user.IsOAuthUser)
+        {
+            throw new InvalidOperationException("O e-mail está vinculado a uma conta Google. Faça login com o Google");
+        }
+
         var isValid = _authService.VerifyPassword(loginUserDto.Password, user.PasswordHash);
         if (!isValid) 
             throw new ArgumentException("Email ou senha são inválidos");

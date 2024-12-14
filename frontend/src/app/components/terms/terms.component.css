@@ -1,0 +1,10 @@
+.terms {
+  margin-top: 50px;
+  display: flex;
+  gap: 2rem;
+}
+
+.terms > div {
+  font-size: 13px;
+  cursor: pointer;
+}

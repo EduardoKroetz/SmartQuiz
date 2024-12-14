@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartQuiz.Infrastructure.Data;
@@ -11,9 +12,11 @@ using SmartQuiz.Infrastructure.Data;
 namespace SmartQuiz.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(SmartQuizDbContext))]
-    partial class SmartQuizDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241214030302_Add_User_IsOAuthUser")]
+    partial class Add_User_IsOAuthUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
