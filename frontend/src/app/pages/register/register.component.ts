@@ -8,11 +8,13 @@ import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinne
 import { CommonModule } from '@angular/common';
 import { ErrorUtils } from '../../utils/error-utils';
 import { PasswordFormComponent } from "../../components/password-form/password-form.component";
+import { LoginGoogleBtnComponent } from "../../components/login-google-btn/login-google-btn.component";
+import { TermsComponent } from "../../components/terms/terms.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [SmartquizDescComponent, RouterLink, FormsModule, SpinnerLoadingComponent, CommonModule, PasswordFormComponent],
+  imports: [SmartquizDescComponent, RouterLink, FormsModule, SpinnerLoadingComponent, CommonModule, PasswordFormComponent, LoginGoogleBtnComponent, TermsComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

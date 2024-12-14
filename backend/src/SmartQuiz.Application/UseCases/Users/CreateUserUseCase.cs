@@ -20,8 +20,9 @@ public class CreateUserUseCase
     public async Task<ResultDto> Execute(CreateUserDto createUserDto)
     {
         var userExists = await _userRepository.GetByEmailAsync(createUserDto.Email);
-        if (userExists != null) throw new InvalidOperationException("Esse e-mail já está cadastrado");
-
+        if (userExists != null) 
+            throw new InvalidOperationException("Esse e-mail já está cadastrado");
+        
         var passwordHash = _authService.HashPassword(createUserDto.Password);
         var user = new User
         {

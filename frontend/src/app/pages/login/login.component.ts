@@ -8,11 +8,13 @@ import { ErrorUtils } from '../../utils/error-utils';
 import { AuthService } from '../../services/auth/auth.service';
 import { SpinnerLoadingComponent } from "../../components/spinner-loading/spinner-loading.component";
 import { PasswordFormComponent } from "../../components/password-form/password-form.component";
+import { LoginGoogleBtnComponent } from "../../components/login-google-btn/login-google-btn.component";
+import { TermsComponent } from "../../components/terms/terms.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SmartquizDescComponent, RouterLink, FormsModule, CommonModule, SpinnerLoadingComponent, PasswordFormComponent],
+  imports: [SmartquizDescComponent, RouterLink, FormsModule, CommonModule, SpinnerLoadingComponent, PasswordFormComponent, LoginGoogleBtnComponent, TermsComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

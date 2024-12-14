@@ -13,7 +13,10 @@
         <app-spinner-loading *ngIf="isLoading" [isBig]="false" [isDark]="true" class="loading-spinner"></app-spinner-loading>
       </button>
     </form>
+    <hr>
+    <app-login-google-btn></app-login-google-btn>
     <div routerLink="/register" class="not-registered">Não se registrou? Registre-se</div>
+    <app-terms></app-terms>
   </div>
   <app-smartquiz-desc class="column-2"></app-smartquiz-desc>
 </div>

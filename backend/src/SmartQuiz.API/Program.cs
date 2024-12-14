@@ -17,6 +17,7 @@ using SmartQuiz.Application.UseCases.Responses;
 using SmartQuiz.Application.UseCases.Reviews;
 using SmartQuiz.Application.UseCases.Users;
 using SmartQuiz.Application.DTOs.Questions;
+using SmartQuiz.Application.UseCases.OAuth;
 using SmartQuiz.Core.Repositories;
 using SmartQuiz.Infrastructure.Data;
 using SmartQuiz.Infrastructure.Data.Repositories;
@@ -140,8 +141,8 @@ void InjectDependencies(IServiceCollection services)
 
     //Services
     services.AddScoped<IAuthService, AuthService>();
-    services.AddScoped<IEmailService, EmailService>();
-
+    services.AddScoped<IOAuthService, OAuthService>();
+    
     //UseCases
     services.AddScoped<CreateUserUseCase>();
     services.AddScoped<LoginUserUseCase>();
@@ -184,6 +185,9 @@ void InjectDependencies(IServiceCollection services)
     services.AddScoped<DeleteReviewUseCase>();
     services.AddScoped<UpdateReviewUseCase>();
     services.AddScoped<GetReviewDetailsUseCase>();
+
+    services.AddScoped<LoginWithGoogleUseCase>();
+    services.AddScoped<ProcessGoogleCallbackUseCase>();
 }
 
 public class Startup { }

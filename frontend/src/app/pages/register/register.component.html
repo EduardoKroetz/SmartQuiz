@@ -16,7 +16,10 @@
       <button class="register-btn">
         <p *ngIf="!loading; else loadingTemplate">Registrar</p></button>
     </form>
+    <hr>
+    <app-login-google-btn></app-login-google-btn>
     <div routerLink="/login" class="already-registered">Já possui uma conta? <span>Entrar</span></div>
+    <app-terms></app-terms>
   </div>
   <app-smartquiz-desc class="column-2"></app-smartquiz-desc>
 </div>
