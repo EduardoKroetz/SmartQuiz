@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  public baseUrl = 'https://localhost:7077/api'
+  public baseUrl = 'https://smartquiz-api-cpbbc6d2e8h7dgbr.brazilsouth-01.azurewebsites.net/api'
   private httpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient) { 
