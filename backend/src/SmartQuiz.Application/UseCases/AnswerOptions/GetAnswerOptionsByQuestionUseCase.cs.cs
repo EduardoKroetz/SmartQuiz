@@ -19,7 +19,7 @@ public class GetAnswerOptionsByQuestionUseCase
     public async Task<ResultDto> Execute(Guid questionId)
     {
         var answerOptions = await _answerOptionRepository.GetByQuestionId(questionId);
-        var answerOptionDtos = _mapper.Map<GetAnswerOptionDto>(answerOptions);
-        return new ResultDto(answerOptionDtos);
+        var answerOptionDto = _mapper.Map<GetAnswerOptionDto>(answerOptions);
+        return new ResultDto(answerOptionDto);
     }
 }

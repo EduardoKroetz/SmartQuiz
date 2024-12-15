@@ -1,7 +1,9 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.AnswerOptions;
+using SmartQuiz.Application.Validators.Interfaces;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
 
@@ -9,15 +11,17 @@ namespace UnitTests.UseCases.AnswerOptions;
 
 public class DeleteAnswerOptionUseCaseTests
 {
-    private readonly Mock<IAnswerOptionRepository> _mockAnswerOptionRepository;
-    private readonly Mock<IQuestionRepository> _mockQuestionRepository;
+    private readonly Mock<IAnswerOptionService> _answerOptionServiceMock;
+    private readonly Mock<IQuestionService> _questionServiceMock;
+    private readonly Mock<IUserAuthorizationValidator> _userAuthorizationValidatorMock;
     private readonly DeleteAnswerOptionUseCase _useCase;
 
     public DeleteAnswerOptionUseCaseTests()
     {
-        _mockAnswerOptionRepository = new Mock<IAnswerOptionRepository>();
-        _mockQuestionRepository = new Mock<IQuestionRepository>();
-        _useCase = new DeleteAnswerOptionUseCase(_mockAnswerOptionRepository.Object, _mockQuestionRepository.Object);
+        _answerOptionServiceMock = new Mock<IAnswerOptionService>();
+        _questionServiceMock = new Mock<IQuestionService>();
+        _userAuthorizationValidatorMock = new Mock<IUserAuthorizationValidator>();
+        _useCase = new DeleteAnswerOptionUseCase(_answerOptionServiceMock.Object, _questionServiceMock.Object, _userAuthorizationValidatorMock.Object);
     }
 
     [Fact]
@@ -25,7 +29,7 @@ public class DeleteAnswerOptionUseCaseTests
     {
         // Arrange
         var answerOptionId = Guid.NewGuid();
-        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync((AnswerOption)null);
+        _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync((AnswerOption)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -39,8 +43,8 @@ public class DeleteAnswerOptionUseCaseTests
         var answerOptionId = Guid.NewGuid();
         var answerOption = new AnswerOption { Id = answerOptionId, QuestionId = Guid.NewGuid() };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync((Question)null);
+        _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _questionServiceMock.Setup(service => service.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync((Question)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -61,8 +65,9 @@ public class DeleteAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = Guid.NewGuid() } // Outro usuário
         };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _questionServiceMock.Setup(service => service.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
+        _userAuthorizationValidatorMock.Setup(validator => validator.ValidateAuthorization(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -83,9 +88,10 @@ public class DeleteAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = userId },
             AnswerOptions = new List<AnswerOption> { new AnswerOption(), new AnswerOption() } // Exatamente 2 opções
         };
-
-        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
+    
+        _answerOptionServiceMock.Setup(service => service.DeleteAsync(answerOption, question)).Throws<InvalidOperationException>();
+        _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _questionServiceMock.Setup(service => service.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -110,15 +116,15 @@ public class DeleteAnswerOptionUseCaseTests
             }
         };
 
-        _mockAnswerOptionRepository.Setup(repo => repo.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
+        _questionServiceMock.Setup(service => service.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
 
         // Act
         var result = await _useCase.Execute(answerOptionId, userId);
 
         // Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
-        _mockAnswerOptionRepository.Verify(repo => repo.DeleteAsync(answerOption), Times.Once);
+        _answerOptionServiceMock.Verify(service => service.DeleteAsync(answerOption, question), Times.Once);
         Assert.Equal(answerOption.Id, (Guid)data.AnswerOptionId);
         Assert.Equal(question.Id, (Guid)data.QuestionId);
     }

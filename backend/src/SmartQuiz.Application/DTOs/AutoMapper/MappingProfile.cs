@@ -18,8 +18,6 @@ public class MappingProfile : Profile
     {
         CreateMap<AnswerOption, GetAnswerOptionDto>()
             .ConstructUsing(src => new GetAnswerOptionDto(src.Id, src.Response));
-        CreateMap<CreateAnswerOptionDto, AnswerOption>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<Match, GetMatchDto>()
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(x => x.CreatedAt.ToBrazilianTime()))

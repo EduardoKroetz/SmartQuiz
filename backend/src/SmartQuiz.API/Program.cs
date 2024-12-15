@@ -18,6 +18,8 @@ using SmartQuiz.Application.UseCases.Reviews;
 using SmartQuiz.Application.UseCases.Users;
 using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.UseCases.OAuth;
+using SmartQuiz.Application.Validators;
+using SmartQuiz.Application.Validators.Interfaces;
 using SmartQuiz.Core.Repositories;
 using SmartQuiz.Infrastructure.Data;
 using SmartQuiz.Infrastructure.Data.Repositories;
@@ -142,6 +144,11 @@ void InjectDependencies(IServiceCollection services)
     //Services
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IOAuthService, OAuthService>();
+    services.AddScoped<IAnswerOptionService, AnswerOptionService>();
+    services.AddScoped<IQuestionService, QuestionService>();
+    
+    //Validator
+    services.AddScoped<IUserAuthorizationValidator, UserAuthorizationValidator>();
     
     //UseCases
     services.AddScoped<CreateUserUseCase>();
