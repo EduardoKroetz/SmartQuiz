@@ -9,29 +9,22 @@ namespace SmartQuiz.Application.UseCases.Users;
 public class CreateUserUseCase
 {
     private readonly IAuthService _authService;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public CreateUserUseCase(IUserRepository userRepository, IAuthService authService)
+    public CreateUserUseCase(IAuthService authService, IUserService userService)
     {
-        _userRepository = userRepository;
         _authService = authService;
+        _userService = userService;
     }
 
     public async Task<ResultDto> Execute(CreateUserDto createUserDto)
     {
-        var userExists = await _userRepository.GetByEmailAsync(createUserDto.Email);
+        var userExists = await _userService.GetByEmailAsync(createUserDto.Email);
         if (userExists != null) 
             throw new InvalidOperationException("Esse e-mail já está cadastrado");
         
-        var passwordHash = _authService.HashPassword(createUserDto.Password);
-        var user = new User
-        {
-            Username = createUserDto.Username,
-            Email = createUserDto.Email,
-            PasswordHash = passwordHash
-        };
-
-        await _userRepository.AddAsync(user);
+        var user = _userService.CreateUser(createUserDto.Username, createUserDto.Email, createUserDto.Password);
+        await _userService.AddAsync(user);
 
         var token = _authService.GenerateJwtToken(user);
         return new ResultDto(new { Token = token, user.Id });

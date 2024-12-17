@@ -1,27 +1,29 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Matches;
 
 public class DeleteMatchUseCase
 {
-    private readonly IMatchRepository _matchRepository;
+    private readonly IMatchService _matchService;
+    private readonly IAuthService _authService;
 
-    public DeleteMatchUseCase(IMatchRepository matchRepository)
+    public DeleteMatchUseCase(IMatchService matchService, IAuthService authService)
     {
-        _matchRepository = matchRepository;
+        _matchService = matchService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(Guid matchId, Guid userId)
     {
-        var match = await _matchRepository.GetByIdAsync(matchId);
-        if (match == null) throw new NotFoundException("Partida não encontrada");
+        var match = await _matchService.GetByIdAsync(matchId);
+        if (match == null) 
+            throw new NotFoundException("Partida não encontrada");
 
-        if (match.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        _authService.ValidateSameUser(match.Quiz.UserId, userId);
 
-        await _matchRepository.DeleteAsync(match);
+        await _matchService.DeleteAsync(match);
 
         return new ResultDto(new { match.Id });
     }

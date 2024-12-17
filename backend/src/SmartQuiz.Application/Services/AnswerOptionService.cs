@@ -30,7 +30,7 @@ public class AnswerOptionService : IAnswerOptionService
         return await _answerOptionRepository.GetByIdAsync(id);
     }
 
-    public async Task SaveAsync(AnswerOption answerOption)
+    public async Task AddAsync(AnswerOption answerOption)
     {
         await _answerOptionRepository.AddAsync(answerOption);
     }

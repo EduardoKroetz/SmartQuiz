@@ -3,12 +3,10 @@ using SmartQuiz.Application.DTOs.AnswerOptions;
 using SmartQuiz.Application.DTOs.Matches;
 using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.DTOs.Quizzes;
-using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Application.DTOs.Reviews;
-using SmartQuiz.Application.DTOs.Users;
 using SmartQuiz.Application.Extensions;
+using SmartQuiz.Application.UseCases.Quizzes;
 using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Enums;
 
 namespace SmartQuiz.Application.DTOs.AutoMapper;
 

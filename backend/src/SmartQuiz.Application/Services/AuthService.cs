@@ -50,4 +50,10 @@ public class AuthService : IAuthService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+
+    public void ValidateSameUser(Guid userId, Guid authUserId)
+    {
+        if (userId != authUserId)
+            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+    }
 }

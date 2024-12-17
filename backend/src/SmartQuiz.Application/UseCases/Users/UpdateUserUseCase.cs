@@ -1,33 +1,33 @@
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Application.DTOs.Users;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Users;
 
 public class UpdateUserUseCase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public UpdateUserUseCase(IUserRepository userRepository)
+    public UpdateUserUseCase(IUserService userService)
     {
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
     public async Task<ResultDto> Execute(Guid userId, UpdateUserDto updateUserDto)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userService.GetByIdAsync(userId);
         if (user == null) 
             throw new NotFoundException("Usuário não encontrado");
 
-        var userEmail = await _userRepository.GetByEmailAsync(updateUserDto.Email);
+        var userEmail = await _userService.GetByEmailAsync(updateUserDto.Email);
         if (userEmail != null && user.Email != userEmail.Email)
             throw new InvalidOperationException("Esse e-mail já está registrado");
 
-        user.Email = updateUserDto.Email;
-        user.Username = updateUserDto.Username;
+        _userService.UpdateUser(user, updateUserDto);
 
-        await _userRepository.UpdateAsync(user);
+        await _userService.UpdateAsync(user);
 
         return new ResultDto(new { });
     }

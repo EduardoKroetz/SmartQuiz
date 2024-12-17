@@ -70,38 +70,6 @@ public class AccountsController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Buscar partidas de um usuário
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="useCase"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="pageNumber"></param>
-    /// <returns></returns>
-    [HttpGet("{userId:guid}/matches")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserMatchesAsync([FromRoute] Guid userId, [FromServices] GetUserMatchesUseCase useCase, [FromQuery] int pageSize = 15, [FromQuery] int pageNumber = 1)
-    {
-        var result = await useCase.Execute(userId, pageSize, pageNumber);
-        return Ok(result);
-    }
-
-    /// <summary>
-    /// Buscar quizzes de um usuário
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="useCase"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="pageNumber"></param>
-    /// <returns></returns>
-    [HttpGet("{userId:guid}/quizzes")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserQuizzesAsync([FromRoute] Guid userId, [FromServices] GetUserQuizzesUseCase useCase, [FromQuery] int pageSize = 15, [FromQuery] int pageNumber = 1)
-    {
-        var result = await useCase.Execute(userId, pageSize, pageNumber);
-        return Ok(result);
-    }
-
     [HttpPut, Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserDto dto ,[FromServices] UpdateUserUseCase useCase)
@@ -119,32 +87,4 @@ public class AccountsController : ControllerBase
         await useCase.Execute(userId, dto);
         return NoContent();
     }
-    
-    /*/// <summary>
-    /// Criar código de verificação de e-mail e enviar pro e-mail do usuário autenticado
-    /// </summary>
-    /// <param name="useCase"></param>
-    /// <returns></returns>
-    [HttpPost("verify-email"), Authorize]
-    public async Task<IActionResult> VerifyEmailAsync([FromServices] VerifyEmailUseCase useCase)
-    {
-        var email = User.GetUserEmail();
-        var result = await useCase.Execute(email);
-        return Ok(result);
-
-    }
-
-    /// <summary>
-    /// Verificar se o código de verificação de e-mail é válido e validar e-mail
-    /// </summary>
-    /// <param name="code"></param>
-    /// <param name="useCase"></param>
-    /// <returns></returns>
-    [HttpPost("verify-email-code/{code}"), Authorize]
-    public async Task<IActionResult> VerifyEmailCodeAsync([FromRoute] string code, [FromServices] VerifyEmailCodeUseCase useCase)
-    {
-        var email = User.GetUserEmail();
-        var result = await useCase.Execute(code, email);
-        return Ok(result);
-    }*/
 }

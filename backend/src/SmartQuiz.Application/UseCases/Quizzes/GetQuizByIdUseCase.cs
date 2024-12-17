@@ -1,24 +1,25 @@
 ﻿using AutoMapper;
 using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Core.Repositories;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class GetQuizByIdUseCase
 {
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuizService _quizService;
     private readonly IMapper _mapper;
 
-    public GetQuizByIdUseCase(IQuizRepository quizRepository, IMapper mapper)
+    public GetQuizByIdUseCase(IQuizService quizService, IMapper mapper)
     {
-        _quizRepository = quizRepository;
+        _quizService = quizService;
         _mapper = mapper;
     }
 
     public async Task<ResultDto> Execute(Guid id)
     {
-        var quiz = await _quizRepository.GetByIdAsync(id);
+        var quiz = await _quizService.GetByIdAsync(id);
         if (quiz == null) 
             throw new ArgumentException("Quiz não encontrado");
 

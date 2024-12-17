@@ -7,7 +7,7 @@ public interface IAnswerOptionService
 {
     Task UpdateCorrectOption(Question question);
     Task<AnswerOption?> GetByIdAsync(Guid id);
-    Task SaveAsync(AnswerOption answerOption);
+    Task AddAsync(AnswerOption answerOption);
     AnswerOption CreateAnswerOption(CreateAnswerOptionDto dto);
     Task DeleteAsync(AnswerOption answerOption, Question question);
     Task UpdateAsync(AnswerOption answerOption);

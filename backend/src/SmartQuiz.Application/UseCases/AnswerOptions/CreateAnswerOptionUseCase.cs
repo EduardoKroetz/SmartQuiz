@@ -2,21 +2,20 @@
 using SmartQuiz.Application.DTOs.AnswerOptions;
 using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Application.Services.Interfaces;
-using SmartQuiz.Application.Validators.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.AnswerOptions;
 
 public class CreateAnswerOptionUseCase
 {
-    private readonly IUserAuthorizationValidator _userAuthorizationValidator;
     private readonly IAnswerOptionService _answerOptionService;
     private readonly IQuestionService _questionService;
-
-    public CreateAnswerOptionUseCase(IUserAuthorizationValidator userAuthorizationValidator, IAnswerOptionService answerOptionService, IQuestionService questionService)
+    private readonly IAuthService _authService;
+    
+    public CreateAnswerOptionUseCase(IAnswerOptionService answerOptionService, IQuestionService questionService, IAuthService authService)
     {
-        _userAuthorizationValidator = userAuthorizationValidator;
         _answerOptionService = answerOptionService;
         _questionService = questionService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(CreateAnswerOptionDto createAnswerOption, Guid userId)
@@ -27,7 +26,7 @@ public class CreateAnswerOptionUseCase
             throw new NotFoundException("Questão não encontrada");
         
         // Validar se quem está criando é quem está autenticado
-        _userAuthorizationValidator.ValidateAuthorization(question.Quiz.UserId, userId);
+        _authService.ValidateSameUser(question.Quiz.UserId, userId);
 
         //Caso seja a opção que está sendo criada é a correta da questão, vai remover a opção correta atual da questão
         if (createAnswerOption.IsCorrectOption)
@@ -37,7 +36,7 @@ public class CreateAnswerOptionUseCase
         var answerOption = _answerOptionService.CreateAnswerOption(createAnswerOption);
 
         // Salvar no banco de dados
-        await _answerOptionService.SaveAsync(answerOption);
+        await _answerOptionService.AddAsync(answerOption);
 
         return new ResultDto(new { AnswerOptionId = answerOption.Id, QuestionId = question.Id });
     }

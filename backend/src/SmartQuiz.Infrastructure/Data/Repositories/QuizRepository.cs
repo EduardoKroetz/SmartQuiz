@@ -19,7 +19,7 @@ public class QuizRepository : Repository<Quiz>, IQuizRepository
             .FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
-    public async Task<List<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take)
+    public async Task<IEnumerable<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take, Guid? userId)
     {
         var query = context.Quizzes.AsQueryable();
 
@@ -29,6 +29,9 @@ public class QuizRepository : Repository<Quiz>, IQuizRepository
                 x.Description.ToLower().Contains(k)
             ));
 
+        if (userId != null)
+            query = query.Where(x => x.UserId == userId);
+        
         return await query
             .Include(x => x.Questions)
             .Where(x => x.IsActive == true)
@@ -40,16 +43,5 @@ public class QuizRepository : Repository<Quiz>, IQuizRepository
     public async Task<bool> HasMatchesRelated(Guid quizId)
     {
         return await context.Matches.AnyAsync(x => x.QuizId == quizId);
-    }
-
-    public async Task<List<Quiz>> GetUserQuizzesAsync(Guid userId, int skip, int take)
-    {
-        return await context.Quizzes
-            .AsNoTracking()
-            .Where(x => x.UserId == userId)
-            .Include(x => x.Questions)
-            .Skip(skip)
-            .Take(take)
-            .ToListAsync();
     }
 }

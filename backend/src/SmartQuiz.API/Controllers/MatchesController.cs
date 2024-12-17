@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartQuiz.API.Extensions;
+using SmartQuiz.Application.DTOs.Matches;
 using SmartQuiz.Application.UseCases.Matches;
 using SmartQuiz.Application.UseCases.Responses;
 
@@ -150,15 +151,10 @@ public class MatchesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMatchesAsync(
         [FromServices] GetMatchesUseCase useCase,
-        [FromQuery] int pageSize = 25,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] string? reference = null,
-        [FromQuery] string? status = null,
-        [FromQuery] bool? reviewed = null,
-        [FromQuery] string? orderBy = null)
+        [FromQuery] GetMatchesDto dto)
     {
         var userId = User.GetUserId();
-        var result = await useCase.Execute(userId, pageSize, pageNumber, reference, status, reviewed, orderBy);
+        var result = await useCase.Execute(userId, dto);
         return Ok(result);
     }
     

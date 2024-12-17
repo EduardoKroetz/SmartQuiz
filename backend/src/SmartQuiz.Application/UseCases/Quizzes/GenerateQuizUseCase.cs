@@ -1,38 +1,25 @@
-using System.Net.Http.Json;
-using System.Text.RegularExpressions;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SmartQuiz.Application.DTOs.Records;
-using SmartQuiz.Application.UseCases.Questions;
 using SmartQuiz.Application.DTOs.AnswerOptions;
 using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Application.DTOs.Responses;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class GenerateQuizUseCase
 {
-    private readonly CreateQuestionUseCase _createQuestionUseCase;
-    private readonly CreateQuizUseCase _createQuizUseCase;
-    private readonly HttpClient _httpClient;
-    private readonly ToggleQuizUseCase _toggleQuizUseCase;
+    private readonly IQuestionService _questionService;
+    private readonly IQuizService _quizService;
+    private readonly IGeminiService _geminiService;
 
-    private readonly string ApiUrl;
 
-    public GenerateQuizUseCase(IConfiguration configuration,
-        CreateQuizUseCase createQuizUseCase, ToggleQuizUseCase toggleQuizUseCase,
-        CreateQuestionUseCase createQuestionUseCase)
+    public GenerateQuizUseCase(IQuestionService questionService, IQuizService quizService, IGeminiService geminiService)
     {
-        _createQuizUseCase = createQuizUseCase;
-        _toggleQuizUseCase = toggleQuizUseCase;
-        _createQuestionUseCase = createQuestionUseCase;
-        _createQuizUseCase = createQuizUseCase;
-        var geminiApiKey = configuration["GeminiApiKey"] ?? throw new Exception("Gemini ApiKey is missing");
-        _httpClient = new HttpClient();
-        _httpClient.Timeout = TimeSpan.FromSeconds(350);
-        ApiUrl =
-            $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={geminiApiKey}";
+        _questionService = questionService;
+        _quizService = quizService;
+        _geminiService = geminiService;
     }
 
     public async Task<ResultDto<IdResult>> Execute(GenerateQuizDto generateQuizDto, Guid userId)
@@ -59,33 +46,7 @@ public class GenerateQuizUseCase
                 }}
         ";
         
-        // Estrutura do payload para a API
-        var payload = new { contents = new object[] { new { parts = new object[]
-        {
-            new { text = quizPrompt }
-        }}}};
-
-        //Requisição para a API do Gemini
-        var response = await _httpClient.PostAsJsonAsync(ApiUrl, payload);
-        if (response.IsSuccessStatusCode == false)
-            throw new InvalidOperationException("Não foi possível concluir a requisição para a API do Gemini");
-        
-        // Deserializar a resposta da API (com metadados)
-        Root geminiContent;
-        try
-        {
-            geminiContent = JsonConvert.DeserializeObject<Root>(await response.Content.ReadAsStringAsync())!;
-        }
-        catch
-        {
-            throw new InvalidOperationException("Não foi possível deserializar a resposta");
-        }
-        var generatedContent = geminiContent.Candidates[0].Content.Parts[0].Text; //Acessar o conteúdo gerado
-
-        // Limpar e ajustar o JSON gerado
-        generatedContent = Regex.Replace(generatedContent, @"\p{C}+", ""); 
-        generatedContent = Regex.Replace(generatedContent, @"```json", "");
-        generatedContent = Regex.Unescape(generatedContent.Trim('`', ' ', '\n', '\r'));
+        var generatedContent = await _geminiService.RequestGeminiAsync(quizPrompt);
         
         //Deserializar o texto Json
         QuizResponse quizResponse;
@@ -108,49 +69,43 @@ public class GenerateQuizUseCase
             Difficulty = generateQuizDto.Difficulty,
             Theme = generateQuizDto.Theme
         };
-
+        
         //Criar o Quiz
-        var quizResultDto = await _createQuizUseCase.Execute(editorQuizDto, userId);
-        var quizId = quizResultDto.Data!.Id;
+        var quiz = _quizService.CreateQuiz(editorQuizDto, userId);
+        await _quizService.AddAsync(quiz);
 
         //Criar as questões para o quiz
         foreach (var questionResponse in quizResponse.Questions)
         {
-            //Criar as opções para cada questão
-            var optionsDto = new List<CreateAnswerOptionInQuestionDto>();
-            foreach (var answerOption in questionResponse.AnswerOptions)
-            {
-                var answerOptionDto = new CreateAnswerOptionInQuestionDto
+            //Converter DTOs
+            var optionsDto = questionResponse.AnswerOptions
+                .Select(answerOption => new CreateAnswerOptionDto
                 {
                     Response = answerOption.Response,
-                    IsCorrectOption = answerOption.IsCorrectOption
-                };
-                optionsDto.Add(answerOptionDto);
-            }
+                    IsCorrectOption = answerOption.IsCorrectOption,
+                })
+                .ToList();
 
             //Criar a questão
-            var createQuestionDto = new CreateQuestionDto
+            var questionDto = new CreateQuestionDto
             {
-                QuizId = quizId,
+                QuizId = quiz.Id,
                 Order = questionResponse.Order,
                 Text = questionResponse.Text,
                 Options = optionsDto
             };
 
-            await _createQuestionUseCase.Execute(createQuestionDto, userId);
+            var question = _questionService.CreateQuestion(questionDto);
+            await _questionService.AddAsync(question);
         }
 
         //Ativar o quiz
-        await _toggleQuizUseCase.Execute(quizId, userId);
+        _quizService.ToggleQuiz(quiz);
+        await _quizService.UpdateAsync(quiz);
 
-        return new ResultDto<IdResult>(new IdResult(quizResultDto.Data!.Id));
+        return new ResultDto<IdResult>(new IdResult(quiz.Id));
     }
 }
-
-internal record Root(List<Candidate> Candidates);
-internal record Candidate(Content Content, string FinishReason);
-internal record Content(List<Part> Parts, string Role);
-internal record Part(string Text);
 
 internal record QuizResponse(string Title, string Description, List<QuizQuestionsResponse> Questions);
 internal record QuizQuestionsResponse(string Text, int Order, List<QuestionAnswerOptionResponse> AnswerOptions);

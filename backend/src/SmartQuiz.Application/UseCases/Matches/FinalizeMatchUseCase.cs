@@ -1,36 +1,31 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Enums;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Matches;
 
 public class FinalizeMatchUseCase
 {
-    private readonly IMatchRepository _matchRepository;
+    private readonly IMatchService _matchService;
+    private readonly IAuthService _authService;
 
-    public FinalizeMatchUseCase(IMatchRepository matchRepository)
+    public FinalizeMatchUseCase(IMatchService matchService, IAuthService authService)
     {
-        _matchRepository = matchRepository;
+        _matchService = matchService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(Guid matchId, Guid userId)
     {
-        var match = await _matchRepository.GetByIdAsync(matchId);
-        if (match == null) throw new NotFoundException("Partida não encontrada");
-
-        if (match.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-
-        if (match.Status == EMatchStatus.Finished)
-            throw new InvalidOperationException("Essa partida já foi finalizada");
-
-        if (match.Status == EMatchStatus.Failed)
-            throw new InvalidOperationException("Não é possível finalizar essa partida");
-
-        match.Status = EMatchStatus.Finished;
-
-        await _matchRepository.UpdateAsync(match);
+        var match = await _matchService.GetByIdAsync(matchId);
+        if (match is null) 
+            throw new NotFoundException("Partida não encontrada");
+        
+        _authService.ValidateSameUser(match.UserId, userId);
+        
+        _matchService.FinalizeMatch(match);
+        
+        await _matchService.UpdateAsync(match);
 
         return new ResultDto(new { match.Id });
     }
