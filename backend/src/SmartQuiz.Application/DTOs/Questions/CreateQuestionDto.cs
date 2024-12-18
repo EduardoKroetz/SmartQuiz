@@ -5,11 +5,6 @@ namespace SmartQuiz.Application.DTOs.Questions;
 
 public class CreateQuestionDto
 {
-    public CreateQuestionDto()
-    {
-        Validate();
-    }
-    
     [Required(ErrorMessage = "Informe a pergunta")]
     public string Text { get; set; }
 
@@ -18,7 +13,7 @@ public class CreateQuestionDto
 
     [Required(ErrorMessage = "Informe as opções de resposta da questão")]
     [MinLength(2, ErrorMessage = "Informe pelo menos duas opções de resposta para a questão")]
-    public List<CreateAnswerOptionDto> Options { get; set; }
+    public List<CreateAnswerOptionInQuestionDto> Options { get; set; }
 
     [Required(ErrorMessage = "Informe a ordem dessa questão no Quiz")]
     public int Order { get; set; }

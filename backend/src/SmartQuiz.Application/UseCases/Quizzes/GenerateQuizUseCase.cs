@@ -79,7 +79,7 @@ public class GenerateQuizUseCase
         {
             //Converter DTOs
             var optionsDto = questionResponse.AnswerOptions
-                .Select(answerOption => new CreateAnswerOptionDto
+                .Select(answerOption => new CreateAnswerOptionInQuestionDto()
                 {
                     Response = answerOption.Response,
                     IsCorrectOption = answerOption.IsCorrectOption,

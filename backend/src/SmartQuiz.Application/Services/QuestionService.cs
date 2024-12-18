@@ -50,8 +50,11 @@ public class QuestionService : IQuestionService
         }
         else
         {
-            var maxOrder = questions.Max(x => x.Order);
-            if (question.Order > maxOrder)
+            var maxOrder = questions.Any() ? questions.Max(x => x.Order) : -1;
+            if (maxOrder == -1)
+            {
+                question.Order = 0;
+            } else if (question.Order > maxOrder)
             {
                 question.Order = maxOrder + 1; // Atualizar para ser a última questão
             }
@@ -60,12 +63,21 @@ public class QuestionService : IQuestionService
 
     public Question CreateQuestion(CreateQuestionDto dto)
     {
-        return new Question
+        var question = new Question
         {
             Text = dto.Text,
             QuizId = dto.QuizId,
-            Order = dto.Order
+            Order = dto.Order,
         };
+
+        question.AnswerOptions = dto.Options.Select(o => new AnswerOption
+        {
+            QuestionId = question.Id,
+            IsCorrectOption = o.IsCorrectOption,
+            Response = o.Response
+        }).ToList();
+
+        return question;
     }
 
     public Question UpdateQuestion(Question question, string text)

@@ -10,12 +10,14 @@ namespace SmartQuiz.Application.Services;
 public class MatchService : IMatchService
 {
     private readonly IMatchRepository _matchRepository;
+    private readonly IQuestionService _questionService;
     private readonly IMapper _mapper;
 
-    public MatchService(IMatchRepository matchRepository, IMapper mapper)
+    public MatchService(IMatchRepository matchRepository, IMapper mapper, IQuestionService questionService)
     {
         _matchRepository = matchRepository;
         _mapper = mapper;
+        _questionService = questionService;
     }
 
     public async Task<Match?> GetByIdAsync(Guid id)
@@ -87,8 +89,9 @@ public class MatchService : IMatchService
         {
             if (match.Responses.Count == 0)
             {
-                nextQuestion = match.Quiz.Questions.OrderBy(x => x.Order).FirstOrDefault();
-
+                var nextQuestionId = match.Quiz.Questions.OrderBy(x => x.Order).FirstOrDefault().Id;
+                nextQuestion = await _questionService.GetByIdAsync(nextQuestionId);
+                
                 if (nextQuestion == null)
                     throw new ArgumentException("Não foi possível buscar a primeira questão do Quiz");
             }
@@ -108,8 +111,8 @@ public class MatchService : IMatchService
 
     public bool AlreadyMatchExpired(Match match)
     {
-        var expires = match.ExpiresIn > DateTime.UtcNow;
-        return expires && match.Quiz.Expires;
+        var expired = match.ExpiresIn < DateTime.UtcNow;
+        return expired && match.Quiz.Expires;
     }
 
     public void AddMatchReview(Match match, Review review)

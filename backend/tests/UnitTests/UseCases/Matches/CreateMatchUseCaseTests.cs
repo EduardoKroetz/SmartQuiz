@@ -1,23 +1,26 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.Matches;
 using SmartQuiz.Core.Entities;
+using SmartQuiz.Core.Enums;
 using SmartQuiz.Core.Repositories;
+using Match = SmartQuiz.Core.Entities.Match;
 
 namespace UnitTests.UseCases.Matches;
 
 public class CreateMatchUseCaseTests
 {
-    private readonly Mock<IMatchRepository> _matchRepositoryMock;
-    private readonly Mock<IQuizRepository> _quizRepositoryMock;
+    private readonly Mock<IMatchService> _matchServiceMock;
+    private readonly Mock<IQuizService> _quizServiceMock;
     private readonly CreateMatchUseCase _useCase;
 
     public CreateMatchUseCaseTests()
     {
-        _matchRepositoryMock = new Mock<IMatchRepository>();
-        _quizRepositoryMock = new Mock<IQuizRepository>();
-        _useCase = new CreateMatchUseCase(_matchRepositoryMock.Object, _quizRepositoryMock.Object);
+        _matchServiceMock = new Mock<IMatchService>();
+        _quizServiceMock = new Mock<IQuizService>();
+        _useCase = new CreateMatchUseCase(_quizServiceMock.Object, _matchServiceMock.Object);
     }
 
     [Fact]
@@ -26,10 +29,11 @@ public class CreateMatchUseCaseTests
         //Arrange
         var userId = Guid.NewGuid();
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = true, ExpiresInSeconds = 120 };
-        var nextQuestion = new Question { Id = Guid.NewGuid(), QuizId = quiz.Id, Order = 0, Text = "", AnswerOptions = [] };
-
-        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
-
+        var match = new Match { Id = Guid.NewGuid(), Quiz = quiz, QuizId = quiz.Id, UserId = userId, Status = EMatchStatus.Created };
+        
+        _matchServiceMock.Setup(x => x.CreateMatch(userId, quiz.Id)).Returns(match);
+        _quizServiceMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
+        
         //Act
         var result = await _useCase.Execute(quiz.Id, userId);
 
@@ -47,7 +51,8 @@ public class CreateMatchUseCaseTests
         //Arrange
         var userId = Guid.NewGuid();
         var quizId = Guid.NewGuid();
-        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
+        
+        _quizServiceMock.Setup(x => x.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(quizId, userId));
@@ -60,7 +65,8 @@ public class CreateMatchUseCaseTests
         var userId = Guid.NewGuid();
         var quiz = new Quiz { Id = Guid.NewGuid(), IsActive = false };
 
-        _quizRepositoryMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
+        _quizServiceMock.Setup(x => x.VerifyQuizActivation(quiz)).Throws<InvalidOperationException>();
+        _quizServiceMock.Setup(x => x.GetByIdAsync(quiz.Id)).ReturnsAsync(quiz);
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _useCase.Execute(quiz.Id, userId));

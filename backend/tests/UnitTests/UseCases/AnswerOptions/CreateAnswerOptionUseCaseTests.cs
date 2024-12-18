@@ -1,15 +1,10 @@
-﻿using AutoMapper;
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.UseCases.AnswerOptions;
 using SmartQuiz.Application.DTOs.AnswerOptions;
-using SmartQuiz.Application.DTOs.AutoMapper;
-using SmartQuiz.Application.Services;
 using SmartQuiz.Application.Services.Interfaces;
-using SmartQuiz.Application.Validators.Interfaces;
 using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.AnswerOptions;
 
@@ -18,15 +13,15 @@ public class CreateAnswerOptionUseCaseTests
 {
     private readonly Mock<IAnswerOptionService> _answerOptionServiceMock;
     private readonly Mock<IQuestionService> _questionServiceMock;
-    private readonly Mock<IUserAuthorizationValidator> _userAuthorizationValidatorMock;
+    private readonly Mock<IAuthService> _authServiceMock;
     private readonly CreateAnswerOptionUseCase _useCase;
 
     public CreateAnswerOptionUseCaseTests()
     {
         _answerOptionServiceMock = new Mock<IAnswerOptionService>();
         _questionServiceMock = new Mock<IQuestionService>();
-        _userAuthorizationValidatorMock = new Mock<IUserAuthorizationValidator>();
-        _useCase = new CreateAnswerOptionUseCase(_userAuthorizationValidatorMock.Object, _answerOptionServiceMock.Object, _questionServiceMock.Object);
+        _authServiceMock = new Mock<IAuthService>();
+        _useCase = new CreateAnswerOptionUseCase(_answerOptionServiceMock.Object, _questionServiceMock.Object, _authServiceMock.Object);
     }
 
     [Fact]
@@ -54,7 +49,7 @@ public class CreateAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = Guid.NewGuid() } // Outro usuário
         };
 
-        _userAuthorizationValidatorMock.Setup(service => service.ValidateAuthorization(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
+        _authServiceMock.Setup(service => service.ValidateSameUser(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
         _questionServiceMock.Setup(service => service.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
@@ -113,7 +108,7 @@ public class CreateAnswerOptionUseCaseTests
             AnswerOptions = new List<AnswerOption>()
         };
 
-        _userAuthorizationValidatorMock.Setup(validator => validator.ValidateAuthorization(question.Quiz.UserId, userId));
+        _authServiceMock.Setup(validator => validator.ValidateSameUser(question.Quiz.UserId, userId));
         _questionServiceMock.Setup(service => service.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
         _answerOptionServiceMock.Setup(service => service.CreateAnswerOption(createAnswerOption)).Returns(new AnswerOption { Id = Guid.NewGuid() });
 

@@ -1,4 +1,5 @@
-﻿using SmartQuiz.Application.Exceptions;
+﻿using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.DTOs.Responses;
 using SmartQuiz.Application.Services.Interfaces;
@@ -22,6 +23,8 @@ public class CreateQuestionUseCase
 
     public async Task<ResultDto> Execute(CreateQuestionDto createQuestionDto, Guid userId)
     {
+        createQuestionDto.Validate();
+        
         var quiz = await _quizService.GetByIdAsync(createQuestionDto.QuizId);
         if (quiz is null) 
             throw new NotFoundException("Quiz não encontrado");
@@ -39,7 +42,14 @@ public class CreateQuestionUseCase
 
         foreach (var createAnswerOption in createQuestionDto.Options)
         {
-            var answerOption = _answerOptionService.CreateAnswerOption(createAnswerOption);
+            var answerOptionDto = new CreateAnswerOptionDto
+            {
+                IsCorrectOption = createAnswerOption.IsCorrectOption,
+                Response = createAnswerOption.Response,
+                QuestionId = question.Id
+            };
+            
+            var answerOption = _answerOptionService.CreateAnswerOption(answerOptionDto);
             await _answerOptionService.AddAsync(answerOption);
         }
 

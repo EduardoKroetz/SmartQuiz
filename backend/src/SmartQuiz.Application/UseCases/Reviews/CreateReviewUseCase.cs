@@ -13,7 +13,14 @@ public class CreateReviewUseCase
     private readonly IReviewService _reviewService;
     private readonly IMatchService _matchService;
     private readonly IAuthService _authService;
-    
+
+    public CreateReviewUseCase(IReviewService reviewService, IMatchService matchService, IAuthService authService)
+    {
+        _reviewService = reviewService;
+        _matchService = matchService;
+        _authService = authService;
+    }
+
     public async Task<ResultDto> Execute(CreateReviewDto dto, Guid userId)
     {
         var match = await _matchService.GetByIdAsync(dto.MatchId);
@@ -26,7 +33,7 @@ public class CreateReviewUseCase
         if (match.Reviewed) 
             throw new InvalidOperationException("Já foi criada uma avaliação para a partida");
 
-        _authService.ValidateSameUser(match.Quiz.UserId, userId);
+        _authService.ValidateSameUser(match.UserId, userId);
 
         var review = _reviewService.CreateReview(dto, match, userId);
         await _reviewService.AddAsync(review);

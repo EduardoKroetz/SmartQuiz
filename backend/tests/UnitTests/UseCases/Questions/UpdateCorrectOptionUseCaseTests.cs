@@ -1,5 +1,6 @@
 ﻿using Moq;
 using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.Questions;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
@@ -8,15 +9,17 @@ namespace UnitTests.UseCases.Questions;
 
 public class UpdateCorrectOptionUseCaseTests
 {
-    private readonly Mock<IQuestionRepository> _questionRepositoryMock;
-    private readonly Mock<IAnswerOptionRepository> _answerOptionRepositoryMock;
+    private readonly Mock<IQuestionService> _questionServiceMock;
+    private readonly Mock<IAuthService> _authServiceMock;
+    private readonly Mock<IAnswerOptionService> _answerOptionServiceMock;
     private readonly UpdateCorrectOptionUseCase _useCase;
 
     public UpdateCorrectOptionUseCaseTests()
     {
-        _questionRepositoryMock = new Mock<IQuestionRepository>();
-        _answerOptionRepositoryMock = new Mock<IAnswerOptionRepository>();
-        _useCase = new UpdateCorrectOptionUseCase(_questionRepositoryMock.Object, _answerOptionRepositoryMock.Object);
+        _questionServiceMock = new Mock<IQuestionService>();
+        _authServiceMock = new Mock<IAuthService>();
+        _answerOptionServiceMock = new Mock<IAnswerOptionService>();
+        _useCase = new UpdateCorrectOptionUseCase(_questionServiceMock.Object, _answerOptionServiceMock.Object ,_authServiceMock.Object);
     }
 
     [Fact]
@@ -35,7 +38,14 @@ public class UpdateCorrectOptionUseCaseTests
             Quiz = new Quiz { Id = Guid.NewGuid(), UserId = userId, }
         };
 
-        _questionRepositoryMock.Setup(x => x.GetByIdAsync(question.Id)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(newCorrectOption);
+        _questionServiceMock.Setup(x =>
+            x.UpdateCorrectOption(It.IsAny<Question>(), It.IsAny<Guid>())).Callback(() =>
+        {
+            currentCorrectOption.IsCorrectOption = false;
+            newCorrectOption.IsCorrectOption = true;
+        });
+        _questionServiceMock.Setup(x => x.GetByIdAsync(question.Id)).ReturnsAsync(question);
 
         //Act
         var result = await _useCase.Execute(question.Id, newCorrectOption.Id, userId);
@@ -44,9 +54,6 @@ public class UpdateCorrectOptionUseCaseTests
         Assert.NotNull(result);
         Assert.False(currentCorrectOption.IsCorrectOption);
         Assert.True(newCorrectOption.IsCorrectOption);
-
-        _answerOptionRepositoryMock.Verify(r => r.UpdateAsync(currentCorrectOption), Times.Once);
-        _answerOptionRepositoryMock.Verify(r => r.UpdateAsync(newCorrectOption), Times.Once);
     }
 
     [Fact]
@@ -54,13 +61,14 @@ public class UpdateCorrectOptionUseCaseTests
     {
         // Arrange
         var questionId = Guid.NewGuid();
-        var newCorrectOptionId = Guid.NewGuid();
+        var newCorrectOption = new AnswerOption { Id = Guid.NewGuid(), IsCorrectOption = true };
         var userId = Guid.NewGuid();
 
-        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync((Question)null);
+        _answerOptionServiceMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(newCorrectOption);
+        _questionServiceMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync((Question)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));
+        await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(questionId, newCorrectOption.Id, userId));
     }
 
     [Fact]
@@ -68,7 +76,7 @@ public class UpdateCorrectOptionUseCaseTests
     {
         // Arrange
         var questionId = Guid.NewGuid();
-        var newCorrectOptionId = Guid.NewGuid();
+        var newCorrectOption = new AnswerOption { Id = Guid.NewGuid(), IsCorrectOption = true };
         var userId = Guid.NewGuid();
         var quizOwnerId = Guid.NewGuid();
 
@@ -78,14 +86,17 @@ public class UpdateCorrectOptionUseCaseTests
             Quiz = new Quiz { UserId = quizOwnerId },
             AnswerOptions = new List<AnswerOption>
             {
-                new AnswerOption { Id = newCorrectOptionId }
+                newCorrectOption
             }
         };
 
-        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(newCorrectOption);
+        _authServiceMock.Setup(x => x.ValidateSameUser(question.Quiz.UserId, userId))
+            .Throws<UnauthorizedAccessException>();
+        _questionServiceMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
 
         // Act & Assert
-        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _useCase.Execute(questionId, newCorrectOption.Id, userId));
     }
 
     [Fact]
@@ -106,7 +117,8 @@ public class UpdateCorrectOptionUseCaseTests
             }
         };
 
-        _questionRepositoryMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((AnswerOption)null);
+        _questionServiceMock.Setup(r => r.GetByIdAsync(questionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _useCase.Execute(questionId, newCorrectOptionId, userId));

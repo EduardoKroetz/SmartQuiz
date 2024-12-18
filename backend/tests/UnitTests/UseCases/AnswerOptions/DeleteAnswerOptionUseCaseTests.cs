@@ -3,9 +3,7 @@ using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.AnswerOptions;
-using SmartQuiz.Application.Validators.Interfaces;
 using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.AnswerOptions;
 
@@ -13,15 +11,15 @@ public class DeleteAnswerOptionUseCaseTests
 {
     private readonly Mock<IAnswerOptionService> _answerOptionServiceMock;
     private readonly Mock<IQuestionService> _questionServiceMock;
-    private readonly Mock<IUserAuthorizationValidator> _userAuthorizationValidatorMock;
+    private readonly Mock<IAuthService> _authServiceMock;
     private readonly DeleteAnswerOptionUseCase _useCase;
 
     public DeleteAnswerOptionUseCaseTests()
     {
         _answerOptionServiceMock = new Mock<IAnswerOptionService>();
         _questionServiceMock = new Mock<IQuestionService>();
-        _userAuthorizationValidatorMock = new Mock<IUserAuthorizationValidator>();
-        _useCase = new DeleteAnswerOptionUseCase(_answerOptionServiceMock.Object, _questionServiceMock.Object, _userAuthorizationValidatorMock.Object);
+        _authServiceMock = new Mock<IAuthService>();
+        _useCase = new DeleteAnswerOptionUseCase(_answerOptionServiceMock.Object, _questionServiceMock.Object, _authServiceMock.Object);
     }
 
     [Fact]
@@ -67,7 +65,7 @@ public class DeleteAnswerOptionUseCaseTests
 
         _answerOptionServiceMock.Setup(service => service.GetByIdAsync(answerOptionId)).ReturnsAsync(answerOption);
         _questionServiceMock.Setup(service => service.GetByIdAsync(answerOption.QuestionId)).ReturnsAsync(question);
-        _userAuthorizationValidatorMock.Setup(validator => validator.ValidateAuthorization(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
+        _authServiceMock.Setup(validator => validator.ValidateSameUser(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>

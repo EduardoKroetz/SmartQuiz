@@ -21,9 +21,13 @@ public class UpdateCorrectOptionUseCase
     public async Task<ResultDto> Execute(Guid questionId, Guid newCorrectOptionId, Guid userId)
     {
         var question = await _questionService.GetByIdAsync(questionId);
-        if (question == null) 
+        if (question is null) 
             throw new NotFoundException("Questão não encontrada");
 
+        var answerOption = await _answerOptionService.GetByIdAsync(newCorrectOptionId);
+        if (answerOption is null) 
+            throw new NotFoundException("Opção não encontrada");
+        
         _authService.ValidateSameUser(question.Quiz.UserId, userId);
 
         _questionService.UpdateCorrectOption(question, newCorrectOptionId);

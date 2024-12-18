@@ -6,12 +6,10 @@ namespace IntegrationTests.Controllers;
 public class MatchesControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly SmartQuizWebApplicationFactory _factory;
 
     public MatchesControllerTests(SmartQuizWebApplicationFactory factory)
     {
-        _factory = factory;
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     [Fact]

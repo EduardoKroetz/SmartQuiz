@@ -8,12 +8,10 @@ namespace SmartQuiz.Application.UseCases.Users;
 public class GetUserUseCase
 {
     private readonly IUserService _userService;
-    private readonly IMapper _mapper;
 
-    public GetUserUseCase(IUserService userService, IMapper mapper)
+    public GetUserUseCase(IUserService userService)
     {
         _userService = userService;
-        _mapper = mapper;
     }
 
     public async Task<ResultDto> Execute(Guid userId)

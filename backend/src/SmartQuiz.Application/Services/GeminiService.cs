@@ -2,10 +2,11 @@ using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.Services;
 
-public class GeminiService
+public class GeminiService : IGeminiService
 {
     private readonly HttpClient _httpClient;
     private readonly string ApiUrl;

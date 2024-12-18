@@ -48,7 +48,10 @@ public class QuizService : IQuizService
 
     public async Task<IEnumerable<Quiz>> SearchQuizAsync(SearchQuizDto searchQuizDto)
     {
-        var keyWords = searchQuizDto.Reference?.Split(" ");
+        string[]? keyWords = null;
+        if (searchQuizDto.Reference is not null)
+            searchQuizDto.Reference.Split(" ");
+        
         var skip = searchQuizDto.PageSize * (searchQuizDto.PageNumber - 1);
 
         return await _quizRepository.SearchQuiz(keyWords, skip, searchQuizDto.PageSize, searchQuizDto.UserId);

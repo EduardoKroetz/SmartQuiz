@@ -10,12 +10,10 @@ namespace IntegrationTests.Controllers;
 public class AccountsControllerTests : IClassFixture<SmartQuizWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly SmartQuizWebApplicationFactory _factory;
 
     public AccountsControllerTests(SmartQuizWebApplicationFactory factory)
     {
-        _factory = factory;
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     [Fact]
@@ -84,37 +82,5 @@ public class AccountsControllerTests : IClassFixture<SmartQuizWebApplicationFact
         var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
         Assert.Equal(userId, (Guid)content.data.id);
         _client.DefaultRequestHeaders.Authorization = null;
-    }
-
-    [Fact]
-    public async Task GetUserMatchesAsync_ShouldReturnOk()
-    {
-        //Arrange
-        var data = await Utils.CreateUserAsync(_client, "matches", "matches@gmail.com");
-        var userId = (Guid)data.id;
-
-        //Act
-        var response = await _client.GetAsync($"api/accounts/{userId}/matches");
-
-        //Assert
-        response.EnsureSuccessStatusCode();
-        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-        Assert.NotNull(content.data);
-    }
-
-    [Fact]
-    public async Task GetUserQuizzesAsync_ShouldReturnOk()
-    {
-        //Arrange
-        var data = await Utils.CreateUserAsync(_client, "quizzes", "quizzes@gmail.com");
-        var userId = (Guid)data.id;
-
-        //Act
-        var response = await _client.GetAsync($"api/accounts/{userId}/quizzes");
-
-        //Assert
-        response.EnsureSuccessStatusCode();
-        var content = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-        Assert.NotNull(content.data);
     }
 }

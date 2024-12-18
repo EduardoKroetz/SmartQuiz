@@ -60,7 +60,7 @@ export class AccountService {
       next: (user) => {
         if (!user)
           return
-        this.apiService.get(`accounts/${user.id}/quizzes?pageNumber=${this.quizzesPageNumber}&pageSize=${this.quizzesPageSize}`).subscribe({
+        this.apiService.get(`quizzes/search?pageNumber=${this.quizzesPageNumber}&pageSize=${this.quizzesPageSize}&userId=${user.id}`).subscribe({
           next: (response: any) => {
             if (response.data.length < this.quizzesPageSize)
               this.isMaxQuizzes = true;

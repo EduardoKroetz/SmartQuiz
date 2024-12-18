@@ -12,13 +12,13 @@ public class LoginUserUseCaseTests
 {
     private readonly LoginUserUseCase _loginUserUseCase;
     private readonly Mock<IAuthService> _authServiceMock;
-    private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly Mock<IUserService> _userServiceMock;
 
     public LoginUserUseCaseTests()
     {
         _authServiceMock = new Mock<IAuthService>();
-        _userRepositoryMock = new Mock<IUserRepository>();
-        _loginUserUseCase = new LoginUserUseCase(_userRepositoryMock.Object, _authServiceMock.Object);
+        _userServiceMock = new Mock<IUserService>();
+        _loginUserUseCase = new LoginUserUseCase(_authServiceMock.Object, _userServiceMock.Object);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class LoginUserUseCaseTests
         //Arrange
         var loginDto = new LoginUserDto { Email = "test@gmail.com", Password = "password" };
         var user = new User { Id = Guid.NewGuid(), PasswordHash = "password_hash", };
-        _userRepositoryMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync(user);
+        _userServiceMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync(user);
         _authServiceMock.Setup(x => x.VerifyPassword(loginDto.Password, user.PasswordHash)).Returns(true);
         _authServiceMock.Setup(x => x.GenerateJwtToken(user)).Returns("token");
 
@@ -44,7 +44,7 @@ public class LoginUserUseCaseTests
     {
         //Arrange
         var loginDto = new LoginUserDto { Email = "test@gmail.com", Password = "password" };
-        _userRepositoryMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync((User)null);
+        _userServiceMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync((User)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _loginUserUseCase.Execute(loginDto));
@@ -56,7 +56,7 @@ public class LoginUserUseCaseTests
         //Arrange
         var loginDto = new LoginUserDto { Email = "test@gmail.com", Password = "password" };
         var user = new User { Id = Guid.NewGuid(), PasswordHash = "password_hash", };
-        _userRepositoryMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync(user);
+        _userServiceMock.Setup(x => x.GetByEmailAsync(loginDto.Email)).ReturnsAsync(user);
         _authServiceMock.Setup(x => x.VerifyPassword(loginDto.Password, user.PasswordHash)).Returns(false);
 
         //Act & Assert
