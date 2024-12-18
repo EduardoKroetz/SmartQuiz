@@ -9,17 +9,17 @@ namespace SmartQuiz.Application.UseCases.Users;
 public class UpdatePasswordUseCase
 {
     private readonly IAuthService _authService;
-    private readonly IUserRepository _userRepository;
-
-    public UpdatePasswordUseCase(IUserRepository userRepository, IAuthService authService)
+    private readonly IUserService _userService;
+    
+    public UpdatePasswordUseCase(IAuthService authService, IUserService userService)
     {
-        _userRepository = userRepository;
         _authService = authService;
+        _userService = userService;
     }
 
     public async Task<ResultDto> Execute(Guid userId, UpdatePasswordDto dto)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userService.GetByIdAsync(userId);
         if (user == null) 
             throw new NotFoundException("Usuário não encontrado");
 
@@ -28,7 +28,7 @@ public class UpdatePasswordUseCase
 
         user.PasswordHash = _authService.HashPassword(dto.NewPassword);
 
-        await _userRepository.UpdateAsync(user);
+        await _userService.UpdateAsync(user);
 
         return new ResultDto(new { });
     }

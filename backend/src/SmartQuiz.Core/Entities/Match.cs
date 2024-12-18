@@ -25,37 +25,6 @@ public class Match : Entity
     public Review Review { get; set; }
     public List<Response> Responses { get; set; }
 
-    public Response CreateResponse(AnswerOption option)
-    {
-        //Verificar se a questão da opção de resposta está entre as questões do quiz
-        if (Quiz.Questions.Any(x => x.Id.Equals(option.QuestionId)) == false)
-        {
-            throw new InvalidOperationException("A opção de resposta não está disponível");
-        }
-
-        var response = new Response
-        {
-            Id = Guid.NewGuid(),
-            MatchId = this.Id,
-            IsCorrect = option.IsCorrectOption,
-            AnswerOptionId = option.Id
-        };
-
-        Responses.Add(response);
-
-        return response;
-    }
-
-    public void AddScore()
-    {
-        Score++;
-    }
-
-    public bool AlreadyExpiration()
-    {
-        return ExpiresIn > DateTime.UtcNow ? false : true;
-    }
-
     public int GetRemainingTime()
     {
         var totalSeconds = (int)(ExpiresIn - DateTime.UtcNow).TotalSeconds;

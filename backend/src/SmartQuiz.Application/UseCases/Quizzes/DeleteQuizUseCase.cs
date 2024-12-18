@@ -1,30 +1,32 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class DeleteQuizUseCase
 {
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuizService _quizService;
+    private readonly IAuthService _authService;
 
-    public DeleteQuizUseCase(IQuizRepository quizRepository)
+    public DeleteQuizUseCase(IQuizService quizService, IAuthService authService)
     {
-        _quizRepository = quizRepository;
+        _quizService = quizService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(Guid quizId, Guid userId)
     {
-        if (await _quizRepository.HasMatchesRelated(quizId))
+        if (await _quizService.HasMatchesRelated(quizId))
             throw new InvalidOperationException("Você pode somente desativar o Quiz nesse momento");
 
-        var quiz = await _quizRepository.GetByIdAsync(quizId);
-        if (quiz == null) throw new NotFoundException("Quiz não encontrado");
+        var quiz = await _quizService.GetByIdAsync(quizId);
+        if (quiz == null) 
+            throw new NotFoundException("Quiz não encontrado");
 
-        if (quiz.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        _authService.ValidateSameUser(quiz.UserId, userId);
 
-        await _quizRepository.DeleteAsync(quiz);
+        await _quizService.DeleteAsync(quiz);
 
         return new ResultDto(new { quiz.Id });
     }

@@ -43,17 +43,17 @@ public class QuizzesController : ControllerBase
     /// <summary>
     /// Pesquisar Quiz
     /// </summary>
-    /// <param name="reference"></param>
     /// <param name="useCase"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="pageNumber"></param>
+    /// <param name="searchQuizDto"></param>
     /// <returns></returns>
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> SearchQuizAsync([FromServices] SearchQuizUseCase useCase, [FromQuery] int pageSize = 25, [FromQuery] int pageNumber = 1, [FromQuery] string? reference = null)
+    public async Task<IActionResult> SearchQuizAsync(
+        [FromServices] SearchQuizUseCase useCase, 
+        [FromQuery] SearchQuizDto searchQuizDto)
     {
-        var result = await useCase.Execute(reference, pageSize, pageNumber);
+        var result = await useCase.Execute(searchQuizDto);
         return Ok(result);
     }
 

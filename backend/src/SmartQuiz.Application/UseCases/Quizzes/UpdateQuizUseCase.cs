@@ -1,40 +1,32 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Quizzes;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Enums;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class UpdateQuizUseCase
 {
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuizService _quizService;
+    private readonly IAuthService _authService;
 
-    public UpdateQuizUseCase(IQuizRepository quizRepository)
+    public UpdateQuizUseCase(IQuizService quizService, IAuthService authService)
     {
-        _quizRepository = quizRepository;
+        _quizService = quizService;
+        _authService = authService;
     }
-
+    
     public async Task<ResultDto> Execute(Guid quizId, EditorQuizDto editorQuizDto, Guid userId)
     {
-        var quiz = await _quizRepository.GetByIdAsync(quizId);
+        var quiz = await _quizService.GetByIdAsync(quizId);
         if (quiz == null) 
             throw new NotFoundException("Quiz não encontrado");
 
-        if (quiz.UserId != userId)
-            throw new UnauthorizedAccessException("Você não possui permissão para acessar esse recurso");
+        _authService.ValidateSameUser(quiz.UserId, userId);
         
-        if (!Enum.TryParse(editorQuizDto.Difficulty, true, out EDifficulty difficulty))
-            throw new InvalidOperationException("Dificuldade inválida. Dificuldades disponíveis: easy, medium, hard");
+        _quizService.UpdateQuiz(quiz, editorQuizDto);
 
-        quiz.Title = editorQuizDto.Title;
-        quiz.Description = editorQuizDto.Description;
-        quiz.Expires = editorQuizDto.Expires;
-        quiz.ExpiresInSeconds = editorQuizDto.ExpiresInSeconds;
-        quiz.Difficulty = difficulty;
-        quiz.Theme = editorQuizDto.Theme;
-
-        await _quizRepository.UpdateAsync(quiz);
+        await _quizService.UpdateAsync(quiz);
 
         return new ResultDto(new { quiz.Id });
     }

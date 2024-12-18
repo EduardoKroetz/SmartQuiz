@@ -8,17 +8,17 @@ namespace SmartQuiz.Application.UseCases.Users;
 public class LoginUserUseCase
 {
     private readonly IAuthService _authService;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public LoginUserUseCase(IUserRepository userRepository, IAuthService authService)
+    public LoginUserUseCase(IAuthService authService, IUserService userService)
     {
-        _userRepository = userRepository;
         _authService = authService;
+        _userService = userService;
     }
 
     public async Task<ResultDto> Execute(LoginUserDto loginUserDto)
     {
-        var user = await _userRepository.GetByEmailAsync(loginUserDto.Email);
+        var user = await _userService.GetByEmailAsync(loginUserDto.Email);
         if (user == null) 
             throw new ArgumentException("Email ou senha são inválidos");
 

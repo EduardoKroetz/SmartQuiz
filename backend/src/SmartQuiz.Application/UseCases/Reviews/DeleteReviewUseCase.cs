@@ -1,33 +1,35 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Reviews;
 
 public class DeleteReviewUseCase
 {
-    private readonly IMatchRepository _matchRepository;
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewService _reviewService;
+    private readonly IMatchService _matchService;
+    private readonly IAuthService _authService;
 
-    public DeleteReviewUseCase(IReviewRepository reviewRepository, IMatchRepository matchRepository)
+    public DeleteReviewUseCase(IReviewService reviewService, IMatchService matchService, IAuthService authService)
     {
-        _reviewRepository = reviewRepository;
-        _matchRepository = matchRepository;
+        _reviewService = reviewService;
+        _matchService = matchService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(Guid reviewId, Guid userId)
     {
-        var review = await _reviewRepository.GetByIdAsync(reviewId);
-        if (review == null) throw new NotFoundException("Avaliação não encontrada");
+        var review = await _reviewService.GetByIdAsync(reviewId);
+        if (review == null) 
+            throw new NotFoundException("Avaliação não encontrada");
 
-        if (review.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        _authService.ValidateSameUser(review.UserId, userId);
 
-        await _reviewRepository.DeleteAsync(review);
-
-        review.Match.Reviewed = false;
-
-        await _matchRepository.UpdateAsync(review.Match);
+        await _reviewService.DeleteAsync(review);
+        
+        _matchService.RemoveMatchReview(review.Match);
+        
+        await _matchService.UpdateAsync(review.Match);
 
         return new ResultDto(new { review.Id });
     }

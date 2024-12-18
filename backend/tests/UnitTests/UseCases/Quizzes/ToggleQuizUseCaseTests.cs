@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Application.UseCases.Quizzes;
 using SmartQuiz.Core.Entities;
 using SmartQuiz.Core.Repositories;
@@ -9,13 +10,15 @@ namespace UnitTests.UseCases.Quizzes;
 
 public class ToggleQuizUseCaseTests
 {
-    private readonly Mock<IQuizRepository> _quizRepositoryMock;
+    private readonly Mock<IQuizService> _quizServiceMock;
+    private readonly Mock<IAuthService> _authServiceMock;
     private readonly ToggleQuizUseCase _toggleQuizUseCase;
 
     public ToggleQuizUseCaseTests()
     {
-        _quizRepositoryMock = new Mock<IQuizRepository>();
-        _toggleQuizUseCase = new ToggleQuizUseCase(_quizRepositoryMock.Object);
+        _quizServiceMock = new Mock<IQuizService>();
+        _authServiceMock = new Mock<IAuthService>();
+        _toggleQuizUseCase = new ToggleQuizUseCase(_quizServiceMock.Object, _authServiceMock.Object);
     }
 
     [Fact]
@@ -35,8 +38,9 @@ public class ToggleQuizUseCaseTests
             }
         };
 
-        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
-        _quizRepositoryMock.Setup(q => q.UpdateAsync(It.IsAny<Quiz>())).Returns(Task.CompletedTask);
+        _quizServiceMock.Setup(q => q.ToggleQuiz(It.IsAny<Quiz>())).Callback(() => quiz.IsActive = true);
+        _quizServiceMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
+        _quizServiceMock.Setup(q => q.UpdateAsync(It.IsAny<Quiz>())).Returns(Task.CompletedTask);
 
         // Act
         var result = await _toggleQuizUseCase.Execute(quizId, userId);
@@ -46,7 +50,7 @@ public class ToggleQuizUseCaseTests
         Assert.NotNull(result);
         Assert.Equal(quizId, (Guid)data.QuizId);
         Assert.True(quiz.IsActive);
-        _quizRepositoryMock.Verify(q => q.UpdateAsync(quiz), Times.Once);
+        _quizServiceMock.Verify(q => q.UpdateAsync(quiz), Times.Once);
     }
 
     [Fact]
@@ -56,7 +60,7 @@ public class ToggleQuizUseCaseTests
         var quizId = Guid.NewGuid();
         var userId = Guid.NewGuid();
 
-        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
+        _quizServiceMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync((Quiz)null);
 
         //Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _toggleQuizUseCase.Execute(quizId, userId));
@@ -75,11 +79,12 @@ public class ToggleQuizUseCaseTests
             IsActive = false,
             Questions = new List<Question>()
         };
-
-        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
+        
+        _authServiceMock.Setup(x => x.ValidateSameUser(quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
+        _quizServiceMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
 
         //Act & Assert
-        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _toggleQuizUseCase.Execute(quizId, Guid.NewGuid()));
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _toggleQuizUseCase.Execute(quizId, userId));
     }
 
     [Fact]
@@ -96,7 +101,8 @@ public class ToggleQuizUseCaseTests
             Questions = new List<Question>()
         };
 
-        _quizRepositoryMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
+        _quizServiceMock.Setup(q => q.ToggleQuiz(It.IsAny<Quiz>())).Throws<ArgumentException>();
+        _quizServiceMock.Setup(q => q.GetByIdAsync(quizId)).ReturnsAsync(quiz);
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _toggleQuizUseCase.Execute(quizId, userId));

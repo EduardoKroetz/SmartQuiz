@@ -16,7 +16,6 @@ using SmartQuiz.Application.UseCases.Quizzes;
 using SmartQuiz.Application.UseCases.Responses;
 using SmartQuiz.Application.UseCases.Reviews;
 using SmartQuiz.Application.UseCases.Users;
-using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.UseCases.OAuth;
 using SmartQuiz.Core.Repositories;
 using SmartQuiz.Infrastructure.Data;
@@ -142,13 +141,19 @@ void InjectDependencies(IServiceCollection services)
     //Services
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IOAuthService, OAuthService>();
+    services.AddScoped<IAnswerOptionService, AnswerOptionService>();
+    services.AddScoped<IGeminiService, GeminiService>();
+    services.AddScoped<IMatchService, MatchService>();
+    services.AddScoped<IQuestionService, QuestionService>();
+    services.AddScoped<IQuizService, QuizService>();
+    services.AddScoped<IResponseService, ResponseService>();
+    services.AddScoped<IReviewService, ReviewService>();
+    services.AddScoped<IUserService, UserService>();
     
     //UseCases
     services.AddScoped<CreateUserUseCase>();
     services.AddScoped<LoginUserUseCase>();
     services.AddScoped<GetUserUseCase>();
-    services.AddScoped<GetUserMatchesUseCase>();
-    services.AddScoped<GetUserQuizzesUseCase>();
     services.AddScoped<UpdateUserUseCase>();
     services.AddScoped<UpdatePasswordUseCase>();
 

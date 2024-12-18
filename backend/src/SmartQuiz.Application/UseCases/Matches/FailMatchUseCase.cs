@@ -1,31 +1,25 @@
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Enums;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Matches;
 
 public class FailMatchUseCase
 {
-    private readonly IMatchRepository _matchRepository;
-
-    public FailMatchUseCase(IMatchRepository matchRepository)
-    {
-        _matchRepository = matchRepository;
-    }
+    private readonly IMatchService _matchService;
+    private readonly IAuthService _authService;
 
     public async Task<ResultDto> Execute(Guid userId, Guid matchId)
     {
-        var match = await _matchRepository.GetByIdAsync(matchId);
+        var match = await _matchService.GetByIdAsync(matchId);
         if (match is null) 
             throw new NotFoundException("Partida não encontrada");
 
-        if (match.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para finalizar essa partida");
+        _authService.ValidateSameUser(match.UserId, userId);
 
-        match.Status = EMatchStatus.Failed;
+        _matchService.FailMatch(match);
 
-        await _matchRepository.UpdateAsync(match);
+        await _matchService.UpdateAsync(match);
 
         return new ResultDto(new { });
     }

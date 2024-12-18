@@ -1,42 +1,31 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Enums;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Matches;
 
 public class CreateMatchUseCase
 {
-    private readonly IMatchRepository _matchRepository;
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuizService _quizService;
+    private readonly IMatchService _matchService;
 
-    public CreateMatchUseCase(IMatchRepository matchRepository, IQuizRepository quizRepository)
+    public CreateMatchUseCase(IQuizService quizService, IMatchService matchService)
     {
-        _matchRepository = matchRepository;
-        _quizRepository = quizRepository;
+        _quizService = quizService;
+        _matchService = matchService;
     }
 
     public async Task<ResultDto> Execute(Guid quizId, Guid userId)
     {
-        var quiz = await _quizRepository.GetByIdAsync(quizId);
+        var quiz = await _quizService.GetByIdAsync(quizId);
         if (quiz == null) 
             throw new NotFoundException("Quiz não encontrado");
 
-        if (quiz.IsActive == false)
-            throw new InvalidOperationException("Não é possível criar uma partida pois o Quiz está inativo");
+        _quizService.VerifyQuizActivation(quiz);
 
-        var match = new Match
-        {
-            QuizId = quizId,
-            Quiz = quiz,
-            Reviewed = false,
-            Score = 0,
-            UserId = userId,
-            Status = EMatchStatus.Created
-        };
+        var match = _matchService.CreateMatch(userId, quizId);
 
-        await _matchRepository.AddAsync(match);
+        await _matchService.AddAsync(match);
 
         return new ResultDto(new { MatchId = match.Id, match.ExpiresIn });
     }

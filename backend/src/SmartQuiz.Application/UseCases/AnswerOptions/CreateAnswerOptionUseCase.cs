@@ -1,49 +1,42 @@
-﻿using AutoMapper;
-using SmartQuiz.Application.Exceptions;
+﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.AnswerOptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.AnswerOptions;
 
 public class CreateAnswerOptionUseCase
 {
-    private readonly IAnswerOptionRepository _answerOptionRepository;
-    private readonly IQuestionRepository _questionRepository;
-    private readonly IMapper _mapper;
-
-    public CreateAnswerOptionUseCase(IAnswerOptionRepository answerOptionRepository, IQuestionRepository questionRepository, IMapper mapper)
+    private readonly IAnswerOptionService _answerOptionService;
+    private readonly IQuestionService _questionService;
+    private readonly IAuthService _authService;
+    
+    public CreateAnswerOptionUseCase(IAnswerOptionService answerOptionService, IQuestionService questionService, IAuthService authService)
     {
-        _answerOptionRepository = answerOptionRepository;
-        _questionRepository = questionRepository;
-        _mapper = mapper;
+        _answerOptionService = answerOptionService;
+        _questionService = questionService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(CreateAnswerOptionDto createAnswerOption, Guid userId)
     {
-        var question = await _questionRepository.GetByIdAsync(createAnswerOption.QuestionId);
+        // Buscar a questão
+        var question = await _questionService.GetByIdAsync(createAnswerOption.QuestionId);
         if (question == null) 
             throw new NotFoundException("Questão não encontrada");
-
-        if (question.Quiz.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        
+        // Validar se quem está criando é quem está autenticado
+        _authService.ValidateSameUser(question.Quiz.UserId, userId);
 
         //Caso seja a opção que está sendo criada é a correta da questão, vai remover a opção correta atual da questão
         if (createAnswerOption.IsCorrectOption)
-        {
-            var correctOption = question.AnswerOptions.FirstOrDefault(x => x.IsCorrectOption);
+            await _answerOptionService.UpdateCorrectOption(question);
+    
+        // Criar nova instância
+        var answerOption = _answerOptionService.CreateAnswerOption(createAnswerOption);
 
-            if (correctOption != null)
-            {
-                correctOption.IsCorrectOption = false;
-                await _answerOptionRepository.UpdateAsync(correctOption);
-            }
-        }
-
-        var answerOption = _mapper.Map<AnswerOption>(createAnswerOption);
-
-        await _answerOptionRepository.AddAsync(answerOption);
+        // Salvar no banco de dados
+        await _answerOptionService.AddAsync(answerOption);
 
         return new ResultDto(new { AnswerOptionId = answerOption.Id, QuestionId = question.Id });
     }

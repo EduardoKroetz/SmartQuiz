@@ -1,32 +1,27 @@
-﻿using AutoMapper;
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
 using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.UseCases.AnswerOptions;
 using SmartQuiz.Application.DTOs.AnswerOptions;
-using SmartQuiz.Application.DTOs.AutoMapper;
+using SmartQuiz.Application.Services.Interfaces;
 using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
 
 namespace UnitTests.UseCases.AnswerOptions;
 
 
 public class CreateAnswerOptionUseCaseTests
 {
-    private readonly Mock<IAnswerOptionRepository> _mockAnswerOptionRepository;
-    private readonly Mock<IQuestionRepository> _mockQuestionRepository;
-    private readonly IMapper _mapper;
+    private readonly Mock<IAnswerOptionService> _answerOptionServiceMock;
+    private readonly Mock<IQuestionService> _questionServiceMock;
+    private readonly Mock<IAuthService> _authServiceMock;
     private readonly CreateAnswerOptionUseCase _useCase;
 
     public CreateAnswerOptionUseCaseTests()
     {
-        _mockAnswerOptionRepository = new Mock<IAnswerOptionRepository>();
-        _mockQuestionRepository = new Mock<IQuestionRepository>();
-        _mapper = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<MappingProfile>();
-        }).CreateMapper();
-        _useCase = new CreateAnswerOptionUseCase(_mockAnswerOptionRepository.Object, _mockQuestionRepository.Object, _mapper);
+        _answerOptionServiceMock = new Mock<IAnswerOptionService>();
+        _questionServiceMock = new Mock<IQuestionService>();
+        _authServiceMock = new Mock<IAuthService>();
+        _useCase = new CreateAnswerOptionUseCase(_answerOptionServiceMock.Object, _questionServiceMock.Object, _authServiceMock.Object);
     }
 
     [Fact]
@@ -34,7 +29,7 @@ public class CreateAnswerOptionUseCaseTests
     {
         // Arrange
         var createAnswerOption = new CreateAnswerOptionDto { QuestionId = Guid.NewGuid() };
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Question)null);
+        _questionServiceMock.Setup(service => service.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Question)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -54,7 +49,8 @@ public class CreateAnswerOptionUseCaseTests
             Quiz = new Quiz { UserId = Guid.NewGuid() } // Outro usuário
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
+        _authServiceMock.Setup(service => service.ValidateSameUser(question.Quiz.UserId, userId)).Throws<UnauthorizedAccessException>();
+        _questionServiceMock.Setup(service => service.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
@@ -82,13 +78,15 @@ public class CreateAnswerOptionUseCaseTests
             }
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
-
+        _questionServiceMock.Setup(service => service.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(service => service.UpdateCorrectOption(question));
+        _answerOptionServiceMock.Setup(service => service.CreateAnswerOption(createAnswerOption)).Returns(new AnswerOption { Id = Guid.NewGuid() });
+        
         // Act
         await _useCase.Execute(createAnswerOption, userId);
 
         // Assert
-        _mockAnswerOptionRepository.Verify(repo => repo.UpdateAsync(It.IsAny<AnswerOption>()), Times.Once);
+        _answerOptionServiceMock.Verify(service => service.UpdateCorrectOption(question), Times.Once);
     }
 
     [Fact]
@@ -110,17 +108,15 @@ public class CreateAnswerOptionUseCaseTests
             AnswerOptions = new List<AnswerOption>()
         };
 
-        _mockQuestionRepository.Setup(repo => repo.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
+        _authServiceMock.Setup(validator => validator.ValidateSameUser(question.Quiz.UserId, userId));
+        _questionServiceMock.Setup(service => service.GetByIdAsync(createAnswerOption.QuestionId)).ReturnsAsync(question);
+        _answerOptionServiceMock.Setup(service => service.CreateAnswerOption(createAnswerOption)).Returns(new AnswerOption { Id = Guid.NewGuid() });
 
         // Act
         var result = await _useCase.Execute(createAnswerOption, userId);
 
         // Assert
         var data = JsonConvert.DeserializeObject<dynamic>(JsonConvert.SerializeObject(result.Data));
-        _mockAnswerOptionRepository.Verify(repo => repo.AddAsync(It.Is<AnswerOption>(ao =>
-            ao.QuestionId == createAnswerOption.QuestionId &&
-            ao.IsCorrectOption == createAnswerOption.IsCorrectOption &&
-            ao.Response == createAnswerOption.Response)), Times.Once);
 
         Assert.Equal(question.Id, (Guid)data.QuestionId);
     }

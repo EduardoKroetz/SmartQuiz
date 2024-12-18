@@ -6,7 +6,6 @@ namespace SmartQuiz.Core.Repositories;
 
 public interface IQuizRepository : IRepository<Quiz>
 {
-    Task<List<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take);
+    Task<IEnumerable<Quiz>> SearchQuiz(string[]? keyWords, int skip, int take, Guid? userId);
     Task<bool> HasMatchesRelated(Guid quizId);
-    Task<List<Quiz>> GetUserQuizzesAsync(Guid userId, int skip, int take);
 }

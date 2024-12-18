@@ -1,68 +1,64 @@
 ﻿using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Enums;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Responses;
 
 public class CreateResponseUseCase
 {
-    private readonly IAnswerOptionRepository _answerOptionRepository;
-    private readonly IMatchRepository _matchRepository;
-    private readonly IResponseRepository _responseRepository;
+    private readonly IAnswerOptionService _answerOptionService;
+    private readonly IMatchService _matchService;
+    private readonly IResponseService _responseService;
+    private readonly IAuthService _authService;
 
-    public CreateResponseUseCase(IAnswerOptionRepository answerOptionRepository,
-        IResponseRepository matchResponseRepository, IMatchRepository matchRepository)
+    public CreateResponseUseCase(IAnswerOptionService answerOptionService,
+        IResponseService matchResponseService, IMatchService matchService, IAuthService authService)
     {
-        _answerOptionRepository = answerOptionRepository;
-        _responseRepository = matchResponseRepository;
-        _matchRepository = matchRepository;
+        _answerOptionService = answerOptionService;
+        _responseService = matchResponseService;
+        _matchService = matchService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(Guid userId, Guid matchId, Guid answerOptionId)
     {
         //Buscar opção
-        var answerOption = await _answerOptionRepository.GetByIdAsync(answerOptionId);
-        if (answerOption == null) throw new ArgumentException("Opção não encontrada");
+        var answerOption = await _answerOptionService.GetByIdAsync(answerOptionId);
+        if (answerOption == null) 
+            throw new ArgumentException("Opção não encontrada");
 
         //Buscar partida
-        var match = await _matchRepository.GetByIdAsync(matchId);
-        if (match == null) throw new ArgumentException("Partida não encontrada");
+        var match = await _matchService.GetByIdAsync(matchId);
+        if (match == null) 
+            throw new ArgumentException("Partida não encontrada");
 
-        if (match.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão acessar esse recurso");
+        _authService.ValidateSameUser(match.Quiz.UserId, userId);
 
-        if (match.Status == EMatchStatus.Finished)
-            throw new InvalidOperationException("Essa partida já foi finalizada");
+        _matchService.EnsureNotCompleted(match);
 
-        if (match.Status == EMatchStatus.Failed) throw new InvalidOperationException("Partida expirada");
-
-        //Verificar se o tempo de expiração já passou
-        if (match.AlreadyExpiration() && match.Quiz.Expires)
+        if (_matchService.AlreadyMatchExpired(match))
         {
-            //Finalizar a partida caso já tenha expirado
-            match.Status = EMatchStatus.Failed;
-            await _matchRepository.UpdateAsync(match);
+            _matchService.FailMatch(match);
+            await _matchService.UpdateAsync(match);
 
             throw new InvalidOperationException("Partida expirada");
         }
+        
+        var matchResponse = _responseService.CreateResponse(match, answerOption);
 
-        //Criar resposta
-        var matchResponse = match.CreateResponse(answerOption);
-
-        await _responseRepository.AddAsync(matchResponse);
+        await _responseService.AddAsync(matchResponse);
 
         //Finaliza a partida caso essa seja a última questão
         if (answerOption.Question.Order + 1 == match.Quiz.Questions.Count)
         {
-            match.Status = EMatchStatus.Finished;
-            await _matchRepository.UpdateAsync(match);
+            _matchService.FinalizeMatch(match);
+            await _matchService.UpdateAsync(match);
         }
 
-        //Após criação da resposta, adicionar pontuação caso a resposta esteja correta
+        // Adicionar pontuação caso a resposta esteja correta
         if (answerOption.IsCorrectOption)
         {
-            match.AddScore();
-            await _matchRepository.UpdateAsync(match);
+            _matchService.AddMatchScore(match);
+            await _matchService.UpdateAsync(match);
         }
 
         return new ResultDto(new { ResponseId = matchResponse.Id, MatchId = matchId });

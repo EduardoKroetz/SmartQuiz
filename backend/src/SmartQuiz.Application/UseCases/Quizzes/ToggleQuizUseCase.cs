@@ -1,33 +1,31 @@
 ﻿using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Quizzes;
 
 public class ToggleQuizUseCase
 {
-    private readonly IQuizRepository _quizRepository;
+    private readonly IAuthService _authService;
+    private readonly IQuizService _quizService;
 
-    public ToggleQuizUseCase(IQuizRepository quizRepository)
+    public ToggleQuizUseCase(IQuizService quizService, IAuthService authService)
     {
-        _quizRepository = quizRepository;
+        _quizService = quizService;
+        _authService = authService;
     }
-
+    
     public async Task<ResultDto> Execute(Guid quizId, Guid userId)
     {
-        var quiz = await _quizRepository.GetByIdAsync(quizId);
+        var quiz = await _quizService.GetByIdAsync(quizId);
         if (quiz == null) 
             throw new NotFoundException("Quiz não encontrado");
 
-        if (quiz.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
+        _authService.ValidateSameUser(quiz.UserId, userId);
 
-        if (quiz.IsActive == false && quiz.Questions.Count == 0)
-            throw new ArgumentException("Não é possível ativar o Quiz pois ele não possui nenhuma questão relacionada");
+        _quizService.ToggleQuiz(quiz);
 
-        quiz.IsActive = !quiz.IsActive;
-
-        await _quizRepository.UpdateAsync(quiz);
+        await _quizService.UpdateAsync(quiz);
 
         return new ResultDto(new { QuizId = quizId, quiz.IsActive });
     }

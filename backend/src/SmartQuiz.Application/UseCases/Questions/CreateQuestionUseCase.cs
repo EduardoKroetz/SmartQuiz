@@ -1,75 +1,56 @@
-﻿using SmartQuiz.Application.Exceptions;
+﻿using SmartQuiz.Application.DTOs.AnswerOptions;
+using SmartQuiz.Application.Exceptions;
 using SmartQuiz.Application.DTOs.Questions;
 using SmartQuiz.Application.DTOs.Responses;
-using SmartQuiz.Core.Entities;
-using SmartQuiz.Core.Repositories;
+using SmartQuiz.Application.Services.Interfaces;
 
 namespace SmartQuiz.Application.UseCases.Questions;
 
 public class CreateQuestionUseCase
 {
-    private readonly IAnswerOptionRepository _answerOptionRepository;
-    private readonly IQuestionRepository _questionRepository;
-    private readonly IQuizRepository _quizRepository;
-
-    public CreateQuestionUseCase(IQuestionRepository questionRepository, IQuizRepository quizRepository,
-        IAnswerOptionRepository answerOptionRepository)
+    private readonly IQuizService _quizService;
+    private readonly IQuestionService _questionService;
+    private readonly IAnswerOptionService _answerOptionService;
+    private readonly IAuthService _authService;
+    
+    public CreateQuestionUseCase(IQuizService quizService, IQuestionService questionService, IAnswerOptionService answerOptionService, IAuthService authService)
     {
-        _questionRepository = questionRepository;
-        _quizRepository = quizRepository;
-        _answerOptionRepository = answerOptionRepository;
+        _quizService = quizService;
+        _questionService = questionService;
+        _answerOptionService = answerOptionService;
+        _authService = authService;
     }
 
     public async Task<ResultDto> Execute(CreateQuestionDto createQuestionDto, Guid userId)
     {
-        var quiz = await _quizRepository.GetByIdAsync(createQuestionDto.QuizId);
-        if (quiz == null) throw new NotFoundException("Quiz não encontrado");
+        createQuestionDto.Validate();
+        
+        var quiz = await _quizService.GetByIdAsync(createQuestionDto.QuizId);
+        if (quiz is null) 
+            throw new NotFoundException("Quiz não encontrado");
 
-        if (quiz.UserId != userId)
-            throw new UnauthorizedAccessException("Você não tem permissão para acessar esse recurso");
-
-        //Valida se possui opção correta
-        var correctOptionsCount = createQuestionDto.Options.Count(x => x.IsCorrectOption);
-        if (correctOptionsCount == 0) throw new ArgumentException("Informe uma opção de resposta correta");
-
-        //Valida se possui somente 1 opção correta
-        if (correctOptionsCount > 1) throw new ArgumentException("Só deve possuir uma opção correta da questão");
-
-        //Verifica se já possui alguma questão nessa ordem (Question.Order)
-        if (quiz.VerifyExistsOrder(createQuestionDto.Order))
-        {
-            //Se já possui, atualiza todas as posições
-            var questions = quiz.GetQuestionsByOrderGratherThan(createQuestionDto.Order - 1);
-            questions.ForEach(x => { x.Order++; });
-
-            await _questionRepository.UpdateRangeAsync(questions);
-        }
-
+        _authService.ValidateSameUser(quiz.UserId, userId);
+        
         //Criar nova questão
-        var question = new Question
+        var question = _questionService.CreateQuestion(createQuestionDto);
+        
+        // Atualizar a ordem das questões
+        _questionService.AdjustQuestionsOrder(quiz.Questions, question);
+        
+        // Salvar questão no banco de dados
+        await _questionService.AddAsync(question);
+
+        foreach (var createAnswerOption in createQuestionDto.Options)
         {
-            Text = createQuestionDto.Text,
-            QuizId = createQuestionDto.QuizId,
-            Order = createQuestionDto.Order
-        };
-
-        quiz.Questions.Add(question);
-
-        if (quiz.VerifyQuestionsSequenceOrder() == false)
-            throw new ArgumentException("A sequência da ordem das questões do Quiz ficou inválida, verifique qual a ordem das questões e tente novamente");
-
-        await _questionRepository.AddAsync(question);
-
-        foreach (var answerOption in createQuestionDto.Options)
-        {
-            var newOption = new AnswerOption
+            var answerOptionDto = new CreateAnswerOptionDto
             {
-                IsCorrectOption = answerOption.IsCorrectOption,
-                QuestionId = question.Id,
-                Response = answerOption.Response
+                IsCorrectOption = createAnswerOption.IsCorrectOption,
+                Response = createAnswerOption.Response,
+                QuestionId = question.Id
             };
-
-            await _answerOptionRepository.AddAsync(newOption);
+            
+            var answerOption = _answerOptionService.CreateAnswerOption(answerOptionDto);
+            await _answerOptionService.AddAsync(answerOption);
         }
 
         return new ResultDto(new { question.Id });

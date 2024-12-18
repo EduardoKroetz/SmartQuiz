@@ -11,17 +11,17 @@ namespace SmartQuiz.Application.UseCases.OAuth;
 
 public class ProcessGoogleCallbackUseCase
 {
-    private readonly IUserRepository _userRepository;
     private readonly IAuthService _authService;
     private readonly IOAuthService _oauthService;
+    private readonly IUserService _userService;
     private readonly string _redirectUri;
     private readonly string _frontendUrl;
     
-    public ProcessGoogleCallbackUseCase(IUserRepository userRepository, IAuthService authService, IOAuthService oAuthService, IConfiguration configuration)
+    public ProcessGoogleCallbackUseCase(IAuthService authService, IOAuthService oAuthService, IConfiguration configuration, IUserService userService)
     {
-        _userRepository = userRepository;
         _authService = authService;
         _oauthService = oAuthService;
+        _userService = userService;
         _redirectUri = configuration["GoogleOAuth:RedirectUri"] ?? throw new NullReferenceException("RedirectUri is invalid");
         _frontendUrl = configuration["FrontendUrl"] ?? throw new NullReferenceException("FrontendUrl is invalid");
     }
@@ -47,26 +47,21 @@ public class ProcessGoogleCallbackUseCase
         var userInfo = await oauth2Service.Userinfo.Get().ExecuteAsync();
         
         // Verificar / Criar usuário 
-        var user = await _userRepository.GetByEmailAsync(userInfo.Email);
+        var user = await _userService.GetByEmailAsync(userInfo.Email);
         if (user is null)
         {   
-            user = new User
-            {
-                Username = userInfo.Name,
-                Email = userInfo.Email,
-                PasswordHash = "",
-                IsOAuthUser = true
-            };
+            user = _userService.CreateUser(userInfo.Name, userInfo.Email, null, true);
             
-            await _userRepository.AddAsync(user);
+            await _userService.AddAsync(user);
         }
         else if (!user.IsOAuthUser)
         {
             user.IsOAuthUser = true;
-            await _userRepository.UpdateAsync(user);
+            await _userService.UpdateAsync(user);
         }
 
         var jwtToken = _authService.GenerateJwtToken(user);
+        
         return $"{_frontendUrl}/callback?token={jwtToken}";
     }
 }
