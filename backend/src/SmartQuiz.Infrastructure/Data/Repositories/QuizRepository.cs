@@ -25,6 +25,7 @@ public class QuizRepository : Repository<Quiz>, IQuizRepository
 
         if (keyWords != null)
             query = query.Where(x => keyWords.Any(k =>
+                x.Theme.ToLower().Contains(k) ||
                 x.Title.ToLower().Contains(k) ||
                 x.Description.ToLower().Contains(k)
             ));
