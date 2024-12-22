@@ -50,7 +50,10 @@ public class QuizService : IQuizService
     {
         string[]? keyWords = null;
         if (searchQuizDto.Reference is not null)
-            searchQuizDto.Reference.Split(" ");
+        {
+            keyWords = searchQuizDto.Reference.Split(" ");
+            keyWords = keyWords.Where(x => x.Length > 1).ToArray();
+        }
         
         var skip = searchQuizDto.PageSize * (searchQuizDto.PageNumber - 1);
 
