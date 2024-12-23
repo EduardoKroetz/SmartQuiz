@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  public baseUrl = 'https://smartquiz-api-cpbbc6d2e8h7dgbr.brazilsouth-01.azurewebsites.net/api'
+  public baseUrl = environment.apiUrl;
   private httpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient) { 
