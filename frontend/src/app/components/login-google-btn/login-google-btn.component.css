@@ -2,7 +2,7 @@
   padding: 10px;
 }
 
-.login-google-btn > img  {
+.login-google-btn img  {
   width: 20px;
 }
 
@@ -11,7 +11,7 @@
     padding: 15px;
   }
   
-  .login-google-btn > img  {
+  .login-google-btn img  {
     width: 35px;
   }
 }

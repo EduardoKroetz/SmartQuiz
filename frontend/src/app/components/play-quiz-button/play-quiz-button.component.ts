@@ -36,6 +36,7 @@ export class PlayQuizButtonComponent {
         this.router.navigate(['/matches/play/'+ matchId])
       },
       error: (error) => {
+        console.log(error)
         this.isCreating = false;
         this.toastService.showToast(ErrorUtils.getErrorFromResponse(error));
       }

@@ -56,22 +56,25 @@ export class AccountService {
 
   getAccountQuizzes() {
     this.isLoadingQuizzes = true;
+    this.firstQuizzesLoad = false;
     this.$user.subscribe({
       next: (user) => {
         if (!user)
           return
+
         this.apiService.get(`quizzes/search?pageNumber=${this.quizzesPageNumber}&pageSize=${this.quizzesPageSize}&userId=${user.id}`).subscribe({
           next: (response: any) => {
             if (response.data.length < this.quizzesPageSize)
               this.isMaxQuizzes = true;
             const quizzes = this.accountQuizzesSubject.getValue();
             this.accountQuizzesSubject.next([...quizzes ,...response.data]);
-            this.firstQuizzesLoad = false;
             this.isLoadingQuizzes = false;
           },
           error: () => {
             this.isLoadingQuizzes = false;
             this.toastService.showToast("Não foi possível obter os quizzes", false);
+            if (this.quizzesPageNumber === 1)
+              this.firstQuizzesLoad = true;
           }
         })
       }
@@ -85,6 +88,7 @@ export class AccountService {
 
   getAccountMatches() {
     this.isLoadingMatches = true;
+    this.firstMatchesLoad = false;
     this.$user.subscribe({
       next: (user) => {
         if (!user)
@@ -96,12 +100,13 @@ export class AccountService {
               this.isMaxMatches = true;
             const matches = this.accountMatchesSubject.getValue();
             this.accountMatchesSubject.next([...matches ,...response.data]);
-            this.firstMatchesLoad = false;
             this.isLoadingMatches = false;
           },
           error: () => {
             this.isLoadingMatches = false;
             this.toastService.showToast("Não foi possível obter as partidas", false);
+            if (this.matchesPageNumber === 1)
+              this.firstMatchesLoad = true;
           }
         })
       }

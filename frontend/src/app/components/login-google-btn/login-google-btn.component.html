@@ -1,4 +1,5 @@
-<button (click)="handleClick()" class="login-google-btn">
-  Entrar com o Google
-  <img src="/google-icon.png" />
+<button (click)="handleClick()" [disabled]="isLoading" class="login-google-btn">
+  <p *ngIf="!isLoading">Entrar com o Google</p>
+  <img *ngIf="!isLoading" src="/google-icon.png" />
+  <app-spinner-loading *ngIf="isLoading" [isBig]="false" [isDark]="true" ></app-spinner-loading>
 </button>

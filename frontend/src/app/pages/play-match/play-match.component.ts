@@ -80,7 +80,6 @@ export class PlayMatchComponent implements OnInit {
   setCurrentQuestion() {
     this.matchService.getNextQuestion(this.matchId).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.isLastQuestion = response.data.isLastQuestion;
         this.currentQuestion = response.data.question;
         this.isLoadingNextQuestion = false;

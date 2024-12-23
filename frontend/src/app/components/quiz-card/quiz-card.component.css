@@ -62,17 +62,7 @@
 }
 
 .play-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  gap: 1rem;
-  padding: 5px;
-  border-radius: 4px;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  z-index: 2;
-  max-width: none;
+  margin-top: .8rem;
 }
 
 @media screen and (min-width: 768px) {

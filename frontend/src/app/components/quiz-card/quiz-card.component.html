@@ -15,8 +15,5 @@
       </div>
     </div>
   </div>
-  <button (click)="handleButtonClick()" class="play-btn">
-    <p>{{ quiz.isActive ? 'Jogar' : 'Visualizar' }}</p>
-    <i class="bi bi-play-fill"></i>
-  </button>
+  <app-play-quiz-button [quizId]="quiz.id" class="play-btn"></app-play-quiz-button>
 </div>

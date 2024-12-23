@@ -31,7 +31,7 @@ public class CreateResponseUseCase
         if (match == null) 
             throw new ArgumentException("Partida não encontrada");
 
-        _authService.ValidateSameUser(match.Quiz.UserId, userId);
+        _authService.ValidateSameUser(match.UserId, userId);
 
         _matchService.EnsureNotCompleted(match);
 

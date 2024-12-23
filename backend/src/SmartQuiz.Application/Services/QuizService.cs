@@ -51,7 +51,7 @@ public class QuizService : IQuizService
         string[]? keyWords = null;
         if (searchQuizDto.Reference is not null)
         {
-            keyWords = searchQuizDto.Reference.Split(" ");
+            keyWords = searchQuizDto.Reference.ToLower().Split(" ");
             keyWords = keyWords.Where(x => x.Length > 1).ToArray();
         }
         
